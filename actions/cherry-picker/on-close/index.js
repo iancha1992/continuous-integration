@@ -8,29 +8,31 @@ console.log("This is the payload");
 console.log(payload);
 const issue_number = payload.number;
 
-console.log("Ross");
+let prInfos;
 
-async function getPrEvents() {
-    await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
-        headers: {
-            'X-GitHub-Api-Version': '2022-11-28'
-        }
-    }).then(response => {
-        console.log("This is the responseindex", response.data);
-        return response.data;
-    })
-};
+await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+    headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+    }
+}).then(response => {
+    console.log("This is the responseindex", response.data);
+    prInfos = response.data;
+})
 
-async function isCherryPickable() {
-    await getPrEvents()
-        .then((response) => {
+
+
+
+
+// function isCherryPickable() {
+//     getPrEvents()
+//         .then((response) => {
             
-            console.log("defense", response)
-        })
+//             console.log("defense", response)
+//         })
 
-    return true
-};
+//     return true
+// };
 
-if (isCherryPickable() == true) {
-    console.log("hihi")
-}
+// if (isCherryPickable() == true) {
+//     console.log("hihi")
+// }
