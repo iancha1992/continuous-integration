@@ -31,6 +31,6 @@ function isCherryPickable() {
     return true
 };
 
-if (isCherryPickable == true) {
+if (isCherryPickable() == true) {
     console.log("hihi")
 }
