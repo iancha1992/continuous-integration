@@ -20,8 +20,8 @@ async function getPrEvents() {
     return gitIssueEventsResponse.data
 };
 
-const prEvents = async() => {
-    await getPrEvents()
+const prEvents = async () => {
+    return await getPrEvents()
 }
 
 
