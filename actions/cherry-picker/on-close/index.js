@@ -10,14 +10,21 @@ const issue_number = payload.number;
 
 
 async function getPrEvents() {
-    const gitIssueEventsResponse = await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+    await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
-    });
-    console.log("Finalss")
-    console.log(gitIssueEventsResponse.data)
-    return gitIssueEventsResponse.data
+    }).then(response => {
+        console.log("This is the responseindex", response)
+        return response
+    })
+    // .catch(err => {
+
+    // })
+
+    // console.log("Finalss")
+    // console.log(gitIssueEventsResponse.data)
+    // return gitIssueEventsResponse.data
 };
 
 const prEvents = async () => {
