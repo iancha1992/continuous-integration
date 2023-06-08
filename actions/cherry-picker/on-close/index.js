@@ -25,7 +25,7 @@ function isCherryPickable() {
     getPrEvents()
         .then((response) => {
             
-            console.log("defense", response.data)
+            console.log("defense", response)
         })
 
     return true
