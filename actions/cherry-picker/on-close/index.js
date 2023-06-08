@@ -34,7 +34,7 @@ async function getPrEventsInfos() {
 
 // });
 
-Promise.all([getPrEventsInfos])
+Promise.all([getPrEventsInfos()])
     .then((responses) => {
         console.log("Congress")
         console.log(responses);
