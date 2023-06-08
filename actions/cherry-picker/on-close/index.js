@@ -8,20 +8,33 @@ console.log("This is the payload");
 console.log(payload);
 const issue_number = payload.number;
 
-let prEventsInfos;
-
 async function getPrEventsInfos() {
-    await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+    const response = await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
-    }).then(response => {
-        console.log("This is the responseindex", response.data);
-        prEventsInfos = response.data
-        // return response.data;
     });
 
+    return response.data
+
+
+
+
+    // .then(response => {
+    //     console.log("This is the responseindex", response.data);
+    //     prEventsInfos = response.data
+    //     // return response.data;
+    // });
+
 };
+
+let prEventsInfos;
+getPrEventsInfos().then((data) => {
+    prEventsInfos = data
+});
+
+console.log("JOE!")
+console.log(prEventsInfos);
 
 // getPrEventsInfos().then((response) => {
 //     prEventsInfos = response
@@ -29,12 +42,12 @@ async function getPrEventsInfos() {
 
 // });
 
-Promise.all([getPrEventsInfos])
-    .then((response) => {
-        console.log("Congress")
-        console.log(response);
-        console.log(prEventsInfos);
-    })
+// Promise.all([getPrEventsInfos])
+//     .then((response) => {
+//         console.log("Congress")
+//         console.log(response);
+//         console.log(prEventsInfos);
+//     })
 
 
 
