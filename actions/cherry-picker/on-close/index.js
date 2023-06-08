@@ -10,15 +10,19 @@ const issue_number = payload.number;
 
 let prEventsInfos;
 
+async function getPrEventsInfos() {
+    await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+        headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+        }
+    }).then(response => {
+        console.log("This is the responseindex", response.data);
+        prEventsInfos = response.data;
+    });
 
-octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
-    headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-    }
-}).then(response => {
-    console.log("This is the responseindex", response.data);
-    prEventsInfos = response.data;
-});
+};
+
+getPrEventsInfos();
 
 function getCommitId() {
     console.log("NBA", prEventsInfos)
