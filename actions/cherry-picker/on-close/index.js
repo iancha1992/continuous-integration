@@ -27,7 +27,7 @@ function getCommitId() {
 }
 
 
-
+commidId = getCommitId();
 
 
 // function isCherryPickable() {
