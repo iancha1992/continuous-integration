@@ -17,13 +17,14 @@ async function getPrEventsInfos() {
         }
     }).then(response => {
         console.log("This is the responseindex", response.data);
-        prEventsInfos = response.data;
+        return response.data;
     });
 
 };
 
-getPrEventsInfos().then(response => {
-    commidId = getCommitId();
+getPrEventsInfos().then((response) => {
+    prEventsInfos = response
+    // commidId = getCommitId();
 
 });
 
@@ -37,7 +38,9 @@ function getCommitId() {
         console.log("brady", info)
     }
 
-}
+};
+
+commidId = getCommitId();
 
 
 
