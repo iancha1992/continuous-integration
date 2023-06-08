@@ -10,6 +10,7 @@ const issue_number = payload.number;
 
 let prEventsInfos;
 
+
 octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
     headers: {
         'X-GitHub-Api-Version': '2022-11-28'
@@ -20,6 +21,7 @@ octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events
 });
 
 function getCommitId() {
+    console.log("NBA", prEventsInfos)
     for (info of prEventsInfos) {
         console.log("brady", info)
     }
