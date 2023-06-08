@@ -30,6 +30,7 @@ async function getPrEventsInfos() {
 
 let prEventsInfos;
 getPrEventsInfos().then((data) => {
+    console.log("Sprite", data)
     prEventsInfos = data
 });
 
