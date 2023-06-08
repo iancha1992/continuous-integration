@@ -17,7 +17,7 @@ async function getPrEvents() {
     return gitIssueEventsResponse.data
 };
 
-const prEvents = getPrEvents();
+const prEvents = await getPrEvents();
 
 console.log("This is the prevents PLANTS")
 console.log(prEvents);
