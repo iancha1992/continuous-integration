@@ -14,6 +14,7 @@ async function getPrEvents() {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     });
+    console.log(gitIssueEventsResponse.data)
     return gitIssueEventsResponse.data
 };
 
