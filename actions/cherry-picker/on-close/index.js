@@ -8,7 +8,6 @@ const payload = github.context.payload;
 console.log(payload);
 const issue_number = payload.number;
 
-const prEvents = await getPrEvents();
 
 async function getPrEvents() {
     const gitIssueEventsResponse = await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
@@ -20,6 +19,10 @@ async function getPrEvents() {
     console.log(gitIssueEventsResponse.data)
     return gitIssueEventsResponse.data
 };
+
+const prEvents = async() => {
+    await getPrEvents()
+}
 
 
 
