@@ -17,7 +17,8 @@ async function getPrEventsInfos() {
         }
     }).then(response => {
         console.log("This is the responseindex", response.data);
-        return response.data;
+        prEventsInfos = response.data
+        // return response.data;
     });
 
 };
@@ -31,7 +32,8 @@ async function getPrEventsInfos() {
 Promise.all([getPrEventsInfos])
     .then((response) => {
         console.log("Congress")
-        console.log(response)
+        console.log(response);
+        console.log(prEventsInfos);
     })
 
 
