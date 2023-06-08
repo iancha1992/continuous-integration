@@ -1,10 +1,10 @@
 name: 'Cherry-picker on close'
 description: 'Cherry-picks the commit when the PR is closed'
-# inputs:
-#   token:
-#     description: 'The GitHub token'
-#     required: false
-#     default: ${{ github.token }}
+inputs:
+  token:
+    description: 'The GitHub token'
+    required: false
+    default: ${{ github.token }}
 runs:
   using: 'node16'
   main: 'index.js'
