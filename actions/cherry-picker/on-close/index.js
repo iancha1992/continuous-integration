@@ -19,4 +19,5 @@ async function getPrEvents() {
 
 const prEvents = getPrEvents();
 
+console.log("This is the prevents")
 console.log(prEvents);
