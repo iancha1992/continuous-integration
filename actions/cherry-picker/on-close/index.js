@@ -10,7 +10,7 @@ const issue_number = payload.number;
 
 let prInfos;
 
-await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
     headers: {
         'X-GitHub-Api-Version': '2022-11-28'
     }
