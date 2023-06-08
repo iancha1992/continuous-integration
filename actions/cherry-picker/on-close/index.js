@@ -6,7 +6,7 @@ const token = core.getInput("token");
 const octokit = github.getOctokit(token);
 
 
-console.log("Testing adam");
+console.log("This is the real. Testing adam");
 const payload = github.context.payload;
 
 console.log(payload);
