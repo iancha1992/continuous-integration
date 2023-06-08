@@ -22,25 +22,31 @@ async function getPrEventsInfos() {
 
 };
 
-getPrEventsInfos().then((response) => {
-    prEventsInfos = response
-    // commidId = getCommitId();
+// getPrEventsInfos().then((response) => {
+//     prEventsInfos = response
+//     // commidId = getCommitId();
 
-});
+// });
+
+Promise.all([getPrEventsInfos])
+    .then((response) => {
+        console.log(response)
+    })
 
 
 
 
 
-function getCommitId() {
-    console.log("NBA", prEventsInfos)
-    for (info of prEventsInfos) {
-        console.log("brady", info)
-    }
 
-};
+// function getCommitId() {
+//     console.log("NBA", prEventsInfos)
+//     for (info of prEventsInfos) {
+//         console.log("brady", info)
+//     }
 
-commidId = getCommitId();
+// };
+
+// commidId = getCommitId();
 
 
 
