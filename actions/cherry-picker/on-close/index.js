@@ -21,8 +21,8 @@ async function getPrEvents() {
     })
 };
 
-function isCherryPickable() {
-    getPrEvents()
+async function isCherryPickable() {
+    await getPrEvents()
         .then((response) => {
             
             console.log("defense", response)
