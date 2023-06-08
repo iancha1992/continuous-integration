@@ -8,7 +8,7 @@ console.log("This is the payload");
 console.log(payload);
 const issue_number = payload.number;
 
-let prInfos;
+let prEventsInfos;
 
 octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
     headers: {
@@ -16,8 +16,15 @@ octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events
     }
 }).then(response => {
     console.log("This is the responseindex", response.data);
-    prInfos = response.data;
-})
+    prEventsInfos = response.data;
+});
+
+function getCommitId() {
+    for (info of prEventsInfos) {
+        console.log("brady", info)
+    }
+
+}
 
 
 
