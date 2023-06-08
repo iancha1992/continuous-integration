@@ -30,6 +30,7 @@ async function getPrEventsInfos() {
 
 Promise.all([getPrEventsInfos])
     .then((response) => {
+        console.log("Congress")
         console.log(response)
     })
 
