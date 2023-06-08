@@ -8,7 +8,7 @@ console.log("This is the payload");
 console.log(payload);
 const issue_number = payload.number;
 
-console.log("Ross")
+console.log("Ross");
 
 async function getPrEvents() {
     await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
@@ -16,8 +16,8 @@ async function getPrEvents() {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     }).then(response => {
-        console.log("This is the responseindex", response)
-        return response
+        console.log("This is the responseindex", response.data);
+        return response.data;
     })
     // .catch(err => {
 
@@ -28,9 +28,17 @@ async function getPrEvents() {
     // return gitIssueEventsResponse.data
 };
 
-prEvents = getPrEvents();
+function isCherryPickable() {
+    getPrEvents()
+        .then((response) => {
+            
+            console.log("defense", response.data)
+        })
+};
 
+// prEvents = getPrEvents().then((response) => {
 
+// })
 
-console.log("This is the prevents PLANTS")
-console.log(prEvents);
+// console.log("This is the prevents PLANTS")
+// console.log(prEvents);
