@@ -22,7 +22,14 @@ async function getPrEventsInfos() {
 
 };
 
-getPrEventsInfos();
+getPrEventsInfos().then(response => {
+    commidId = getCommitId();
+
+});
+
+
+
+
 
 function getCommitId() {
     console.log("NBA", prEventsInfos)
@@ -33,7 +40,7 @@ function getCommitId() {
 }
 
 
-commidId = getCommitId();
+
 
 
 // function isCherryPickable() {
