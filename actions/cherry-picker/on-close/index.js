@@ -19,13 +19,6 @@ async function getPrEvents() {
         console.log("This is the responseindex", response.data);
         return response.data;
     })
-    // .catch(err => {
-
-    // })
-
-    // console.log("Finalss")
-    // console.log(gitIssueEventsResponse.data)
-    // return gitIssueEventsResponse.data
 };
 
 function isCherryPickable() {
@@ -34,15 +27,10 @@ function isCherryPickable() {
             
             console.log("defense", response.data)
         })
+
+    return true
 };
 
-if (isCherryPickable == True) {
-    
+if (isCherryPickable == true) {
+    console.log("hihi")
 }
-
-// prEvents = getPrEvents().then((response) => {
-
-// })
-
-// console.log("This is the prevents PLANTS")
-// console.log(prEvents);
