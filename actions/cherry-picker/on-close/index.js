@@ -3,11 +3,12 @@ const github = require('@actions/github');
 const token = core.getInput("token");
 const octokit = github.getOctokit(token);
 
-console.log("This is the real. Testing adam");
 const payload = github.context.payload;
+console.log("This is the payload");
 console.log(payload);
 const issue_number = payload.number;
 
+console.log("Ross")
 
 async function getPrEvents() {
     await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
