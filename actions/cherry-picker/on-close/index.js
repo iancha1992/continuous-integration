@@ -28,27 +28,20 @@ async function getPrEventsInfos() {
 
 };
 
-let prEventsInfos;
-getPrEventsInfos().then((data) => {
-    console.log("Sprite", data)
-    prEventsInfos = data
-});
-
-console.log("JOE!")
-console.log(prEventsInfos);
-
 // getPrEventsInfos().then((response) => {
 //     prEventsInfos = response
 //     // commidId = getCommitId();
 
 // });
 
-// Promise.all([getPrEventsInfos])
-//     .then((response) => {
-//         console.log("Congress")
-//         console.log(response);
-//         console.log(prEventsInfos);
-//     })
+Promise.all([getPrEventsInfos])
+    .then((responses) => {
+        console.log("Congress")
+        console.log(responses);
+        for (const response of responses) {
+            console.log(response)
+        }
+    })
 
 
 
