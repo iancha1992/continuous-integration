@@ -51,6 +51,7 @@ Promise.all([getPrEventsInfos()])
             else if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId != null)) {
                 console.log("Anotherone")
                 console.log(commitId)
+                throw "There are multiple commits made by copybara-service[bot]. There can only be one."
             }
 
             // console.log("This is commit ID!!!!", commitId)
