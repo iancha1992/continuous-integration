@@ -41,12 +41,17 @@ Promise.all([getPrEventsInfos()])
         for (const response of responses[0]) {
             // console.log(response);
             // console.log("Goooooogle", typeof response.commit_id);
-            if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null)) {
-                // commitId = response.commit_id
+            if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId == null)) {
+                commitId = response.commit_id
                 // console.log(commitId)
                 // console.log(typeof response.commit_id)
-                console.log("FAnta")
-            };
+                console.log("FAnta");
+                console.log(commitId)
+            }
+            else if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId != null)) {
+                console.log("Anotherone")
+                console.log(commitId)
+            }
 
             // console.log("This is commit ID!!!!", commitId)
         }
