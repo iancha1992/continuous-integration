@@ -15,7 +15,7 @@ async function run() {
   const owner = payload.repository.owner.login;
   const repo = payload.repository.name;
 
-  console.log(payload)
+  console.log("This is payload!!!!!", payload)
 
   if (command.startsWith("fork ")) {
     // Check if the commenter is a collaborator of the repo
