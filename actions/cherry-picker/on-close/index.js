@@ -41,8 +41,7 @@ Promise.all([getPrEventsInfos()])
         for (const response of responses[0]) {
             // console.log(response);
             // console.log("Goooooogle", typeof response.commit_id);
-            // if ((response.actor.login == "copybara-service[bot]") && (response.commit_id)) {
-            if (response.commit_id != null) {
+            if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null)) {
                 // commitId = response.commit_id
                 // console.log(commitId)
                 // console.log(typeof response.commit_id)
