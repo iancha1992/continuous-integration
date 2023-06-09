@@ -33,6 +33,12 @@ async function getPrEventsInfos() {
 
 let commitId;
 
+
+// Check events api. and the actor be bazel-io. event = mentioned
+
+
+
+
 Promise.all([getPrEventsInfos()])
     .then((responses) => {
         console.log("Congress")
@@ -57,6 +63,8 @@ Promise.all([getPrEventsInfos()])
 
             // console.log("This is commit ID!!!!", commitId)
         }
+
+
 
         
 
