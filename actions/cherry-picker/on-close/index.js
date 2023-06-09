@@ -36,7 +36,9 @@ Promise.all([getPrEventsInfos()])
             console.log(response);
             if ((response.actor.login == "copybara-service[bot]") && (response.commit_id)) {
                 commitId = response.commit_id
-            }
+            };
+
+            console.log("This is commit ID!!!!", commitId)
         }
 
         
