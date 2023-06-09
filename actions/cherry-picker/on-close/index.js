@@ -9,7 +9,13 @@ console.log(payload);
 const issue_number = payload.number;
 
 async function getPrEventsInfos() {
-    const response = await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+    // const response = await octokit.request(`GET /repos/iancha1992/gh_practice/issues/${issue_number}/events`, {
+    //     headers: {
+    //         'X-GitHub-Api-Version': '2022-11-28'
+    //     }
+    // });
+
+    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18305/events`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
