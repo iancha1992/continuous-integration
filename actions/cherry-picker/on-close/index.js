@@ -14,19 +14,9 @@ async function getPrEventsInfos() {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     });
-    console.log("MMMMMMMMM", response.data)
-    return response.data
-
-
-
-
-    // .then(response => {
-    //     console.log("This is the responseindex", response.data);
-    //     prEventsInfos = response.data
-    //     // return response.data;
-    // });
-
+    return response.data;
 };
+
 
 // getPrEventsInfos().then((response) => {
 //     prEventsInfos = response
@@ -34,13 +24,23 @@ async function getPrEventsInfos() {
 
 // });
 
+let commitId;
+
 Promise.all([getPrEventsInfos()])
     .then((responses) => {
         console.log("Congress")
         console.log(responses);
-        for (const response of responses) {
-            console.log(response)
+
+        // Checking events
+        for (const response of responses[0]) {
+            console.log(response);
+            if ((response.actor.login == "copybara-service[bot]") && (response.commit_id)) {
+                commitId = response.commit_id
+            }
         }
+
+        
+
     })
 
 
