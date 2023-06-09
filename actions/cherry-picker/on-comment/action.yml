@@ -1,0 +1,10 @@
+name: 'Cherry-picker on comment'
+description: 'Cherry-picks the commit when the issue is created after the bazel-io X.Y.Z comment'
+inputs:
+  token:
+    description: 'The GitHub token'
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: 'node16'
+  main: 'index.js'
