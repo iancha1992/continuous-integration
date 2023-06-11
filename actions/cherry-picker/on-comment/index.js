@@ -17,7 +17,7 @@ actor_name = "copybara-service[bot]";
 
 
 async function getIssueEventsInfos() {
-    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/events`, {
+    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/${issue_number}/events`, {
         per_page: 100,
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
@@ -68,4 +68,9 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
             }
         }
+
+        // cherrypick(commitId, pr_number, issue_number)
+
+    }).catch((e) => {
+        console.log(e);
     })
