@@ -1,3 +1,5 @@
+import { cherrypickRunner } from "../cherry-pick-runner/index.js";
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 const token = core.getInput("token");
@@ -9,15 +11,15 @@ console.log("Gomez")
 console.log("This is the payload");
 console.log(payload);
 
-const issue_number = payload.issue.number;
-const pr_number = payload.issue.body.split("#")[1];
-console.log("This is my pr number", pr_number);
+const issueNumber = payload.issue.number;
+const prNumber = payload.issue.body.split("#")[1];
+console.log("This is my pr number", prNumber);
 
-actor_name = "copybara-service[bot]";
+actorName = "copybara-service[bot]";
 
 
 async function getIssueEventsInfos() {
-    const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${issue_number}/events`, {
+    const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${issueNumber}/events`, {
         per_page: 100,
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
@@ -27,7 +29,7 @@ async function getIssueEventsInfos() {
 };
 
 async function getPrEventsInfos() {
-    const response = await octokit.request(`GET /repos/iancha1992/bazel/pulls/${pr_number}`, {
+    const response = await octokit.request(`GET /repos/iancha1992/bazel/pulls/${prNumber}`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
@@ -43,36 +45,40 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
     .then((responses) => {
         console.log("Congress");
         console.log(responses);
-        console.log(`Checking if Pull Request #${pr_number} is closed...`);
+        console.log(`Checking if Pull Request #${prNumber} is closed...`);
 
         if (responses[0].state != "closed") {
             // Needs better implemention for throwing error here later
-            throw (`Pull Request #${pr_number} is not closed yet. Only closed ones are cherry-pickable.`);
+            throw (`Pull Request #${prNumber} is not closed yet. Only closed ones are cherry-pickable.`);
         }
         else {
-            console.log(`Confirmed that Pull Request #${pr_number} is closed.`);
+            console.log(`Confirmed that Pull Request #${prNumber} is closed.`);
         }
 
         console.log("Now checking if there is a commit ID..");
 
         let commitId = null;
         for (const response of responses[1]) {
-            if ((response.actor.login == actor_name) && (response.commit_id != null) && (commitId == null)) {
+            if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null)) {
                 commitId = response.commit_id
                 console.log("FAnta");
                 console.log(commitId)
             }
-            else if ((response.actor.login == actor_name) && (response.commit_id != null) && (commitId != null)) {
+            else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null)) {
                 console.log("Anotherone")
                 console.log(commitId)
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
             }
         }
         if (commitId == null) {
-            throw `There is no commit made by ${actor_name}`
+            throw `There is no commit made by ${actorName}`
+        } else {
+            pass
+            // cherrypickRunner(commitId);
         }
 
-        // cherrypick(commitId, pr_number, issue_number)
+
+
 
     }).catch((e) => {
         console.log(e);
