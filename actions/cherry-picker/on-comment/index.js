@@ -68,6 +68,9 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
             }
         }
+        if (commitId == null) {
+            throw `There is no commit made by ${actor_name}`
+        }
 
         // cherrypick(commitId, pr_number, issue_number)
 
