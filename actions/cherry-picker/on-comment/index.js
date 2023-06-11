@@ -35,9 +35,8 @@ async function getPrEventsInfos() {
 }
 
 
-https://api.github.com/repos/bazelbuild/bazel/pulls/18130
+// https://api.github.com/repos/bazelbuild/bazel/pulls/18130
 
-let commitId;
 
 Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
     .then((responses) => {
@@ -54,6 +53,8 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
 
         console.log("Now checking if there is a commit ID..");
 
+        let commitId = null;
+
         for (const response of responses[1]) {
             if ((response.actor.login == actor_name) && (response.commit_id != null) && (commitId == null)) {
                 commitId = response.commit_id
@@ -66,5 +67,4 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
             }
         }
-
     })
