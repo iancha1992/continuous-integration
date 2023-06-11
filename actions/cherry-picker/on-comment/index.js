@@ -17,7 +17,7 @@ actor_name = "copybara-service[bot]";
 
 
 async function getIssueEventsInfos() {
-    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/${issue_number}/events`, {
+    const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${issue_number}/events`, {
         per_page: 100,
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
