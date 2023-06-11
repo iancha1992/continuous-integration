@@ -42,7 +42,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
     .then((responses) => {
         console.log("Congress");
         console.log(responses);
-        console.log(`Checking if Pull Request #${pr_number} is closed.`);
+        console.log(`Checking if Pull Request #${pr_number} is closed...`);
 
         if (responses[0].state != "closed") {
             throw (`Pull Request #${pr_number} is not closed yet. Only closed ones are cherry-pickable.`);
