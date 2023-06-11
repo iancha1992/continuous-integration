@@ -9,7 +9,10 @@ console.log("Gomez")
 console.log("This is the payload");
 console.log(payload);
 
-// const issue_number = payload.number;
+const issue_number = payload.number;
+const pr_number = payload.issue.body.split("#")[1];
+console.log("This is my pr number", pr_number);
+
 
 // async function getPrEventsInfos() {
 //     const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/events`, {
