@@ -26,7 +26,7 @@ async function getIssueEventsInfos() {
 };
 
 async function getPrEventsInfos() {
-    const response = await octokit.request(`GET /repos/bazelbuild/bazel/pulls/18130`, {
+    const response = await octokit.request(`GET /repos/iancha1992/bazel/pulls/${pr_number}`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
