@@ -18,6 +18,7 @@ actor_name = "copybara-service[bot]";
 
 async function getIssueEventsInfos() {
     const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/events`, {
+        per_page: 100,
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
@@ -45,6 +46,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         console.log(`Checking if Pull Request #${pr_number} is closed...`);
 
         if (responses[0].state != "closed") {
+            // Needs better implemention for throwing error here later
             throw (`Pull Request #${pr_number} is not closed yet. Only closed ones are cherry-pickable.`);
         }
         else {
@@ -54,7 +56,6 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         console.log("Now checking if there is a commit ID..");
 
         let commitId = null;
-
         for (const response of responses[1]) {
             if ((response.actor.login == actor_name) && (response.commit_id != null) && (commitId == null)) {
                 commitId = response.commit_id
