@@ -14,33 +14,32 @@ const pr_number = payload.issue.body.split("#")[1];
 console.log("This is my pr number", pr_number);
 
 
-// async function getPrEventsInfos() {
-//     const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/events`, {
-//         headers: {
-//             'X-GitHub-Api-Version': '2022-11-28'
-//         }
-//     });
-//     return response.data;
-// };
+async function getPrEventsInfos() {
+    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/events`, {
+        headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+        }
+    });
+    return response.data;
+};
 
+let commitId;
 
-// let commitId;
+Promise.all([getPrEventsInfos()])
+    .then((responses) => {
+        console.log("Congress")
+        console.log(responses);
 
-// Promise.all([getPrEventsInfos()])
-//     .then((responses) => {
-//         console.log("Congress")
-//         console.log(responses);
-
-//         for (const response of responses[0]) {
-//             if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId == null)) {
-//                 commitId = response.commit_id
-//                 console.log("FAnta");
-//                 console.log(commitId)
-//             }
-//             else if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId != null)) {
-//                 console.log("Anotherone")
-//                 console.log(commitId)
-//                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
-//             }
-//         }
-//     })
+        for (const response of responses[0]) {
+            if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId == null)) {
+                commitId = response.commit_id
+                console.log("FAnta");
+                console.log(commitId)
+            }
+            else if ((response.actor.login == "copybara-service[bot]") && (response.commit_id != null) && (commitId != null)) {
+                console.log("Anotherone")
+                console.log(commitId)
+                throw "There are multiple commits made by copybara-service[bot]. There can only be one."
+            }
+        }
+    })
