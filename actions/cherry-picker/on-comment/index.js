@@ -15,7 +15,7 @@ console.log("This is my pr number", pr_number);
 
 
 async function getPrEventsInfos() {
-    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/events`, {
+    const response = await octokit.request(`GET /repos/bazelbuild/bazel/issues/18130/comments`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
