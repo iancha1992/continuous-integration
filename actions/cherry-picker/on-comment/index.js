@@ -61,7 +61,7 @@ function getCommitId(issueEvents) {
 };
 
 function getReviewer(reviews) {
-    if (reviews.length() == 0) {
+    if (reviews.length == 0) {
         return null
     }
 
