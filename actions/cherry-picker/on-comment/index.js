@@ -1,5 +1,3 @@
-// import { cherrypickRunner } from "../cherry-pick-runner/index.js";
-
 const cherrypickRunner = require("../cherry-pick-runner/index");
 
 const core = require('@actions/core');
@@ -9,16 +7,12 @@ const octokit = github.getOctokit(token);
 
 const payload = github.context.payload;
 
-console.log("Gomez")
 console.log("This is the payload");
 console.log(payload);
 
 const issueNumber = payload.issue.number;
 const prNumber = payload.issue.body.split("#")[1];
 console.log("This is my pr number", prNumber);
-
-actorName = "copybara-service[bot]";
-
 
 async function getIssueEventsInfos() {
     const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${issueNumber}/events`, {
@@ -45,7 +39,6 @@ async function getPrEventsInfos() {
 
 Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
     .then((responses) => {
-        console.log("Congress");
         console.log(responses);
         console.log(`Checking if Pull Request #${prNumber} is closed...`);
 
@@ -60,28 +53,23 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         console.log("Now checking if there is a commit ID..");
 
         let commitId = null;
+        actorName = "copybara-service[bot]";
+        actionEvent = "merged";
+
         for (const response of responses[1]) {
-            if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null)) {
+            if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
                 commitId = response.commit_id
-                console.log("FAnta");
-                console.log(commitId)
             }
-            else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null)) {
-                console.log("Anotherone")
-                console.log(commitId)
+            else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
             }
         }
         if (commitId == null) {
             throw `There is no commit made by ${actorName}`
         } else {
-            pass
+            console.log("Cherrypicking right now!");
             // cherrypickRunner(commitId);
         }
-
-
-
-
     }).catch((e) => {
         console.log(e);
     })
