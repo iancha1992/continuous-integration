@@ -62,7 +62,6 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         for (const response of responses[1]) {
             if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
                 commitId = response.commit_id;
-                console.log(`Retrieved the commit ID, ${commitId}`)
             }
             else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
@@ -71,7 +70,8 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         if (commitId == null) {
             throw `There is no commit made by ${actorName}`
         } else {
-            console.log("Cherrypicking right now!");
+            console.log(`Retrieved the commit ID, ${commitId}`);
+            console.log("Now unto cherrypicking this!!");
             // cherrypickRunner(commitId);
         }
     }).catch((e) => {
