@@ -3,3 +3,5 @@ export function cherrypickRunner(commitId, prNumber, token, reviewer) {
     console.log("Reviewers!!!");
     console.log(reviewer);
 }
+
+module.exports = cherrypickRunner;
