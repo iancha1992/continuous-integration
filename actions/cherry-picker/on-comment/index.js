@@ -74,7 +74,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
             throw `There is no commit made by ${actorName}`
         } else {
             console.log(`Retrieved the commit ID, ${commitId}`);
-            console.log("Now unto cherrypicking this!!");
+            console.log("Now this is good to cherrypick!!!");
             // cherrypickRunner(commitId);
         }
     }).catch((e) => {
