@@ -1,8 +1,3 @@
-function cherrypickRunner(commitId, prNumber, issueNumber) {
-    console.log("Running cherrypick runner")
+function cherrypickRunner(commitId, prNumber, token, reviewer) {
+    console.log(`Running cherrypicking with commitID ${commitId}, PR#${prNumber}, Reviewer ${reviewer}`);
 }
-
-
-
-
-

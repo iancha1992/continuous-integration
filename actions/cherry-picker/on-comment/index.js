@@ -58,13 +58,30 @@ function getCommitId(issueEvents) {
         }
     }
     return commitId;
-}
+};
 
+function getReviewer(reviews) {
+    if (reviews.length() == 0) {
+        return null
+    }
+
+    let approvers_list = [];
+    for (let review of reviews) {
+        if (review.state == "APPROVED") {
+            let data = {
+                "login": review.login,
+                "id": review.id
+            }
+            approvers_list.push(data)
+        }
+    }
+    return approvers_list;
+}
 
 // https://api.github.com/repos/bazelbuild/bazel/pulls/18130
 
 
-Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
+Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
     .then((responses) => {
         console.log(responses);
         console.log(`Checking if Pull Request #${prNumber} is closed...`);
@@ -91,14 +108,25 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         //         throw "There are multiple commits made by copybara-service[bot]. There can only be one."
         //     }
         // }
-        commitId = getCommitId(responses[1]);
+        let commitId = getCommitId(responses[1]);
         if (commitId == null) {
             throw `There is no commit made by ${actorName}`
         }
         console.log(`Retrieved the commit ID, ${commitId}`);
+    
+        console.log("Now retrieving the approver's infos...");
 
         // Get the approver(reviewer) of the PR.
-        
+        let reviewer = getReviewer(responses[2]);
+        if (!reviewer) {
+            throw ("There was no approver!");
+        }
+
+        console.log(`PR #${prNumber} is good to cherry-pick.`);
+
+        cherrypickRunner(commitId, prNumber, token, reviewer);
+
+
 
 
 
