@@ -44,9 +44,9 @@ async function getReviews() {
 
 function getCommitId(issueEvents) {
     const actorName = "iancha1992";
-    // actorName = "copybara-service[bot]";
+    // const actorName = "copybara-service[bot]";
     const actionEvent = "merged";
-    // actionEvent = "closed";
+    // const actionEvent = "closed";
     let commitId = null;
     for (let e of issueEvents) {
         console.log("This is the response!!!", e);
