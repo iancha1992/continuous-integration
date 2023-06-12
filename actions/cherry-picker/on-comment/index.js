@@ -114,14 +114,13 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         }
         console.log(`Retrieved the commit ID, ${commitId}`);
     
-        console.log("Now retrieving the approver's infos...");
-
         // Get the approver(reviewer) of the PR.
+        console.log("Now retrieving the approver's infos...");
         let reviewer = getReviewer(responses[2]);
         if (!reviewer) {
             throw ("There was no approver!");
         }
-
+        console.log(reviewer);
         console.log(`PR #${prNumber} is good to cherry-pick.`);
 
         cherrypickRunner(commitId, prNumber, token, reviewer);
