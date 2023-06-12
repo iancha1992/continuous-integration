@@ -69,8 +69,8 @@ function getReviewer(reviews) {
     for (let review of reviews) {
         if (review.state == "APPROVED") {
             let data = {
-                "login": review.login,
-                "id": review.id
+                "login": review.user.login,
+                "id": review.user.id
             }
             approvers_list.push(data)
         }
