@@ -15,7 +15,7 @@ const prNumber = payload.issue.body.split("#")[1];
 console.log("This is my pr number", prNumber);
 
 async function getIssueEventsInfos() {
-    const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${issueNumber}/events`, {
+    const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${prNumber}/events`, {
         per_page: 100,
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
