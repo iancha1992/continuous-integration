@@ -60,6 +60,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         // actionEvent = "closed";
 
         for (let response of responses[1]) {
+            console.log("This is allresponses!", responses[1])
             console.log("This is the response!!!", response);
             if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
                 console.log("This is the response!!!", response);
