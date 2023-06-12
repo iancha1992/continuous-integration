@@ -97,19 +97,6 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
 
         // Check if there is exactly one Copybara commit ID.
         console.log("Now checking if there is a commit ID..");
-
-        // Check if copybara has one commit ID and retrieve
-        // for (let response of responses[1]) {
-        //     console.log("This is allresponses!", responses[1])
-        //     console.log("This is the response!!!", response);
-        //     if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
-        //         console.log("This is the response!!!", response);
-        //         commitId = response.commit_id;
-        //     }
-        //     else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
-        //         throw "There are multiple commits made by copybara-service[bot]. There can only be one."
-        //     }
-        // }
         let commitId = getCommitId(responses[1]);
         if (commitId == null) {
             throw `There is no available commit made!`
