@@ -59,8 +59,9 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         actionEvent = "merged";
         // actionEvent = "closed";
 
-        for (const response of responses[1]) {
+        for (let response of responses[1]) {
             if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
+                console.log("This is the response!!!", response);
                 commitId = response.commit_id;
             }
             else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
