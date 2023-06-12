@@ -91,13 +91,19 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         //         throw "There are multiple commits made by copybara-service[bot]. There can only be one."
         //     }
         // }
+        commitId = getCommitId(responses[1]);
         if (commitId == null) {
             throw `There is no commit made by ${actorName}`
-        } else {
-            console.log(`Retrieved the commit ID, ${commitId}`);
-            console.log("Now this is good to cherrypick!!!");
-            // cherrypickRunner(commitId, prNumber, token);
         }
+        console.log(`Retrieved the commit ID, ${commitId}`);
+
+        // Get the approver(reviewer) of the PR.
+        
+
+
+
+
+
     }).catch((e) => {
         console.log(e);
     })
