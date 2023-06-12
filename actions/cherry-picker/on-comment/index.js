@@ -31,6 +31,33 @@ async function getPrEventsInfos() {
         }
     });
     return response.data;
+};
+
+async function getReviews() {
+    const response = await octokit.request(`GET /repos/iancha1992/bazel/pulls/${prNumber}/reviews`, {
+        headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+        }
+    });
+    return response.data;
+};
+
+function getCommitId(issueEvents) {
+    const actorName = "iancha1992";
+    // actorName = "copybara-service[bot]";
+    const actionEvent = "merged";
+    // actionEvent = "closed";
+    let commitId = null;
+    for (let e of issueEvents) {
+        console.log("This is the response!!!", e);
+        if ((e.actor.login == actorName) && (e.commit_id != null) && (commitId == null) && (e.event == actionEvent)) {
+            commitId = e.commit_id;
+        }
+        else if ((e.actor.login == actorName) && (e.commit_id != null) && (commitId != null) && (e.event == actionEvent)) {
+            throw "There are multiple commits made by copybara-service[bot]. There can only be one."
+        }
+    }
+    return commitId;
 }
 
 
@@ -42,40 +69,34 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         console.log(responses);
         console.log(`Checking if Pull Request #${prNumber} is closed...`);
 
+        // Check if the PR was closed.
         if (responses[0].state != "closed") {
             // Needs better implemention for throwing error here later
             throw (`Pull Request #${prNumber} is not closed yet. Only closed ones are cherry-pickable.`);
         }
-        else {
-            console.log(`Confirmed that Pull Request #${prNumber} is closed.`);
-        }
+        console.log(`Confirmed that Pull Request #${prNumber} is closed.`);
 
+        // Check if there is exactly one Copybara commit ID.
         console.log("Now checking if there is a commit ID..");
 
-        let commitId = null;
-
-        actorName = "iancha1992";
-        // actorName = "copybara-service[bot]";
-        actionEvent = "merged";
-        // actionEvent = "closed";
-
-        for (let response of responses[1]) {
-            console.log("This is allresponses!", responses[1])
-            console.log("This is the response!!!", response);
-            if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
-                console.log("This is the response!!!", response);
-                commitId = response.commit_id;
-            }
-            else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
-                throw "There are multiple commits made by copybara-service[bot]. There can only be one."
-            }
-        }
+        // Check if copybara has one commit ID and retrieve
+        // for (let response of responses[1]) {
+        //     console.log("This is allresponses!", responses[1])
+        //     console.log("This is the response!!!", response);
+        //     if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
+        //         console.log("This is the response!!!", response);
+        //         commitId = response.commit_id;
+        //     }
+        //     else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
+        //         throw "There are multiple commits made by copybara-service[bot]. There can only be one."
+        //     }
+        // }
         if (commitId == null) {
             throw `There is no commit made by ${actorName}`
         } else {
             console.log(`Retrieved the commit ID, ${commitId}`);
             console.log("Now this is good to cherrypick!!!");
-            // cherrypickRunner(commitId);
+            // cherrypickRunner(commitId, prNumber, token);
         }
     }).catch((e) => {
         console.log(e);
