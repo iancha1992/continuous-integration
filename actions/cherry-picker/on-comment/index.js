@@ -53,8 +53,11 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
         console.log("Now checking if there is a commit ID..");
 
         let commitId = null;
-        actorName = "copybara-service[bot]";
+
+        actorName = "iancha1992";
+        // actorName = "copybara-service[bot]";
         actionEvent = "merged";
+        // actionEvent = "closed";
 
         for (const response of responses[1]) {
             if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
