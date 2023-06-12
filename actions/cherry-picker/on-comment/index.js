@@ -110,7 +110,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         // }
         let commitId = getCommitId(responses[1]);
         if (commitId == null) {
-            throw `There is no commit made by ${actorName}`
+            throw `There is no available commit made!`
         }
         console.log(`Retrieved the commit ID, ${commitId}`);
     
