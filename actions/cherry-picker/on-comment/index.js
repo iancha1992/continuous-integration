@@ -1,4 +1,6 @@
-const cherrypickRunner = require("../cherry-pick-runner/index.js");
+// const cherrypickRunner = require("../cherry-pick-runner/index.js");
+
+import { cherrypickRunner } from "../cherry-pick-runner/index.js";
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -125,12 +127,8 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
 
         cherrypickRunner(commitId, prNumber, token, reviewer);
 
-
-
-
-
-
-
     }).catch((e) => {
         console.log(e);
     })
+
+
