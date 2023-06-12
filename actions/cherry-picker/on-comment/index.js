@@ -1,4 +1,4 @@
-const cherrypickRunner = require("../cherry-pick-runner/index");
+const cherrypickRunner = require("../cherry-pick-runner/index.js");
 
 const core = require('@actions/core');
 const github = require('@actions/github');
