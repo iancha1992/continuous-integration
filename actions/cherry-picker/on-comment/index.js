@@ -61,7 +61,8 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos()])
 
         for (const response of responses[1]) {
             if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId == null) && (response.event == actionEvent)) {
-                commitId = response.commit_id
+                commitId = response.commit_id;
+                console.log(`Retrieved the commit ID, ${commitId}`)
             }
             else if ((response.actor.login == actorName) && (response.commit_id != null) && (commitId != null) && (response.event == actionEvent)) {
                 throw "There are multiple commits made by copybara-service[bot]. There can only be one."
