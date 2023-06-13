@@ -7,4 +7,4 @@ const payload = github.context.payload;
 console.log("This is the payload");
 console.log(payload);
 
-console.log("hello world!")
+console.log("hello world!");
