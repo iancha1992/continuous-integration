@@ -1,20 +1,11 @@
 const cherrypickRunner = require("../cherry-pick-runner/index.js");
-
-// import { cherrypickRunner } from "../cherry-pick-runner/index.js";
-
 const core = require('@actions/core');
 const github = require('@actions/github');
 const token = core.getInput("token");
 const octokit = github.getOctokit(token);
 
 const payload = github.context.payload;
-
-console.log("This is the payload");
-console.log(payload);
-
-const issueNumber = payload.issue.number;
 const prNumber = payload.issue.body.split("#")[1];
-console.log("This is my pr number", prNumber);
 
 async function getIssueEventsInfos() {
     const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${prNumber}/events`, {
@@ -52,7 +43,6 @@ function getCommitId(issueEvents) {
     let commitId = null;
 
     for (let e of issueEvents) {
-        console.log("This is the response!!!", e);
         if ((e.actor.login == actorName) && (e.commit_id != null) && (commitId == null) && (e.event == actionEvent)) {
             commitId = e.commit_id;
         }
@@ -81,12 +71,8 @@ function getReviewer(reviews) {
     return approvers_list;
 }
 
-// https://api.github.com/repos/bazelbuild/bazel/pulls/18130
-
-
 Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
     .then((responses) => {
-        console.log(responses);
         console.log(`Checking if Pull Request #${prNumber} is closed...`);
 
         // Check if the PR was closed.
