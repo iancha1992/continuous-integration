@@ -51,7 +51,6 @@ function getCommitId(issueEvents) {
     // const actionEvent = "closed";
     let commitId = null;
 
-    throw "There are multiple commits made by copybara-service[bot]. There can only be one."
     for (let e of issueEvents) {
         console.log("This is the response!!!", e);
         if ((e.actor.login == actorName) && (e.commit_id != null) && (commitId == null) && (e.event == actionEvent)) {
