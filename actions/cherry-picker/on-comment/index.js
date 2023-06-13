@@ -7,6 +7,8 @@ const octokit = github.getOctokit(token);
 const payload = github.context.payload;
 const prNumber = payload.issue.body.split("#")[1];
 
+console.log("This is the payload", payload);
+
 async function getIssueEventsInfos() {
     const response = await octokit.request(`GET /repos/iancha1992/bazel/issues/${prNumber}/events`, {
         per_page: 100,
