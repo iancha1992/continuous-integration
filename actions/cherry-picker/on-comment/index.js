@@ -7,6 +7,10 @@ const octokit = github.getOctokit(token);
 const payload = github.context.payload;
 const prNumber = payload.issue.body.split("#")[1];
 
+const triggeredOn = core.getInput("triggeredOn");
+
+console.log("Triggered by:", triggeredOn);
+
 console.log("This is the payload", payload);
 
 async function getIssueEventsInfos() {

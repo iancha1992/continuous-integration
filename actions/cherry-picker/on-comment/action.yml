@@ -5,6 +5,9 @@ inputs:
     description: 'The GitHub token'
     required: false
     default: ${{ github.token }}
+  triggered-on:
+    required: true
+    default: ${{ github.triggered-on }}
 runs:
   using: 'node16'
   main: 'index.js'
