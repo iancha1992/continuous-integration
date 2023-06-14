@@ -8,8 +8,10 @@ const triggeredOn = core.getInput("triggered-on");
 
 if (triggeredOn == "commented") {
     var prNumber = payload.issue.body.split("#")[1];
-    console.log("prnumber commented")
+}
 
+else if (triggeredOn == "closed") {
+    var prNumber = payload.number;
 }
 
 
