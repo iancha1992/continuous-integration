@@ -3,13 +3,14 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const token = core.getInput("token");
 const octokit = github.getOctokit(token);
-
 const payload = github.context.payload;
-const prNumber = payload.issue.body.split("#")[1];
-
 const triggeredOn = core.getInput("triggered-on");
 
-console.log("Triggered by:", triggeredOn);
+if (triggeredOn == "commented") {
+    var prNumber = payload.issue.body.split("#")[1];
+
+}
+
 
 console.log("This is the payload", payload);
 
