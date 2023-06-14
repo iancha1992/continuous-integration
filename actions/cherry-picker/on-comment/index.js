@@ -8,6 +8,7 @@ const triggeredOn = core.getInput("triggered-on");
 
 if (triggeredOn == "commented") {
     var prNumber = payload.issue.body.split("#")[1];
+    console.log("prnumber commented")
 
 }
 
