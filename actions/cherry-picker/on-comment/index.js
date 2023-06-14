@@ -44,6 +44,8 @@ function getCommitId(issueEvents) {
     // const actionEvent = "closed";
     let commitId = null;
 
+    console.log("This is the issueEvents", issueEvents);
+
     for (let e of issueEvents) {
         if ((e.actor.login == actorName) && (e.commit_id != null) && (commitId == null) && (e.event == actionEvent)) {
             commitId = e.commit_id;
