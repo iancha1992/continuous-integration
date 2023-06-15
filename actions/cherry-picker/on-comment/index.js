@@ -64,7 +64,7 @@ async function getAllMilestonesIdsAndTitles() {
     });
     return response.data.map((item) => {
         milestone = {
-            title: item.title.split("release blockers")[0],
+            title: item.title.split("release blockers")[0].replace(" ", ""),
             number: item.number
         };
         return milestone
