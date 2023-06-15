@@ -82,6 +82,17 @@ function getReviewer(reviews) {
     return approvers_list;
 }
 
+function extractReleaseNumber() {
+    if (triggeredOn == "commented") {
+        releaseNumber = payload.issue.milestone.title.split("release blockers")
+    }
+    else if (triggeredOn == "closed") {
+        pass
+    }
+    console.log("this is the releaseNumber", releaseNumber)
+    return releaseNumber
+}
+
 Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
     .then((responses) => {
         console.log(`Checking if Pull Request #${prNumber} is closed...`);
