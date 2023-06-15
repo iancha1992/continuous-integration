@@ -85,7 +85,7 @@ function getReviewer(reviews) {
 function extractReleaseNumber() {
     console.log("this is the releaseNumber", payload.issue.milestone.title.split("release blockers"))
     if (triggeredOn == "commented") {
-        return payload.issue.milestone.title.split("release blockers")
+        return payload.issue.milestone.title.split("release blockers")[0]
     }
     else if (triggeredOn == "closed") {
         pass
@@ -122,7 +122,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
 
         const releaseNumber = extractReleaseNumber();
 
-        cherrypickRunner(commitId, prNumber, token, reviewer);
+        cherrypickRunner(commitId, prNumber, token, reviewer, releaseNumber);
 
     }).catch((e) => {
         console.log(e);
