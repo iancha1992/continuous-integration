@@ -83,7 +83,6 @@ function getReviewer(reviews) {
 }
 
 function extractReleaseNumber() {
-    console.log("this is the releaseNumber", payload.issue.milestone.title.split("release blockers"))
     if (triggeredOn == "commented") {
         return payload.issue.milestone.title.split("release blockers")[0]
     }
