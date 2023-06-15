@@ -83,14 +83,13 @@ function getReviewer(reviews) {
 }
 
 function extractReleaseNumber() {
+    console.log("this is the releaseNumber", payload.issue.milestone.title.split("release blockers"))
     if (triggeredOn == "commented") {
-        releaseNumber = payload.issue.milestone.title.split("release blockers")
+        return payload.issue.milestone.title.split("release blockers")
     }
     else if (triggeredOn == "closed") {
         pass
     }
-    console.log("this is the releaseNumber", releaseNumber)
-    return releaseNumber
 }
 
 Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
@@ -120,6 +119,8 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         }
         console.log(reviewer);
         console.log(`PR #${prNumber} is good to cherry-pick.`);
+
+        const releaseNumber = 
 
         cherrypickRunner(commitId, prNumber, token, reviewer);
 
