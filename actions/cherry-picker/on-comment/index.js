@@ -56,31 +56,28 @@ async function getReviews() {
 //     return response.data;
 // }
 
-async function getAllMilestones() {
+async function getAllMilestonesIdsAndTitles() {
     const response = await octokit.request(`GET /repos/iancha1992/bazel/milestones`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     });
-    console.log("getallmilestones", response.data);
-    console.log("sprit");
-    return response.data.filter(milestone => 
-        ({
-            "number" : milestone.number,
-            "title" : milestone.title
-        })
-    )
+    return response.data.map((item) => {
+        milestone = {
+            title: item.title,
+            number: item.number
+        };
+        return milestone
+    })
 };
 
 getAllMilestones().then(response => {
-    console.log("stones data")
-    console.log(response)
+    console.log(response);
 })
-console.log("finished el fin")
+
+
 // function() {
 //     getAllMilestones()
-
-
 // };
 
 
