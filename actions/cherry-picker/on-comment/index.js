@@ -14,7 +14,6 @@ else if (triggeredOn == "closed") {
     var prNumber = payload.number;
 }
 
-
 console.log("This is the payload", payload);
 
 async function getIssueEventsInfos() {
