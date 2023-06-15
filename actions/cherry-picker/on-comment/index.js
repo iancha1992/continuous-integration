@@ -62,11 +62,17 @@ async function getAllMilestones() {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     });
-    console.log("getallmilestones", response.data)
-    return response.data;
+    console.log("getallmilestones", response.data);
+    console.log("sprit");
+    return response.data.filter(milestone => {
+        return {
+            "number" : milestone.number,
+            "title" : milestone.title
+        }
+    })
 };
 
-getAllMilestones()
+console.log(getAllMilestones())
 
 // function() {
 //     getAllMilestones()
