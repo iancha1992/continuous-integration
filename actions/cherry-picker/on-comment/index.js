@@ -71,7 +71,7 @@ async function getAllMilestonesIdsAndTitles() {
     })
 };
 
-getAllMilestones().then(response => {
+getAllMilestonesIdsAndTitles().then(response => {
     console.log(response);
 })
 
