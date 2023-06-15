@@ -44,26 +44,36 @@ async function getReviews() {
     return response.data;
 };
 
-async function getMilestonedIssues() {
-    const response = await octokit.request(`GET /repos/iancha1992/bazel/issues`, {
-        headers: {
-            'X-GitHub-Api-Version': '2022-11-28'
-        },
-        per_page: 100,
-        milestone: 1
+// async function getMilestonedIssues() {
+//     const response = await octokit.request(`GET /repos/iancha1992/bazel/issues`, {
+//         headers: {
+//             'X-GitHub-Api-Version': '2022-11-28'
+//         },
+//         per_page: 100,
+//         milestone: 1
 
-    });
-    return response.data;
-}
+//     });
+//     return response.data;
+// }
 
-async function getMilestones() {
+async function getAllMilestones() {
     const response = await octokit.request(`GET /repos/iancha1992/bazel/milestones`, {
         headers: {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     });
+    console.log("getallmilestones", response.data)
     return response.data;
-}
+};
+
+getAllMilestones()
+
+// function() {
+//     getAllMilestones()
+
+
+// };
+
 
 function getCommitId(issueEvents) {
     const actorName = "iancha1992";
@@ -108,6 +118,7 @@ function extractReleaseNumber() {
         return payload.issue.milestone.title.split("release blockers")[0]
     }
     else if (triggeredOn == "closed") {
+        pass
         
     }
 }
