@@ -120,7 +120,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         console.log(reviewer);
         console.log(`PR #${prNumber} is good to cherry-pick.`);
 
-        const releaseNumber = 
+        const releaseNumber = extractReleaseNumber();
 
         cherrypickRunner(commitId, prNumber, token, reviewer);
 
