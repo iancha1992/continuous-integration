@@ -64,7 +64,7 @@ async function getAllMilestonesIdsAndTitles() {
     });
     return response.data.map((item) => {
         milestone = {
-            title: item.title,
+            title: item.title.split("release blockers")[0],
             number: item.number
         };
         return milestone
@@ -72,6 +72,7 @@ async function getAllMilestonesIdsAndTitles() {
 };
 
 getAllMilestonesIdsAndTitles().then(response => {
+    console.log("water");
     console.log(response);
 })
 
