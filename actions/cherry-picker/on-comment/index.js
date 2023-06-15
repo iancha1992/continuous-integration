@@ -72,7 +72,10 @@ async function getAllMilestones() {
     )
 };
 
-console.log(getAllMilestones())
+getAllMilestones().then(response => {
+    console.log("stones data")
+    console.log(response)
+})
 console.log("finished el fin")
 // function() {
 //     getAllMilestones()
