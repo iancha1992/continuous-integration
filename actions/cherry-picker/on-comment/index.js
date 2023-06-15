@@ -64,16 +64,16 @@ async function getAllMilestones() {
     });
     console.log("getallmilestones", response.data);
     console.log("sprit");
-    return response.data.filter(milestone => {
-        return {
+    return response.data.filter(milestone => 
+        ({
             "number" : milestone.number,
             "title" : milestone.title
-        }
-    })
+        })
+    )
 };
 
 console.log(getAllMilestones())
-
+console.log("finished el fin")
 // function() {
 //     getAllMilestones()
 
