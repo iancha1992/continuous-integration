@@ -91,8 +91,8 @@ async function getAllMilestonesIdsAndTitles() {
                 break;
             }
         }
-        console.log("This is the final data", finalData);
     };
+    console.log("This is the final data", finalData);
 
 
 };
