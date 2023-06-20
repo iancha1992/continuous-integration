@@ -71,6 +71,7 @@ async function getAllMilestonesIdsAndTitles() {
         milestonedIssues.push(milestone);
     });
     console.log("Now requesting for milestonedIssues Infos...")
+    let finalData = [];
     for (let issue of milestonedIssues) {
         const issuesData = await octokit.request(`GET /repos/iancha1992/bazel/issues`, {
             headers: {
@@ -79,8 +80,18 @@ async function getAllMilestonesIdsAndTitles() {
             milestone: issue.number
         });
         console.log("This is the milestonedissues", issuesData);
-        const filteredMilestonedIssues = issuesData.data.filter((item) => item.body == `Forked from #${prNumber}`);
-        console.log("This is the final data", filteredMilestonedIssues);
+        // const filteredMilestonedIssues = issuesData.data.filter((item) => item.body == `Forked from #${prNumber}`);
+        for (let forkedIssue of issuesData.data) {
+            if (forkedIssue.body == `Forked from #${prNumber}`) {
+                data = {
+                    issueNumber: forkedIssue.number,
+                    releaseNumber: issue.title,
+                }
+                finalData.push(data);
+                break;
+            }
+        }
+        console.log("This is the final data", finalData);
     };
 
 
