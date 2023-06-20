@@ -62,14 +62,31 @@ async function getAllMilestonesIdsAndTitles() {
             'X-GitHub-Api-Version': '2022-11-28'
         }
     });
-    return response.data.map((item) => {
+    let milestonedIssues = [];
+    response.data.map((item) => {
         milestone = {
             title: item.title.split("release blockers")[0].replace(" ", ""),
             number: item.number
         };
-        return milestone
-    })
+        milestonedIssues.push(milestone);
+    });
+    console.log("Now requesting for milestonedIssues Infos...")
+    for (let issue of milestonedIssues) {
+        const issuesData = await octokit.request(`GET /repos/iancha1992/bazel/issues`, {
+            headers: {
+                'X-GitHub-Api-Version': '2022-11-28'
+            },
+            milestone: issue.number
+        });
+        console.log("This is the milestonedissues", issuesData);
+    };
+
+
 };
+
+async function getAllIssuesForIssue() {
+    pass
+}
 
 // getAllMilestonesIdsAndTitles().then(response => {
 //     console.log("water");
@@ -80,6 +97,8 @@ async function getAllMilestonesIdsAndTitles() {
 // function() {
 //     getAllMilestones()
 // };
+
+let cherrypickData;
 
 
 function getCommitId(issueEvents) {
@@ -120,16 +139,29 @@ function getReviewer(reviews) {
     return approvers_list;
 }
 
+
+
+
+
 function extractReleaseNumber() {
-    if (triggeredOn == "commented") {
-        return payload.issue.milestone.title.split("release blockers")[0]
-    }
-    else if (triggeredOn == "closed") {
-        getAllMilestonesIdsAndTitles().then(response => {
-            console.log("water");
-            console.log(response);
-        })
-    }
+    // if (triggeredOn == "commented") {
+    //     return payload.issue.milestone.title.split("release blockers")[0]
+    // }
+    // else if (triggeredOn == "closed") {
+    //     getAllMilestonesIdsAndTitles().then(response => {
+    //         console.log("water");
+    //         console.log(response);
+    //     })
+    // }
+
+    getAllMilestonesIdsAndTitles().then(response => {
+        console.log("water");
+        console.log(response);
+        // milestoneNumber = response.number;
+
+
+
+    })
 }
 
 Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
@@ -161,6 +193,20 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         console.log(`PR #${prNumber} is good to cherry-pick.`);
 
         const releaseNumber = extractReleaseNumber();
+
+        // let cherrypickData;
+
+        // if (triggeredOn == "commented") {
+        //     pass
+            
+            
+        // }
+        
+        // else if (triggeredOn == "closed") {
+        //     pass
+        // }
+
+        // let cherrypickData = 
 
         cherrypickRunner(commitId, prNumber, token, reviewer, releaseNumber);
 
