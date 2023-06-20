@@ -79,6 +79,8 @@ async function getAllMilestonesIdsAndTitles() {
             milestone: issue.number
         });
         console.log("This is the milestonedissues", issuesData);
+        const filteredMilestonedIssues = issuesData.data.filter(item => item.includes(`Forked from #${prNumber}`));
+        console.log("This is the final data", filteredMilestonedIssues);
     };
 
 
