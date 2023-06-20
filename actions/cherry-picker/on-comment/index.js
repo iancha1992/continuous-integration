@@ -71,10 +71,10 @@ async function getAllMilestonesIdsAndTitles() {
     })
 };
 
-getAllMilestonesIdsAndTitles().then(response => {
-    console.log("water");
-    console.log(response);
-})
+// getAllMilestonesIdsAndTitles().then(response => {
+//     console.log("water");
+//     console.log(response);
+// })
 
 
 // function() {
@@ -125,8 +125,10 @@ function extractReleaseNumber() {
         return payload.issue.milestone.title.split("release blockers")[0]
     }
     else if (triggeredOn == "closed") {
-        pass
-        
+        getAllMilestonesIdsAndTitles().then(response => {
+            console.log("water");
+            console.log(response);
+        })
     }
 }
 
