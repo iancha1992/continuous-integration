@@ -1,9 +1,7 @@
 import os
-
+token = os.environ["INPUT_TOKEN"]
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 
 
-print("Hello python world")
-print(triggered_on)
 
-
+print("This is the toke", token)
