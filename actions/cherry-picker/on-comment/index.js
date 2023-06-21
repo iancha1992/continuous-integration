@@ -93,8 +93,7 @@ async function getAllMilestonesIdsAndTitles() {
         }
     };
     console.log("This is the final data", finalData);
-
-
+    return finalData;
 };
 
 async function getAllIssuesForIssue() {
