@@ -2,6 +2,7 @@ import os
 from functions.check_closed import check_closed
 from functions.get_commit_id import get_commit_id
 from functions.get_reviewers import get_reviewers
+from functions.extract_release_numbers_data import extract_release_numbers_data
 
 token = os.environ["INPUT_TOKEN"]
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
@@ -21,3 +22,6 @@ print("Here is the commitid", commit_id)
 
 # Retrieve approvers(reviewers) of the PR
 reviewers = get_reviewers(pr_number)
+
+# Retrieve release_numbers
+release_numbers_data = extract_release_numbers_data()
