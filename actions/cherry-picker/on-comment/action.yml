@@ -22,6 +22,9 @@ runs:
       run: |
               echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
       shell: bash
-    - name: Run python index.py
-      run: python continuous-integration/actions/cherry-picker/on-comment/index.py
-      shell: bash
+    # - name: Run python index.py
+    #   run: python continuous-integration/actions/cherry-picker/on-comment/index.py
+    #   shell: bash
+    runs:
+    using: 'node16'
+    main: 'index.js'
