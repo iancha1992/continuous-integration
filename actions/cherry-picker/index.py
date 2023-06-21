@@ -18,3 +18,5 @@ print("This is prnumber!!!!!!!", pr_number)
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
 
 commit_id = get_commit_id(pr_number, actor_name, action_event)
+
+print("Here is the commitid!!!!", commit_id)
