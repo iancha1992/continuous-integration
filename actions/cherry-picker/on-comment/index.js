@@ -147,6 +147,7 @@ function extractReleaseNumber() {
     getAllMilestonesIdsAndTitles().then(response => {
         console.log("water");
         console.log(response);
+        return response
         // milestoneNumber = response.number;
 
 
@@ -183,6 +184,7 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         console.log(`PR #${prNumber} is good to cherry-pick.`);
 
         const releaseNumbersData = extractReleaseNumber();
+        console.log(releaseNumbersData);
 
         cherrypickRunner(commitId, prNumber, token, reviewer, releaseNumbersData);
 
