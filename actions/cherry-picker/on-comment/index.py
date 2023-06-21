@@ -4,4 +4,5 @@ pr_number = os.environ["INPUT_PR_NUMBER"]
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 
 print("This is the payload!")
-print(payload)
+print(pr_number)
+
