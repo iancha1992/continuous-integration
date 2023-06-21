@@ -8,9 +8,9 @@ inputs:
   triggered-on:
     required: true
     default: ${{ github.triggered-on }}
-  github-payload:
+  PR_NUMBER:
     required: true
-    default: ${{ github.github-payload }}
+    default: ${{ github.pr-number }}
 runs:
   using: 'composite'
   steps:
