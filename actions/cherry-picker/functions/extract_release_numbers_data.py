@@ -18,7 +18,7 @@ def get_milestoned_issues(milestones):
     }
     for milestone in milestones:
         params = {
-            milestone: milestone["number"]
+            "milestone": milestone["number"]
         }
         r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues', headers=headers, params=params)
         print("quietresults")
