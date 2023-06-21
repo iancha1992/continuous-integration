@@ -6,7 +6,7 @@ def check_closed(pr_number):
     }
     r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls/{pr_number}', headers=headers)
     print("hihihihi", r.json())
-    return True if r.text.state == "closed" else False
+    return True if r.json().state == "closed" else False
     
 
 
