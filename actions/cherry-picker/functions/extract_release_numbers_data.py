@@ -5,7 +5,7 @@ def get_all_milestones_data():
         'X-GitHub-Api-Version': '2022-11-28'
     }
     r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/milestones', headers=headers)
-    print(r.json())
+    print("tupac", r.json())
     return r.json()["data"]
 
 
