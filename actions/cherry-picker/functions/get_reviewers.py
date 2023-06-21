@@ -13,8 +13,8 @@ def get_reviewers(pr_number):
     for review in r.json():
         if review["state"] == "APPROVED":
             data = {
-                "login": review.user.login,
-                "id": review.user.id
+                "login": review["user"]["login"],
+                "id": review["user"]["id"]
             }
             approvers_list.append(data)
     if len(approvers_list) == 0:
