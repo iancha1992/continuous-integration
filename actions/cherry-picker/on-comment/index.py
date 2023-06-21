@@ -1,7 +1,9 @@
+import os
 
-
-
+triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 
 
 print("Hello python world")
-print(INPUT_TRIGGERED_ON)
+print(triggered_on)
+
+
