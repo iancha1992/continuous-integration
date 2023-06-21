@@ -82,7 +82,7 @@ async function getAllMilestonesIdsAndTitles() {
         console.log("This is the milestonedissues", issuesData);
         // const filteredMilestonedIssues = issuesData.data.filter((item) => item.body == `Forked from #${prNumber}`);
         for (let forkedIssue of issuesData.data) {
-            if ((forkedIssue.body == `Forked from #${prNumber}`) && (forkedIssue.state == "closed")) {
+            if ((forkedIssue.body == `Forked from #${prNumber}`) && (forkedIssue.state == "open")) {
                 data = {
                     issueNumber: forkedIssue.number,
                     releaseNumber: issue.title,
