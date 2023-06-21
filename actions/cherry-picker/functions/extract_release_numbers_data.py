@@ -10,6 +10,8 @@ def get_all_milestones_data():
     return milestones_data
 
 def get_milestoned_issues(milestones):
+    print("Coach")
+    pprint(milestones)
     results= {}
     headers = {
         'X-GitHub-Api-Version': '2022-11-28'
