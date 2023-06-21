@@ -8,7 +8,7 @@ inputs:
   triggered-on:
     required: true
     default: ${{ github.triggered-on }}
-  PR_NUMBER:
+  pr-number:
     required: true
     default: ${{ github.pr-number }}
 runs:
@@ -25,7 +25,7 @@ runs:
       run: |
               echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
               echo "INPUT_TOKEN=${{ inputs.token }}" >> $GITHUB_ENV
-              echo "GITHUB_PAYLOAD=${{ inputs.github-payload }}" >> $GITHUB_ENV
+              echo "INPUT_PR_NUMBER=${{ inputs.pr-number }}" >> $GITHUB_ENV
       shell: bash
     - name: Run python index.py
       run: |
