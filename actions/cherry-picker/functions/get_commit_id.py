@@ -8,6 +8,6 @@ def get_commit_id(pr_number):
     params = {
         "per_page": 100
     }
-    r = requests.get(f'https://api.github.com/repos/repos/iancha1992/bazel/issues/{pr_number}/events', headers=headers, params=params)
+    r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues/{pr_number}/events', headers=headers, params=params)
     print("getcommitiddd")
     pprint(r.json())
