@@ -22,7 +22,6 @@ runs:
       run: |
               echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
       shell: bash
-    - name: Fetch the number's square
-      id: get-square
-      run: python index.py
+    - name: Run python index.py
+      run: pwd
       shell: bash
