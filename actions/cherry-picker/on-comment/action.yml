@@ -10,6 +10,7 @@ inputs:
     default: ${{ github.triggered-on }}
 runs:
   using: 'composite'
+  main: 'index.py'
   steps:
     - name: Install Python
       uses: actions/setup-python@v4
@@ -25,6 +26,5 @@ runs:
     # - name: Run python index.py
     #   run: python continuous-integration/actions/cherry-picker/on-comment/index.py
     #   shell: bash
-    runs:
-    using: 'node16'
-    main: 'index.js'
+    # using: 'node16'
+    # main: 'index.js'
