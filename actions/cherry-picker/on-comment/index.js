@@ -82,7 +82,7 @@ async function getAllMilestonesIdsAndTitles() {
         console.log("This is the milestonedissues", issuesData);
         // const filteredMilestonedIssues = issuesData.data.filter((item) => item.body == `Forked from #${prNumber}`);
         for (let forkedIssue of issuesData.data) {
-            if (forkedIssue.body == `Forked from #${prNumber}`) {
+            if ((forkedIssue.body == `Forked from #${prNumber}`) && (forkedIssue.state == "closed")) {
                 data = {
                     issueNumber: forkedIssue.number,
                     releaseNumber: issue.title,
@@ -101,18 +101,7 @@ async function getAllIssuesForIssue() {
     pass
 }
 
-// getAllMilestonesIdsAndTitles().then(response => {
-//     console.log("water");
-//     console.log(response);
-// })
-
-
-// function() {
-//     getAllMilestones()
-// };
-
 let cherrypickData;
-
 
 function getCommitId(issueEvents) {
     const actorName = "iancha1992";
@@ -138,7 +127,6 @@ function getReviewer(reviews) {
     if (reviews.length == 0) {
         return null
     }
-
     let approvers_list = [];
     for (let review of reviews) {
         if (review.state == "APPROVED") {
@@ -157,16 +145,6 @@ function getReviewer(reviews) {
 
 
 function extractReleaseNumber() {
-    // if (triggeredOn == "commented") {
-    //     return payload.issue.milestone.title.split("release blockers")[0]
-    // }
-    // else if (triggeredOn == "closed") {
-    //     getAllMilestonesIdsAndTitles().then(response => {
-    //         console.log("water");
-    //         console.log(response);
-    //     })
-    // }
-
     getAllMilestonesIdsAndTitles().then(response => {
         console.log("water");
         console.log(response);
@@ -205,23 +183,9 @@ Promise.all([getPrEventsInfos(), getIssueEventsInfos(), getReviews()])
         console.log(reviewer);
         console.log(`PR #${prNumber} is good to cherry-pick.`);
 
-        const releaseNumber = extractReleaseNumber();
+        const releaseNumbersData = extractReleaseNumber();
 
-        // let cherrypickData;
-
-        // if (triggeredOn == "commented") {
-        //     pass
-            
-            
-        // }
-        
-        // else if (triggeredOn == "closed") {
-        //     pass
-        // }
-
-        // let cherrypickData = 
-
-        cherrypickRunner(commitId, prNumber, token, reviewer, releaseNumber);
+        cherrypickRunner(commitId, prNumber, token, reviewer, releaseNumbersData);
 
     }).catch((e) => {
         console.log(e);
