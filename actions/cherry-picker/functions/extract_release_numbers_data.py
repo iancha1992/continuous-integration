@@ -10,6 +10,6 @@ def get_all_milestones_data():
 
 
 def extract_release_numbers_data():
-    pass
+    get_all_milestones_data()
 
     
