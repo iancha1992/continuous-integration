@@ -10,7 +10,6 @@ inputs:
     default: ${{ github.triggered-on }}
 runs:
   using: 'composite'
-  main: 'index.py'
   steps:
     - name: Install Python
       uses: actions/setup-python@v4
