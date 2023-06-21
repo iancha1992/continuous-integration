@@ -9,5 +9,5 @@ inputs:
     required: true
     default: ${{ github.triggered-on }}
 runs:
-  using: 'python'
-  main: 'index.py'
+  using: 'node16'
+  main: 'index.js'
