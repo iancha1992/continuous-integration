@@ -19,4 +19,5 @@ def get_reviewers(pr_number):
             approvers_list.append(data)
     if len(approvers_list) == 0:
         raise ValueError(f"PR#{pr_number} has no approver.")
+    
     return approvers_list
