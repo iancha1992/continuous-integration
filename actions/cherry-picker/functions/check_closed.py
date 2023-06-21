@@ -8,7 +8,7 @@ def check_closed(pr_number):
     }
     r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls/{pr_number}', headers=headers)
     print("Dataha")
-    pprint(r.json())
+    pprint(r.json().state)
     if r.json().state == "closed":
         print("ITS CLOSED")
         return True
