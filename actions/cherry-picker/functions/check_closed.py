@@ -5,6 +5,7 @@ def check_closed(pr_number):
         'X-GitHub-Api-Version': '2022-11-28'
     }
     r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls/{pr_number}', headers = headers)
+    print(r)
     return True if r.text.state == "closed" else False
     
 
