@@ -8,9 +8,9 @@ inputs:
   triggered-on:
     required: true
     default: ${{ github.triggered-on }}
-  payload:
+  github-payload:
     required: true
-    default: ${{ github.payload }}
+    default: ${{ github.github-payload }}
 runs:
   using: 'composite'
   steps:
@@ -25,7 +25,7 @@ runs:
       run: |
               echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
               echo "INPUT_TOKEN=${{ inputs.token }}" >> $GITHUB_ENV
-              echo "PAYLOAD=${{ inputs.payload }}" >> $GITHUB_ENV
+              echo "GITHUB_PAYLOAD=${{ inputs.github-payload }}" >> $GITHUB_ENV
       shell: bash
     - name: Run python index.py
       run: |
