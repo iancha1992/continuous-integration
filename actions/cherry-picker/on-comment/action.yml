@@ -9,5 +9,20 @@ inputs:
     required: true
     default: ${{ github.triggered-on }}
 runs:
-  using: 'node16'
-  main: 'index.js'
+  using: 'composite'
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+      shell: bash
+    - name: Pass Inputs to Shell
+      run: |
+              echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Fetch the number's square
+      id: get-square
+      run: python index.py
+      shell: bash
