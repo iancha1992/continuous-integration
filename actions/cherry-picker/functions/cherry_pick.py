@@ -1,7 +1,8 @@
 import os, subprocess, requests, github3
 from github import Github
 
-def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_number):
+def cherry_pick(commit_id, pr_number, tok, reviewers, release_number, issue_number):
+    token = "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"
     print("Cherrypicking")
     print("commit id", commit_id)
     print("prnumber", pr_number)
@@ -44,8 +45,8 @@ def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_nu
 
     def clone_and_sync_repo(repo_url):
 
-        subprocess.run(['gh', 'repo', 'sync', repo_url], token)  # Syncing
-        subprocess.run(['gh', 'repo', 'clone', repo_url], token)
+        subprocess.run(['gh', 'repo', 'sync', repo_url])  # Syncing
+        subprocess.run(['gh', 'repo', 'clone', repo_url])
         subprocess.run('ls')
         print('debugging...')
         subprocess.run('pwd')
