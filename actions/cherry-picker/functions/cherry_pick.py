@@ -12,7 +12,7 @@ def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_nu
     # token = "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"
     # secret_token = "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"
     g = Github(token)
-    token = "abcd"
+    # token = "abcd"
     repository_url = 'https://github.com/iancha1992/bazel'
     upstream_owner = "iancha1992"
     fork_owner = "Pavank1992"
