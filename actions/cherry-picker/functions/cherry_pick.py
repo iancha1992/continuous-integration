@@ -45,7 +45,7 @@ def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_nu
 
         subprocess.run(['gh', 'repo', 'sync', repo_url])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', repo_url])
-        subprocess.run('ls')
+        print(subprocess.run('ls'))
         print('debugging...')
         subprocess.run('pwd')
         
