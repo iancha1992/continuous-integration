@@ -44,7 +44,7 @@ def cherry_pick(commit_id, pr_number, tok, reviewers, release_number, issue_numb
 
 
     def clone_and_sync_repo(repo_url):
-
+        # subprocess.run('gh', 'auth', 'login')
         subprocess.run(['gh', 'repo', 'sync', repo_url])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', repo_url])
         subprocess.run('ls')
@@ -60,9 +60,9 @@ def cherry_pick(commit_id, pr_number, tok, reviewers, release_number, issue_numb
         os.chdir(repo_name)
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
         subprocess.run(['git', 'checkout', master_branch])
-        subprocess.run(['git', 'pull'])
-        subprocess.run(['git', 'checkout', release_number])
-        subprocess.run(['git', 'pull'])
+        # subprocess.run(['git', 'pull'])
+        subprocess.run(['git', 'checkout', 'release-'+release_number])
+        # subprocess.run(['git', 'pull'])
 
 
     def create_branch_and_cherrypick(pr_number, commit_id):
