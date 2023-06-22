@@ -24,4 +24,4 @@ print("Here is the commitid", commit_id)
 reviewers = get_reviewers(pr_number)
 
 # Retrieve release_numbers
-release_numbers_data = extract_release_numbers_data()
+release_numbers_data = extract_release_numbers_data(pr_number)

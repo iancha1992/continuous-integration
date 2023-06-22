@@ -9,7 +9,7 @@ def get_all_milestones_data():
     milestones_data = list(map(lambda n: {"title": n["title"].split("release blockers")[0].replace(" ", ""), "number": n["number"]}, r.json()))
     return milestones_data
 
-def get_milestoned_issues(milestones):
+def get_milestoned_issues(milestones, pr_number):
     print("Coach")
     pprint(milestones)
     results= {}
@@ -23,6 +23,17 @@ def get_milestoned_issues(milestones):
         r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues', headers=headers, params=params)
         print("quietresults")
         pprint(r.json())
+        for issue in r.json():
+            if issue["body"] == f'Forked from #{pr_number}' and issue["state"] == "open":
+                # data = {
+                #     "issue_number": issue["number"],
+                #     "release_number": milestone["title"]
+                # }
+                results[milestone["title"]] = issue["number"]
+                break
+    print("cocacola")
+    pprint(results)
+    return results
 
 
 
@@ -33,7 +44,9 @@ def get_milestoned_issues(milestones):
 
 
 
-def extract_release_numbers_data():
+
+
+def extract_release_numbers_data(pr_number):
     milestones_data = get_all_milestones_data()
-    milestoned_issues = get_milestoned_issues(milestones_data)
+    milestoned_issues = get_milestoned_issues(milestones_data, pr_number)
 
