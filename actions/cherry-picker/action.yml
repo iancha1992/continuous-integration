@@ -25,7 +25,7 @@ runs:
     - name: Pass Inputs to Shell
       run: |
               echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
-              echo "INPUT_TOKEN=${{ inputs.token }}" >> $GITHUB_ENV
+              echo "GH_TOKEN=${{ inputs.token }}" >> $GITHUB_ENV
               echo "INPUT_PR_NUMBER=${{ inputs.pr-number }}" >> $GITHUB_ENV
       shell: bash
     - name: Run python index.py

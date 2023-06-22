@@ -5,7 +5,7 @@ from functions.get_reviewers import get_reviewers
 from functions.extract_release_numbers_data import extract_release_numbers_data
 from functions.cherry_pick import cherry_pick
 
-token = os.environ["INPUT_TOKEN"]
+token = os.environ["GH_TOKEN"]
 token_test = "awefawefwefwfwf" + token
 print("tokentest", token_test)
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
