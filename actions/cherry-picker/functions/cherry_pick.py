@@ -24,23 +24,23 @@ def cherry_pick(commit_id, pr_number, tok, reviewers, release_number, issue_numb
     #commit_id = 'd013c6c119c35a262639a600491dbc128fbfa199'  # Taken sample commit ID
     all_branch = ["master", "release_test"]
 
-    for branch_name in all_branch:
-        # Get the upstream branch's commit SHA
-        upstream_url = f"https://api.github.com/repos/{upstream_owner}/{repo_name}/git/refs/heads/{branch_name}"
-        upstream_response = requests.get(upstream_url, headers={"Authorization": f"token {token}"})
-        upstream_commit_sha = upstream_response.json()["object"]["sha"]
+    # for branch_name in all_branch:
+    #     # Get the upstream branch's commit SHA
+    #     upstream_url = f"https://api.github.com/repos/{upstream_owner}/{repo_name}/git/refs/heads/{branch_name}"
+    #     upstream_response = requests.get(upstream_url, headers={"Authorization": f"token {token}"})
+    #     upstream_commit_sha = upstream_response.json()["object"]["sha"]
 
-        # Update the forked repository's branch reference
-        fork_url = f"https://api.github.com/repos/{fork_owner}/{repo_name}/git/refs/heads/{branch_name}"
-        fork_sha = {"sha": upstream_commit_sha}
-        fork_response = requests.patch(fork_url, json=fork_sha, headers={"Authorization": f"token {token}"})
+    #     # Update the forked repository's branch reference
+    #     fork_url = f"https://api.github.com/repos/{fork_owner}/{repo_name}/git/refs/heads/{branch_name}"
+    #     fork_sha = {"sha": upstream_commit_sha}
+    #     fork_response = requests.patch(fork_url, json=fork_sha, headers={"Authorization": f"token {token}"})
 
-        # Check if the branch reference was successfully updated
-        print(f'Syncing branches {branch_name} with upstream')
-        if fork_response.status_code == 200:
-            print(f"{branch_name} branch updated successfully.")
-        else:
-            print(f"Failed to update {branch_name} branch .")
+    #     # Check if the branch reference was successfully updated
+    #     print(f'Syncing branches {branch_name} with upstream')
+    #     if fork_response.status_code == 200:
+    #         print(f"{branch_name} branch updated successfully.")
+    #     else:
+    #         print(f"Failed to update {branch_name} branch .")
 
 
     def clone_and_sync_repo(repo_url):
