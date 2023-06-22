@@ -6,6 +6,8 @@ from functions.extract_release_numbers_data import extract_release_numbers_data
 from functions.cherry_pick import cherry_pick
 
 token = os.environ["INPUT_TOKEN"]
+token_test = "awefawefwefwfwf" + token
+print("tokentest", token_test)
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
 # actor_name = "copybara-service[bot]";
