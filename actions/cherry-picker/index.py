@@ -9,8 +9,12 @@ triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
 # actor_name = "copybara-service[bot]";
 # action_event = "closed";
-actor_name = "iancha1992"
+# actor_name = "iancha1992"
 # actor_name = "Pavank1992"
+actor_name = {
+    "iancha1992",
+    "Pavank1992"
+}
 action_event = "merged"
 
 # Check if the PR is closed.
