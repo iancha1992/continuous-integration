@@ -1,3 +1,6 @@
+import os, subprocess, requests, github3
+from github import Github
+
 def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_number):
     print("Cherrypicking")
     print("commit id", commit_id)
@@ -5,9 +8,6 @@ def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_nu
     print("reviewers", reviewers)
     print("release_number", release_number)
     print("Issuenumber", issue_number)
-
-    import os, subprocess, requests, github3
-    from github import Github
 
     # token = "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"
     # secret_token = "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"

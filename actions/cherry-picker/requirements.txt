@@ -1,1 +1,2 @@
 requests==2.31.0
+github3.py==4.0.1
