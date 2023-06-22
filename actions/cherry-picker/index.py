@@ -5,9 +5,6 @@ from functions.get_reviewers import get_reviewers
 from functions.extract_release_numbers_data import extract_release_numbers_data
 from functions.cherry_pick import cherry_pick
 
-token = os.environ["GH_TOKEN"]
-token_test = "awefawefwefwfwf" + token
-print("tokentest", token_test)
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
 # actor_name = "copybara-service[bot]";
@@ -33,4 +30,4 @@ release_numbers_data = extract_release_numbers_data(pr_number)
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
-    cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_number)
+    cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number)
