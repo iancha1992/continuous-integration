@@ -32,6 +32,8 @@ runs:
       run: |
               chmod +x ${{ github.action_path }}/index.py
               python ${{ github.action_path }}/index.py
+      env:
+        GH_TOKEN: ${{ github.token }}
       shell: bash
     # - name: Run python index.py
     #   run: python continuous-integration/actions/cherry-picker/on-comment/index.py
