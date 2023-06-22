@@ -56,7 +56,7 @@ def cherry_pick(commit_id, pr_number, tok, reviewers, release_number, issue_numb
 
     def checkout_release_number(repo_url, branch):
         # subprocess.run(['git', 'clone', repo_url])  # cloning
-        repo_name = repo_url.split('/')[-1].split('.')[0]
+        # repo_name = repo_url.split('/')[-1].split('.')[0]
         os.chdir(repo_name)
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
         subprocess.run(['git', 'checkout', master_branch])
