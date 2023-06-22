@@ -10,7 +10,7 @@ def get_all_milestones_data():
     return milestones_data
 
 def get_milestoned_issues(milestones, pr_number):
-    print("Coach")
+    print("get_milestoned_issues()")
     pprint(milestones)
     results= {}
     headers = {
@@ -31,7 +31,7 @@ def get_milestoned_issues(milestones, pr_number):
                 # }
                 results[milestone["title"]] = issue["number"]
                 break
-    print("cocacola")
+    print("results for get_imlestoned_issues")
     pprint(results)
     return results
 
