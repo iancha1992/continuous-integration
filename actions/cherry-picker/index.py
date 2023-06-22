@@ -3,6 +3,7 @@ from functions.check_closed import check_closed
 from functions.get_commit_id import get_commit_id
 from functions.get_reviewers import get_reviewers
 from functions.extract_release_numbers_data import extract_release_numbers_data
+from functions.cherry_pick import cherry_pick
 
 token = os.environ["INPUT_TOKEN"]
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
@@ -25,3 +26,8 @@ reviewers = get_reviewers(pr_number)
 
 # Retrieve release_numbers
 release_numbers_data = extract_release_numbers_data(pr_number)
+
+for k in release_numbers_data.keys():
+    release_number = k
+    issue_number = release_numbers_data[k]
+    cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_number)

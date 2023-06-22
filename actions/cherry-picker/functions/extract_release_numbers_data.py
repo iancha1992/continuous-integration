@@ -35,18 +35,7 @@ def get_milestoned_issues(milestones, pr_number):
     pprint(results)
     return results
 
-
-
-
-
-
-
-
-
-
-
-
 def extract_release_numbers_data(pr_number):
     milestones_data = get_all_milestones_data()
     milestoned_issues = get_milestoned_issues(milestones_data, pr_number)
-
+    return milestoned_issues
