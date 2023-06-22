@@ -12,6 +12,7 @@ def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_nu
     # token = "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"
     # secret_token = "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"
     g = Github(token)
+    token = "abcd"
     repository_url = 'https://github.com/iancha1992/bazel'
     upstream_owner = "iancha1992"
     fork_owner = "Pavank1992"
@@ -43,11 +44,12 @@ def cherry_pick(commit_id, pr_number, token, reviewers, release_number, issue_nu
 
     def clone_and_sync_repo(repo_url):
 
-        subprocess.run(['gh', 'repo', 'sync', repo_url])  # Syncing
-        subprocess.run(['gh', 'repo', 'clone', repo_url])
-        print(subprocess.run('ls'))
+        subprocess.run(['gh', 'repo', 'sync', repo_url], token)  # Syncing
+        subprocess.run(['gh', 'repo', 'clone', repo_url], token)
+        subprocess.run('ls')
         print('debugging...')
         subprocess.run('pwd')
+        print(repo_name)
         
 
 
