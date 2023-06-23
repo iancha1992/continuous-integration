@@ -14,29 +14,14 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     repository_url = 'https://github.com/iancha1992/bazel'
     fork_owner = "Pavank1992"
     repo_name = "bazel"
-    master_branch = 'release_test'
+    master_branch = 'master'
+    release_branch_name = "release-" + release_number
+    target_branch_name = f"cp{pr_number}"
     #release_number = 'test_16910'
     # pr_number = '1234556'
     #commit_id = 'd013c6c119c35a262639a600491dbc128fbfa199'  # Taken sample commit ID
     all_branch = ["master", "release_test"]
 
-    # for branch_name in all_branch:
-    #     # Get the upstream branch's commit SHA
-    #     upstream_url = f"https://api.github.com/repos/{upstream_owner}/{repo_name}/git/refs/heads/{branch_name}"
-    #     upstream_response = requests.get(upstream_url, headers={"Authorization": f"token {token}"})
-    #     upstream_commit_sha = upstream_response.json()["object"]["sha"]
-
-    #     # Update the forked repository's branch reference
-    #     fork_url = f"https://api.github.com/repos/{fork_owner}/{repo_name}/git/refs/heads/{branch_name}"
-    #     fork_sha = {"sha": upstream_commit_sha}
-    #     fork_response = requests.patch(fork_url, json=fork_sha, headers={"Authorization": f"token {token}"})
-
-    #     # Check if the branch reference was successfully updated
-    #     print(f'Syncing branches {branch_name} with upstream')
-    #     if fork_response.status_code == 200:
-    #         print(f"{branch_name} branch updated successfully.")
-    #     else:
-    #         print(f"Failed to update {branch_name} branch .")
 
 
     def clone_and_sync_repo(repo_url):
@@ -46,17 +31,20 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
     def checkout_release_number(repo_url, branch):
         os.chdir(repo_name)
+        print("git fetch --all")
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
+        print("git checkout", master_branch)
         subprocess.run(['git', 'checkout', master_branch])
-        subprocess.run(['git', 'checkout', 'release-'+release_number])
+        print(f'git checkout {release_branch_name}')
+        subprocess.run(['git', 'checkout', release_branch_name])
+        print(f'git checkout -b {target_branch_name}')
+        subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
-    def create_branch_and_cherrypick(pr_number, commit_id):
+    def run_cherrypick(pr_number, commit_id):
         # Create a new branch for cherry-picking
         cp_branch_name = f'cp{pr_number}'
         # subprocess.run(['git', 'config', '--global', 'user.email', 'pavanksingh@google.com'])
         # subprocess.run(['git', 'config', '--global', 'user.name', 'pavank1992'])
-        print(f"creating CP branch {cp_branch_name}")
-        subprocess.run(['git', 'checkout', '-b', cp_branch_name])
 
         # Cherry-pick the specified commit
         print(f"cherry-picking the commit id {commit_id} in CP branch: {cp_branch_name}")
@@ -86,5 +74,5 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print('Cherry-picking Started')
     clone_and_sync_repo(repository_url)
     checkout_release_number(repository_url, release_number)
-    create_branch_and_cherrypick(pr_number, commit_id)
-    print('...end...')
+    # run_cherrypick(pr_number, commit_id)
+    # print('...end...')
