@@ -24,8 +24,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     #commit_id = 'd013c6c119c35a262639a600491dbc128fbfa199'  # Taken sample commit ID
     all_branch = ["master", "release_test"]
 
-
-
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name])  # Syncing
@@ -35,22 +33,18 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     def remove_upstream_and_add_origin():
         subprocess.run(['git', 'remote', 'rm', 'upstream'])
         subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
-
-    def checkout_release_number(branch):
         print("git remote -v")
         subprocess.run(['git', 'remote', '-v'])
-        # print("git fetch --all")
-        # subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
-        # print("git checkout", master_branch)
-        # subprocess.run(['git', 'checkout', master_branch])
-        # print(f'git checkout {release_branch_name}')
-        # subprocess.run(['git', 'checkout', release_branch_name])
-        # print(f'git checkout -b {target_branch_name}')
-        # subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
-
-
-        
+    def checkout_release_number():
+        print("git fetch --all")
+        subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
+        print("git checkout", master_branch)
+        subprocess.run(['git', 'checkout', master_branch])
+        print(f'git checkout {release_branch_name}')
+        subprocess.run(['git', 'checkout', release_branch_name])
+        print(f'git checkout -b {target_branch_name}')
+        subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
     def run_cherrypick(pr_number, commit_id):
         # Create a new branch for cherry-picking
@@ -86,6 +80,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print('Cherry-picking Started')
     clone_and_sync_repo()
     remove_upstream_and_add_origin()
-    checkout_release_number(release_number)
+    checkout_release_number()
     # run_cherrypick(pr_number, commit_id)
     # print('...end...')
