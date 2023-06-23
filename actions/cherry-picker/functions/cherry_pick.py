@@ -44,10 +44,10 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         # subprocess.run('gh', 'auth', 'login')
         subprocess.run(['gh', 'repo', 'sync', repo_url])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', repo_url])
-        subprocess.run('ls')
-        print('debugging...')
-        subprocess.run('pwd')
-        print(repo_name)
+        # subprocess.run('ls')
+        # print('debugging...')
+        # subprocess.run('pwd')
+        # print(repo_name)
         
 
 
@@ -89,9 +89,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
                 "GIT_PASSWORD": password,
                 "SECRET_TOKEN": token
             }
-            print("aaaaa")
             subprocess.run(['git', 'push', '--set-upstream', 'origin', cp_branch_name], env=git_env)
-            print("bbbb")
         else:
             print("Cherry-pick unsuccessful. Please proceed manually.")
 
