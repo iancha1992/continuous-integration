@@ -29,21 +29,20 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', repository_url])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', repository_url])
-
-        print("git remote -v")
-        subprocess.run(['git', 'remote', '-v'])
         
 
     def checkout_release_number(repository_url, branch):
         os.chdir(repo_name)
-        print("git fetch --all")
-        subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
-        print("git checkout", master_branch)
-        subprocess.run(['git', 'checkout', master_branch])
-        print(f'git checkout {release_branch_name}')
-        subprocess.run(['git', 'checkout', release_branch_name])
-        print(f'git checkout -b {target_branch_name}')
-        subprocess.run(['git', 'checkout', '-b', target_branch_name])
+        print("git remote -v")
+        subprocess.run(['git', 'remote', '-v'])
+        # print("git fetch --all")
+        # subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
+        # print("git checkout", master_branch)
+        # subprocess.run(['git', 'checkout', master_branch])
+        # print(f'git checkout {release_branch_name}')
+        # subprocess.run(['git', 'checkout', release_branch_name])
+        # print(f'git checkout -b {target_branch_name}')
+        # subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
         
 
