@@ -11,8 +11,9 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("Issuenumber", issue_number)
 
     g = Github(token)
-    # repository_url = 'https://github.com/iancha1992/bazel'
-    repository_url = "iancha1992/bazel"
+    gh_cli_repo_name = "iancha1992/bazel"
+    repo_url = 'git@github.com:iancha1992/bazel.git'
+
     fork_owner = "Pavank1992"
     repo_name = "bazel"
     master_branch = 'master'
@@ -27,12 +28,15 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
-        subprocess.run(['gh', 'repo', 'sync', repository_url])  # Syncing
-        subprocess.run(['gh', 'repo', 'clone', repository_url])
-        
-
-    def checkout_release_number(repository_url, branch):
+        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name])  # Syncing
+        subprocess.run(['gh', 'repo', 'clone', gh_cli_repo_name])
         os.chdir(repo_name)
+
+    def remove_upstream_and_add_origin():
+        subprocess.run(['git', 'remote', 'rm', 'upstream'])
+        subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
+
+    def checkout_release_number(branch):
         print("git remote -v")
         subprocess.run(['git', 'remote', '-v'])
         # print("git fetch --all")
@@ -43,6 +47,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         # subprocess.run(['git', 'checkout', release_branch_name])
         # print(f'git checkout -b {target_branch_name}')
         # subprocess.run(['git', 'checkout', '-b', target_branch_name])
+
+
 
         
 
@@ -79,6 +85,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
     print('Cherry-picking Started')
     clone_and_sync_repo()
-    checkout_release_number(repository_url, release_number)
+    remove_upstream_and_add_origin()
+    checkout_release_number(release_number)
     # run_cherrypick(pr_number, commit_id)
     # print('...end...')
