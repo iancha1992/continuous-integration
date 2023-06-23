@@ -30,6 +30,10 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         subprocess.run(['gh', 'repo', 'sync', repository_url])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', repository_url])
 
+        print("git remote -v")
+        subprocess.run(['git', 'remote', '-v'])
+        
+
     def checkout_release_number(repository_url, branch):
         os.chdir(repo_name)
         print("git fetch --all")
