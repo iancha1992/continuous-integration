@@ -32,7 +32,7 @@ runs:
     - name: Run python index.py
       run: |
               chmod +x ${{ github.action_path }}/index.py
-              python ${{ github.action_path }}/index.py
+              python -u ${{ github.action_path }}/index.py
       env:
         GH_TOKEN: ${{ github.token }}
       shell: bash

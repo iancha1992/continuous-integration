@@ -12,7 +12,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
     g = Github(token)
     repository_url = 'https://github.com/iancha1992/bazel'
-    upstream_owner = "iancha1992"
     fork_owner = "Pavank1992"
     repo_name = "bazel"
     master_branch = 'release_test'
@@ -41,26 +40,15 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
 
     def clone_and_sync_repo(repo_url):
-        # subprocess.run('gh', 'auth', 'login')
+        print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', repo_url])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', repo_url])
-        subprocess.run('ls')
-        print('debugging...')
-        subprocess.run('pwd')
-        print(repo_name)
-        
-
 
     def checkout_release_number(repo_url, branch):
-        # subprocess.run(['git', 'clone', repo_url])  # cloning
-        # repo_name = repo_url.split('/')[-1].split('.')[0]
         os.chdir(repo_name)
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
         subprocess.run(['git', 'checkout', master_branch])
-        # subprocess.run(['git', 'pull'])
         subprocess.run(['git', 'checkout', 'release-'+release_number])
-        # subprocess.run(['git', 'pull'])
-
 
     def create_branch_and_cherrypick(pr_number, commit_id):
         # Create a new branch for cherry-picking
