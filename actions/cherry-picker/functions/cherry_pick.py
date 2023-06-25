@@ -44,7 +44,12 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         print(f'git checkout {release_branch_name}')
         subprocess.run(['git', 'checkout', release_branch_name])
         print(f'git checkout -b {target_branch_name}')
-        subprocess.run(['git', 'checkout', '-b', target_branch_name])
+        status_checkout = subprocess.run(['git', 'checkout', '-b', target_branch_name])
+
+        # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
+        if status_checkout.returncode != 0:
+            subprocess.run(['gh', 'pr', 'comment', issue_number, "--body", f"Cherry-pick was attempted. But there was already a branch created ({target_branch_name})"])
+
 
     def run_cherrypick(pr_number, commit_id):
         # Create a new branch for cherry-picking
