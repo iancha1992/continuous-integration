@@ -74,7 +74,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
             # }
             subprocess.run(['git', 'push', '--set-upstream', 'origin', cp_branch_name])
         else:
-            subprocess.run(['gh', 'pr', 'comment', issue_number, "--body", f"Cherry-pick was attempted. But there was merge conflicts."])
+            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
 
     print('Cherry-picking Started')
     clone_and_sync_repo()
