@@ -60,7 +60,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         status = subprocess.run(['git', 'cherry-pick', commit_id])
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {cp_branch_name}")
-            # username = "iancha1992"
+            username = "iancha1992"
             # password = "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"
             # git_env = {
             #     "GIT_COMMITTER_NAME": username,
