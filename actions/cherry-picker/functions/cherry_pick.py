@@ -36,6 +36,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     def remove_upstream_and_add_origin():
         subprocess.run(['git', 'remote', 'rm', 'upstream'])
         subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
+        subprocess.run(['git', 'remote', 'set-url', 'origin', f'https://{token}@github.com/username/directory-name.git'])
         print("git remote -v")
         subprocess.run(['git', 'remote', '-v'])
 

@@ -35,13 +35,13 @@ runs:
               python -u ${{ github.action_path }}/index.py
       env:
         GH_TOKEN: ${{ github.token }}
-        GIT_COMMITTER_NAME: iancha1992
-        GIT_COMMITTER_EMAIL: heec@google.com
-        GIT_AUTHOR_NAME: iancha1992
-        GIT_AUTHOR_EMAIL: heec@google.com
-        GIT_TERMINAL_PROMPT: 0
-        GIT_ASKPASS: echo
-        GIT_USERNAME: iancha1992
+        # GIT_COMMITTER_NAME: iancha1992
+        # GIT_COMMITTER_EMAIL: heec@google.com
+        # GIT_AUTHOR_NAME: iancha1992
+        # GIT_AUTHOR_EMAIL: heec@google.com
+        # GIT_TERMINAL_PROMPT: 0
+        # GIT_ASKPASS: echo
+        # GIT_USERNAME: iancha1992
 
 
       shell: bash
