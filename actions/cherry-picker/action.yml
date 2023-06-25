@@ -42,7 +42,6 @@ runs:
         GIT_TERMINAL_PROMPT: 0
         GIT_ASKPASS: echo
         GIT_USERNAME: iancha1992
-        GIT_PASSWORD: ${{ github.token }}
 
 
       shell: bash
