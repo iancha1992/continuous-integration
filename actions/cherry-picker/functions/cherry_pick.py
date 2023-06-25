@@ -50,7 +50,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         if status_checkout.returncode != 0:
             subprocess.run(['gh', 'pr', 'comment', issue_number, "--body", f"Cherry-pick was attempted. But there was already a created branch called ({target_branch_name})"])
 
-    def run_cherrypick(pr_number, commit_id):
+    def run_cherrypick():
         # Create a new branch for cherry-picking
         cp_branch_name = f'cp{pr_number}'
 
@@ -80,5 +80,5 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     clone_and_sync_repo()
     remove_upstream_and_add_origin()
     checkout_release_number()
-    # run_cherrypick(pr_number, commit_id)
+    run_cherrypick()
     # print('...end...')
