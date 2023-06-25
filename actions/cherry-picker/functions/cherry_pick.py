@@ -50,37 +50,31 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         if status_checkout.returncode != 0:
             subprocess.run(['gh', 'pr', 'comment', issue_number, "--body", f"Cherry-pick was attempted. But there was already a created branch called ({target_branch_name})"])
 
-
     def run_cherrypick(pr_number, commit_id):
         # Create a new branch for cherry-picking
         cp_branch_name = f'cp{pr_number}'
-        # subprocess.run(['git', 'config', '--global', 'user.email', 'pavanksingh@google.com'])
-        # subprocess.run(['git', 'config', '--global', 'user.name', 'pavank1992'])
 
         # Cherry-pick the specified commit
-        print(f"cherry-picking the commit id {commit_id} in CP branch: {cp_branch_name}")
+        print(f"Cherry-picking the commit id {commit_id} in CP branch: {cp_branch_name}")
         status = subprocess.run(['git', 'cherry-pick', commit_id])
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {cp_branch_name}")
-            # env = dict(os.environ)
-            username = "iancha1992"
-            password = "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"
-            git_env = {
-                "GIT_COMMITTER_NAME": username,
-                "GIT_COMMITTER_EMAIL": username + "@google.com",
-                "GIT_AUTHOR_NAME": username,
-                "GIT_AUTHOR_EMAIL": username + "@google.com",
-                "GIT_TERMINAL_PROMPT": "0",
-                "GIT_ASKPASS": "echo",
-                "GIT_USERNAME": username,
-                "GIT_PASSWORD": password,
-                "SECRET_TOKEN": token
-            }
-            print("aaaaa")
-            subprocess.run(['git', 'push', '--set-upstream', 'origin', cp_branch_name], env=git_env)
-            print("bbbb")
+            # username = "iancha1992"
+            # password = "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"
+            # git_env = {
+            #     "GIT_COMMITTER_NAME": username,
+            #     "GIT_COMMITTER_EMAIL": username + "@google.com",
+            #     "GIT_AUTHOR_NAME": username,
+            #     "GIT_AUTHOR_EMAIL": username + "@google.com",
+            #     "GIT_TERMINAL_PROMPT": "0",
+            #     "GIT_ASKPASS": "echo",
+            #     "GIT_USERNAME": username,
+            #     "GIT_PASSWORD": password,
+            #     "SECRET_TOKEN": token
+            # }
+            subprocess.run(['git', 'push', '--set-upstream', 'origin', cp_branch_name])
         else:
-            print("Cherry-pick unsuccessful. Please proceed manually.")
+            subprocess.run(['gh', 'pr', 'comment', issue_number, "--body", f"Cherry-pick was attempted. But there was merge conflicts."])
 
     print('Cherry-picking Started')
     clone_and_sync_repo()
