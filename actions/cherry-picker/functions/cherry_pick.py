@@ -20,10 +20,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     repo_name = "bazel"
     master_branch = 'release_test'
     release_branch_name = "release-" + release_number
-    target_branch_name = f"cp{pr_number}"
-    #release_number = 'test_16910'
-    # pr_number = '1234556'
-    #commit_id = 'd013c6c119c35a262639a600491dbc128fbfa199'  # Taken sample commit ID
+    # target_branch_name = f"cp{pr_number}"
+    target_branch_name = 'release_test'
     all_branch = ["master", "release_test"]
 
     def clone_and_sync_repo():
