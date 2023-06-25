@@ -48,7 +48,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
         if status_checkout.returncode != 0:
-            subprocess.run(['gh', 'pr', 'comment', issue_number, "--body", f"Cherry-pick was attempted. But there was already a created branch called ({target_branch_name})"])
+            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
 
     def run_cherrypick():
         # Create a new branch for cherry-picking
