@@ -16,8 +16,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     g = Github(token)
     gh_cli_repo_name = "iancha1992/bazel"
     repo_url = 'git@github.com:iancha1992/bazel.git'
-
-    fork_owner = "Pavank1992"
     repo_name = "bazel"
     master_branch = 'release_test'
     # release_branch_name = "release-" + release_number
@@ -27,6 +25,9 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     all_branch = ["master", "release_test"]
 
     def clone_and_sync_repo():
+        subprocess.run(['git', 'config', '--global', 'user.name', 'iancha1992'])
+        subprocess.run(['git', 'config', '--global', 'user.email', 'heec@google.com'])
+        subprocess.run(['git', 'checkout', release_branch_name])
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name])  # Syncing
         subprocess.run(['gh', 'repo', 'clone', gh_cli_repo_name])
