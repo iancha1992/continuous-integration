@@ -16,7 +16,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
     fork_owner = "Pavank1992"
     repo_name = "bazel"
-    master_branch = 'master'
+    master_branch = 'release_test'
     release_branch_name = "release-" + release_number
     target_branch_name = f"cp{pr_number}"
     #release_number = 'test_16910'
