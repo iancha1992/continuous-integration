@@ -9,6 +9,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("reviewers", reviewers)
     print("release_number", release_number)
     print("Issuenumber", issue_number)
+    print("househouse")
 
     # commit_id = "a9f5e2180ac949ad4dd365cc5fc9ceaa116034ce"
     commit_id = "63a2d53"
