@@ -15,11 +15,11 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
 
     g = Github(token)
     gh_cli_repo_name = "iancha1992/bazel"
-    repo_url = 'git@github.com:iancha1992/bazel.git'
-    repo_name = "bazel"
+    repo_url = f'git@github.com:{gh_cli_repo_name}.git'
+    repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = 'release_test'
-    # release_branch_name = "release-" + release_number
-    release_branch_name = 'release-6.3.0'
+    release_branch_name = "release-" + release_number
+    # release_branch_name = 'release-6.3.0'
     target_branch_name = f"cp{pr_number}"
     user_name = "iancha1992"
     # target_branch_name = 'release_test'
@@ -30,7 +30,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         # subprocess.run(['git', 'config', '--global', 'user.email', 'heec@google.com'])
         # subprocess.run(['git', 'checkout', release_branch_name])
         print("Cloning and syncing the repo...")
-        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name])  # Syncing
+        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])  # Syncing
+        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
         # subprocess.run(['gh', 'repo', 'clone', gh_cli_repo_name])
         subprocess.run(['git', 'clone', f'https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git'])
         subprocess.run(['git', 'config', '--global', 'user.name', 'iancha1992'])
@@ -48,11 +49,12 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         print("git fetch --all")
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
         print("git checkout", master_branch)
-        # subprocess.run(['git', 'pull'])
+        subprocess.run(['git', 'checkout', release_branch_name])
+        subprocess.run(['git', 'pull'])
 
         print(f'git checkout {release_branch_name}')
         subprocess.run(['git', 'checkout', release_branch_name])
-        # subprocess.run(['git', 'pull'])
+        subprocess.run(['git', 'pull'])
         print(f'git checkout -b {target_branch_name}')
         status_checkout = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
