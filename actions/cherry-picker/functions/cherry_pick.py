@@ -48,11 +48,11 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         print("git fetch --all")
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
         print("git checkout", master_branch)
-        subprocess.run(['git', 'pull'])
+        # subprocess.run(['git', 'pull'])
 
         print(f'git checkout {release_branch_name}')
         subprocess.run(['git', 'checkout', release_branch_name])
-        subprocess.run(['git', 'pull'])
+        # subprocess.run(['git', 'pull'])
         print(f'git checkout -b {target_branch_name}')
         status_checkout = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
