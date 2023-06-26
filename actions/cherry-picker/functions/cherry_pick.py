@@ -28,7 +28,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     def clone_and_sync_repo():
         # subprocess.run(['git', 'config', '--global', 'user.name', 'iancha1992'])
         # subprocess.run(['git', 'config', '--global', 'user.email', 'heec@google.com'])
-        subprocess.run(['git', 'checkout', release_branch_name])
+        # subprocess.run(['git', 'checkout', release_branch_name])
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name])  # Syncing
         # subprocess.run(['gh', 'repo', 'clone', gh_cli_repo_name])
