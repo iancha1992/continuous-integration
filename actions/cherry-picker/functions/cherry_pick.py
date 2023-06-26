@@ -19,7 +19,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     repo_name = "bazel"
     master_branch = 'release_test'
     # release_branch_name = "release-" + release_number
-    release_branch_name = 'release_test'
+    release_branch_name = 'release-6.3.0'
     target_branch_name = f"cp{pr_number}"
     user_name = "iancha1992"
     # target_branch_name = 'release_test'
@@ -61,14 +61,11 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
 
     def run_cherrypick():
-        # Create a new branch for cherry-picking
-        cp_branch_name = f'cp{pr_number}'
-
         # Cherry-pick the specified commit
-        print(f"Cherry-picking the commit id {commit_id} in CP branch: {cp_branch_name}")
+        print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
         status = subprocess.run(['git', 'cherry-pick', commit_id])
         if status.returncode == 0:
-            print(f"Successfully Cherry-picked, pushing it to branch: {cp_branch_name}")
+            print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             username = "iancha1992"
             # password = "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"
             # git_env = {
@@ -82,7 +79,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
             #     "GIT_PASSWORD": password,
             #     "SECRET_TOKEN": token
             # }
-            subprocess.run(['git', 'push', '--set-upstream', 'origin', cp_branch_name])
+            subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
 
