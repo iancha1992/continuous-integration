@@ -33,6 +33,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name])  # Syncing
         # subprocess.run(['gh', 'repo', 'clone', gh_cli_repo_name])
         subprocess.run(['git', 'clone', f'https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git'])
+        subprocess.run(['git', 'config', '--global', 'user.name', 'iancha1992'])
+        subprocess.run(['git', 'config', '--global', 'user.email', 'heec@google.com'])
         os.chdir(repo_name)
 
     def remove_upstream_and_add_origin():
