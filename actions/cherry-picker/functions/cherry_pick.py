@@ -29,7 +29,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])  # Syncing
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
-        # subprocess.run(['gh', 'repo', 'clone', gh_cli_repo_name])
         subprocess.run(['git', 'clone', f'https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git'])
         subprocess.run(['git', 'config', '--global', 'user.name', 'iancha1992'])
         subprocess.run(['git', 'config', '--global', 'user.email', 'heec@google.com'])
@@ -38,7 +37,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     def remove_upstream_and_add_origin():
         subprocess.run(['git', 'remote', 'rm', 'upstream'])
         subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
-        # subprocess.run(['git', 'remote', 'set-url', 'origin', f'https://{token}@github.com/username/directory-name.git'])
         print("git remote -v")
         subprocess.run(['git', 'remote', '-v'])
 
