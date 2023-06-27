@@ -11,7 +11,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("Issuenumber", issue_number)
     print("househouse")
 
-    # commit_id = "a9f5e2180ac949ad4dd365cc5fc9ceaa116034ce"
     commit_id = "63a2d53"
 
     g = Github(token)
@@ -27,9 +26,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     all_branch = ["master", "release_test"]
 
     def clone_and_sync_repo():
-        # subprocess.run(['git', 'config', '--global', 'user.name', 'iancha1992'])
-        # subprocess.run(['git', 'config', '--global', 'user.email', 'heec@google.com'])
-        # subprocess.run(['git', 'checkout', release_branch_name])
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])  # Syncing
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
@@ -49,13 +45,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     def checkout_release_number():
         print("git fetch --all")
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
-        # print("git checkout", master_branch)
-        # subprocess.run(['git', 'checkout', master_branch])
-        # subprocess.run(['git', 'pull'])
-
         print(f'git checkout {release_branch_name}')
         subprocess.run(['git', 'checkout', release_branch_name])
-        # subprocess.run(['git', 'pull'])
         print(f'git checkout -b {target_branch_name}')
         status_checkout = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
@@ -69,7 +60,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         status = subprocess.run(['git', 'cherry-pick', commit_id])
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
-            username = "iancha1992"
             subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
