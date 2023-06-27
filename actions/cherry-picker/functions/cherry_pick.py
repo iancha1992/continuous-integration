@@ -70,18 +70,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             username = "iancha1992"
-            # password = "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"
-            # git_env = {
-            #     "GIT_COMMITTER_NAME": username,
-            #     "GIT_COMMITTER_EMAIL": username + "@google.com",
-            #     "GIT_AUTHOR_NAME": username,
-            #     "GIT_AUTHOR_EMAIL": username + "@google.com",
-            #     "GIT_TERMINAL_PROMPT": "0",
-            #     "GIT_ASKPASS": "echo",
-            #     "GIT_USERNAME": username,
-            #     "GIT_PASSWORD": password,
-            #     "SECRET_TOKEN": token
-            # }
             subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
