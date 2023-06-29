@@ -36,6 +36,6 @@ for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
     cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number)
-    create_pr(commit_id, pr_number, reviewers, release_number, issue_number)
+    # create_pr(commit_id, pr_number, reviewers, release_number, issue_number)
 
     # cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number)
