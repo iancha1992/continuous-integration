@@ -4,7 +4,7 @@ from functions.get_commit_id import get_commit_id
 from functions.get_reviewers import get_reviewers
 from functions.extract_release_numbers_data import extract_release_numbers_data
 from functions.cherry_pick import cherry_pick
-from functions.create_pr import create_pr
+# from functions.create_pr import create_pr
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
