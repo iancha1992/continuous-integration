@@ -16,7 +16,7 @@ actor_name = {
     "iancha1992",
     "Pavank1992"
 }
-action_event = "merged"
+action_event = "closed"
 
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
