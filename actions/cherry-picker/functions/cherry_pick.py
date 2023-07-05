@@ -55,7 +55,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     def run_cherrypick():
         # Cherry-pick the specified commit
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
-        status = subprocess.run(['git', 'cherry-pick', commit_id])
+        # status = subprocess.run(['git', 'cherry-pick', commit_id])
+        status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
