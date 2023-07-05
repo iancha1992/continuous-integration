@@ -1,8 +1,12 @@
 import os, subprocess, requests, github3
 from github import Github
 
+token = os.environ["GH_TOKEN"]
+g = Github(token)
+gh_cli_repo_name = "iancha1992/bazel"
+
 def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
-    token = os.environ["GH_TOKEN"]
+    # token = os.environ["GH_TOKEN"]
     print("Cherrypicking")
     print("commit id", commit_id)
     print("prnumber", pr_number)
@@ -11,8 +15,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("Issuenumber", issue_number)
     print("househouse")
 
-    g = Github(token)
-    gh_cli_repo_name = "iancha1992/bazel"
+    # g = Github(token)
+    # gh_cli_repo_name = "iancha1992/bazel"
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
     repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = 'release_test'
@@ -64,10 +68,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         if push_status.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
 
-
-    print('Cherry-picking Started')
     clone_and_sync_repo()
     remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
-    # print('...end...')
