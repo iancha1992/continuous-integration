@@ -18,7 +18,7 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
     repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = 'release_test'
-    # release_branch_name = "release-" + release_number
+    # release_branch_name = "release-" + release_numberj
     release_branch_name = 'fake-release-6.3.0'
     target_branch_name = f"cp{pr_number}"
     user_name = "iancha1992"
