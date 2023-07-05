@@ -9,7 +9,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("reviewers", reviewers)
     print("release_number", release_number)
     print("Issuenumber", issue_number)
-    print("househouse")
 
     g = Github(token)
     gh_cli_repo_name = "iancha1992/bazel"
