@@ -1,10 +1,6 @@
 import os, subprocess, requests, github3
 from github import Github
 
-token = os.environ["GH_TOKEN"]
-g = Github(token)
-gh_cli_repo_name = "iancha1992/bazel"
-
 def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     # token = os.environ["GH_TOKEN"]
     print("Cherrypicking")
@@ -15,8 +11,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("Issuenumber", issue_number)
     print("househouse")
 
-    # g = Github(token)
-    # gh_cli_repo_name = "iancha1992/bazel"
+    g = Github(token)
+    gh_cli_repo_name = "iancha1992/bazel"
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
     repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = 'release_test'
