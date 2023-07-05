@@ -11,8 +11,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     print("Issuenumber", issue_number)
     print("househouse")
 
-    # commit_id = "429bbe0"
-
     g = Github(token)
     gh_cli_repo_name = "iancha1992/bazel"
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
@@ -23,7 +21,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
     target_branch_name = f"cp{pr_number}"
     user_name = "iancha1992"
     # target_branch_name = 'release_test'
-    all_branch = ["master", "release_test"]
 
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
