@@ -23,8 +23,6 @@ if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is n
 
 # Retrieve commit_id. If doesn't exist or multiple commit id's, then raise error.
 commit_id = get_commit_id(pr_number, actor_name, action_event)
-print("Here is the commitid", commit_id)
-
 
 # Retrieve approvers(reviewers) of the PR
 reviewers = get_reviewers(pr_number)
@@ -38,8 +36,5 @@ for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
     cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
-    is_first_time = False
-    print("SF Cherrypick done")
     create_pr(commit_id, pr_number, reviewers, release_number, issue_number)
-
-    # cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number)
+    is_first_time = False
