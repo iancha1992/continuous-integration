@@ -39,6 +39,7 @@ for k in release_numbers_data.keys():
     issue_number = release_numbers_data[k]
     cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
     is_first_time = False
+    print("SF Cherrypick done")
     # create_pr(commit_id, pr_number, reviewers, release_number, issue_number)
 
     # cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number)
