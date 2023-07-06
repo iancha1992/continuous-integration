@@ -64,7 +64,14 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
 
     if is_first_time == True:
+        # The repo should be cloned only once to save time. Otherwise, it is a waste of time and space.
         clone_and_sync_repo()
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
+
+    return {
+        "master_branch": master_branch,
+        "release_branch_name": release_branch_name,
+        "target_branch_name": target_branch_name
+    }

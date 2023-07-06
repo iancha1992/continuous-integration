@@ -16,6 +16,7 @@ actor_name = {
     "iancha1992",
     "Pavank1992"
 }
+
 action_event = "merged"
 
 # Check if the PR is closed.
@@ -35,6 +36,6 @@ is_first_time = True
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
-    cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
+    pr_data = cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
     create_pr(commit_id, pr_number, reviewers, release_number, issue_number)
     is_first_time = False
