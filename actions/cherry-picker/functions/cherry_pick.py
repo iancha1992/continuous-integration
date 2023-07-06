@@ -1,7 +1,7 @@
 import os, subprocess, requests, github3
 from github import Github
 
-def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
+def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time):
     token = os.environ["GH_TOKEN"]
     print("Cherrypicking")
     print("commit id", commit_id)
@@ -63,7 +63,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number):
         if push_status.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
 
-    clone_and_sync_repo()
-    remove_upstream_and_add_origin()
+    if is_first_time == True:
+        clone_and_sync_repo()
+        remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
