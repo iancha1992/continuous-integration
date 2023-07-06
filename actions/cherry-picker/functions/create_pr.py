@@ -1,6 +1,6 @@
 import subprocess
 
-def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, pr_url, repo_name):
+def create_pr(commit_id, pr_number, reviewers, release_number, issue_number):
     print(commit_id, pr_number, reviewers, release_number, issue_number)
     subprocess.run('gh', 'pr', 'create', '--base', 'test_16910', '--head', 'test_16910_1', '--label', 'team-CLI,' '-r', 'iancha1992', '--title', "[6.3.0]no", '--body', "Everything works aaaa")
 
