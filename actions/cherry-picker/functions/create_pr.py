@@ -1,7 +1,7 @@
 import subprocess
 from pprint import pprint
 
-def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, labels, pr_data):
+def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, labels, issue_data, pr_data):
     reviewers = [
         {'login': 'chaheein123', 'id': 23069091},
         {'login': 'pavanksingh123', 'id': 23069091},

@@ -6,6 +6,7 @@ from functions.extract_release_numbers_data import extract_release_numbers_data
 from functions.cherry_pick import cherry_pick
 from functions.create_pr import create_pr
 from functions.get_labels import get_labels
+from functions.get_issue_data import get_issue_data
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
@@ -35,11 +36,14 @@ release_numbers_data = extract_release_numbers_data(pr_number)
 # Retrieve labels
 labels = get_labels(pr_number)
 
+# Retrieve issue/PR's title and body
+issue_data = get_issue_data(pr_number, commit_id)
+
 is_first_time = True
 
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
     pr_data = cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
-    create_pr(commit_id, pr_number, reviewers, release_number, issue_number, labels, pr_data)
+    create_pr(commit_id, pr_number, reviewers, release_number, issue_number, labels, issue_data, pr_data)
     is_first_time = False
