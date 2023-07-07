@@ -5,6 +5,7 @@ from functions.get_reviewers import get_reviewers
 from functions.extract_release_numbers_data import extract_release_numbers_data
 from functions.cherry_pick import cherry_pick
 from functions.create_pr import create_pr
+from functions.get_labels import get_labels
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
@@ -31,11 +32,14 @@ reviewers = get_reviewers(pr_number)
 # Retrieve release_numbers
 release_numbers_data = extract_release_numbers_data(pr_number)
 
+# Retrieve labels
+labels = get_labels(pr_number)
+
 is_first_time = True
 
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
     pr_data = cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
-    create_pr(commit_id, pr_number, reviewers, release_number, issue_number)
+    # create_pr(commit_id, pr_number, reviewers, release_number, issue_number, pr_data)
     is_first_time = False

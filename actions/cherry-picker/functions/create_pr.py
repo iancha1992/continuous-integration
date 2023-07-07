@@ -1,7 +1,19 @@
 import subprocess
+from pprint import pprint
 
-def create_pr(commit_id, pr_number, reviewers, release_number, issue_number):
-    print(commit_id, pr_number, reviewers, release_number, issue_number)
-    subprocess.run('gh', 'pr', 'create', '--base', 'test_16910', '--head', 'test_16910_1', '--label', 'team-CLI,' '-r', 'iancha1992', '--title', "[6.3.0]no", '--body', "Everything works aaaa")
+def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, pr_data):
+    # reviewers = [
+    #     {'login': 'chaheein123', 'id': 23069091},
+    #     {'login': 'pavanksingh123', 'id': 23069091},
+    #     {'login': 'sunilk123', 'id': 23069091},
+    # ]
+    head_branch = f"iancha1992:{pr_data['target_branch_name']}"
+    release_branch = pr_data["release_branch_name"]
+    reviewers_str = ",".join([str(r["login"]) for r in reviewers])
+    
+    subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", "abc", "--body", "pr body!!", "--head", head_branch, "--base", release_branch,  '--label', "team-Android", '--reviewer', reviewers_str])
 
-create_pr("63a2d53", 103, [{'login': 'chaheein123', 'id': 23069091}], "6.3.0", 106, "https://github.com/iancha1992/bazel/pull/new/cp103", "iancha1992/bazel")
+    print(reviewers_str)
+
+
+create_pr(1, 2, [], 3, 2, 1)
