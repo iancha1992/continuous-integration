@@ -41,5 +41,5 @@ for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
     pr_data = cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
-    # create_pr(commit_id, pr_number, reviewers, release_number, issue_number, pr_data)
+    create_pr(commit_id, pr_number, reviewers, release_number, issue_number, labels, pr_data)
     is_first_time = False
