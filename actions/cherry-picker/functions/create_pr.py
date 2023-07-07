@@ -9,4 +9,9 @@ def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, lab
     pr_title = issue_data["title"]
     pr_body = f"[{release_number}] {issue_data['body']}"
     
-    subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
+    status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
+    if status_create_pr.returncode != 0:
+        # throw notification, but pass for now
+        pass
+    
+    
