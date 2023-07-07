@@ -11,5 +11,4 @@ def get_issue_data(pr_number, commit_id):
     response_commit = requests.get(f"https://api.github.com/repos/iancha1992/bazel/commits/{commit_id}")
     data["body"] = response_commit.json()["commit"]["message"]
 
-    print("data!!!!!", data)
     return data
