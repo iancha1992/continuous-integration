@@ -7,6 +7,6 @@ def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, lab
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
     labels_str = ",".join(labels)
     pr_title = issue_data["title"]
-    pr_body = issue_data["body"]
+    pr_body = f"[{release_number}] {issue_data['body']}"
     
     subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
