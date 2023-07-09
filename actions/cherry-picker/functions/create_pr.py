@@ -8,10 +8,11 @@ def create_pr(commit_id, pr_number, reviewers, release_number, issue_number, lab
     labels_str = ",".join(labels)
     pr_title = issue_data["title"]
     pr_body = f"[{release_number}] {issue_data['body']}"
-    
     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
+    print("status_create_pr", status_create_pr)
+    # print("status_create_pr", status_create_pr)
     if status_create_pr.returncode != 0:
-        # throw notification, but pass for now
-        pass
-    
-    
+        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
+    else:
+        print("PR was successfully created")
+        # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick in https://github.com/bazelbuild/bazel/pull/"])
