@@ -1,7 +1,7 @@
 import os, subprocess, requests, github3
 from github import Github
 
-def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time):
+def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time, labels, issue_data):
     token = os.environ["GH_TOKEN"]
     print("Cherrypicking")
     print("commit id", commit_id)
@@ -63,15 +63,29 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         if push_status.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
 
+    def create_pr():
+        head_branch = f"iancha1992:{target_branch_name}"
+        reviewers_str = ",".join([str(r["login"]) for r in reviewers])
+        labels_str = ",".join(labels)
+        pr_title = issue_data["title"]
+        pr_body = f"[{release_number}] {issue_data['body']}"
+        # subprocess.run(["gh", "repo", "set-default"])
+        status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
+        print("status_create_pr", status_create_pr)
+        # print("status_create_pr", status_create_pr)
+        if status_create_pr.returncode != 0:
+            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
+        else:
+            print("PR was successfully created")
+            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick in https://github.com/bazelbuild/bazel/pull/"])
+
+
     if is_first_time == True:
         # The repo should be cloned only once to save time. Otherwise, it is a waste of time and space.
         clone_and_sync_repo()
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
+    create_pr()
 
-    return {
-        "master_branch": master_branch,
-        "release_branch_name": release_branch_name,
-        "target_branch_name": target_branch_name
-    }
+    
