@@ -1,10 +1,10 @@
 name: 'Cherry-picker on comment'
 description: 'Cherry-picks the commit when the issue is created after the bazel-io X.Y.Z comment'
 inputs:
-  token:
-    description: 'The GitHub token'
-    required: false
-    default: ${{ github.token }}
+  # token:
+  #   description: 'The GitHub token'
+  #   required: false
+  #   default: ${{ github.token }}
   triggered-on:
     required: true
     default: ${{ github.triggered-on }}
@@ -33,8 +33,8 @@ runs:
       run: |
               chmod +x ${{ github.action_path }}/index.py
               python -u ${{ github.action_path }}/index.py
-      env:
-        GH_TOKEN: ${{ github.token }}
+      # env:
+      #   GH_TOKEN: ${{ github.token }}
         # GIT_COMMITTER_NAME: iancha1992
         # GIT_COMMITTER_EMAIL: heec@google.com
         # GIT_AUTHOR_NAME: iancha1992

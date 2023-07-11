@@ -7,6 +7,7 @@ from functions.cherry_pick import cherry_pick
 from functions.create_pr import create_pr
 from functions.get_labels import get_labels
 from functions.get_issue_data import get_issue_data
+# from functions.gh_auth_login import gh_auth_login
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
@@ -20,6 +21,8 @@ actor_name = {
 }
 
 action_event = "merged"
+
+# gh_auth_login()
 
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
