@@ -69,11 +69,10 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         labels_str = ",".join(labels)
         pr_title = issue_data["title"]
         pr_body = f"[{release_number}] {issue_data['body']}"
-        # subprocess.run(["gh", "repo", "set-default"])
-        # status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
+        status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
         status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", "iancha1992:tomtesting", "--base", "fake-release-6.3.0"])
         print("status_create_pr", status_create_pr)
-        # print("status_create_pr", status_create_pr)
+        print("status_create_pr", status_create_pr)
         if status_create_pr.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
         else:
@@ -87,6 +86,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
-    create_pr()
+    # create_pr()
 
     
