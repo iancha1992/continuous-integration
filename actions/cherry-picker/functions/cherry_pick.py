@@ -70,7 +70,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         pr_title = issue_data["title"]
         pr_body = f"[{release_number}] {issue_data['body']}"
         # subprocess.run(["gh", "repo", "set-default"])
-        status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
+        # status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
+        status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", "iancha1992:tomtesting", "--base", "fake-release-6.3.0", "--label", labels_str, "--reviewer", reviewers_str])
         print("status_create_pr", status_create_pr)
         # print("status_create_pr", status_create_pr)
         if status_create_pr.returncode != 0:
