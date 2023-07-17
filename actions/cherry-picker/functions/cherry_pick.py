@@ -21,6 +21,12 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
     user_name = "iancha1992"
     # target_branch_name = 'release_test'
 
+    result_data = {
+        "release_branch_name": release_branch_name,
+        "target_branch_name": target_branch_name,
+        "is_successful": True
+    }
+
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])  # Syncing
@@ -49,28 +55,26 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
 
     def run_cherrypick():
-        result_data = {
-            "release_branch_name": release_branch_name,
-            "target_branch_name": target_branch_name,
-            "is_successful": True
-        }
+        # result_data = {
+        #     "release_branch_name": release_branch_name,
+        #     "target_branch_name": target_branch_name,
+        #     "is_successful": True
+        # }
         push_status = None
         # Cherry-pick the specified commit
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
         # status = subprocess.run(['git', 'cherry-pick', commit_id])
         status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
-        
+
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
             result_data["is_successful"] = False
-            return result_data
         if push_status.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
             result_data["is_successful"] = False
-        return result_data
 
     # def create_pr():
     #     head_branch = f"iancha1992:{target_branch_name}"
@@ -90,4 +94,5 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
+    return result_data
 
