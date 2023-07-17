@@ -30,8 +30,8 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
     release_branch = pr_data["release_branch_name"]
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
     labels_str = ",".join(labels)
-    pr_title = issue_data["title"]
-    pr_body = f"[{release_number}] {issue_data['body']}"
+    pr_title = f"[{release_number}] {issue_data['title']}"
+    pr_body = issue_data['body']
     # subprocess.run(["gh", "repo", "set-default"])
     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
     print("status_create_pr", status_create_pr)
