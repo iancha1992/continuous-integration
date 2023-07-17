@@ -94,5 +94,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
+    print("Resultdata!!!", result_data)
     return result_data
 
