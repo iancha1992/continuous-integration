@@ -67,8 +67,8 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         head_branch = f"iancha1992:{target_branch_name}"
         reviewers_str = ",".join([str(r["login"]) for r in reviewers])
         labels_str = ",".join(labels)
-        pr_title = issue_data["title"]
-        pr_body = f"[{release_number}] {issue_data['body']}"
+        pr_title = f"[{release_number}] issue_data['title']"
+        pr_body = issue_data['body']
         print(labels_str)
         status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
         # status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", "iancha1992:tomtesting", "--base", "fake-release-6.3.0"])
