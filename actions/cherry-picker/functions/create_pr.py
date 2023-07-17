@@ -29,7 +29,8 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
     head_branch = f"iancha1992:{pr_data['target_branch_name']}"
     release_branch = pr_data["release_branch_name"]
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
-    labels.append("awaiting-review")
+    if "awaiting-review" not in labels:
+        labels.append("awaiting-review")
     labels_str = ",".join(labels)
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']
