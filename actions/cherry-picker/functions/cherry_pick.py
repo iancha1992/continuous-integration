@@ -1,7 +1,7 @@
 import os, subprocess, requests, github3
 from github import Github
 
-def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time, labels, issue_data):
+def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time):
     token = os.environ["GH_TOKEN"]
     print("Cherrypicking")
     print("commit id", commit_id)
