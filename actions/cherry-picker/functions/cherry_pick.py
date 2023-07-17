@@ -49,6 +49,11 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
 
     def run_cherrypick():
+        result_data = {
+            "release_branch_name": release_branch_name,
+            "target_branch_name": target_branch_name,
+            "is_successful": True
+        }
         push_status = None
         # Cherry-pick the specified commit
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
@@ -59,34 +64,29 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
-
+            result_data["is_successful"] = False
+            return result_data
         if push_status.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
+            result_data["is_successful"] = False
+        return result_data
 
-    def create_pr():
-        head_branch = f"iancha1992:{target_branch_name}"
-        reviewers_str = ",".join([str(r["login"]) for r in reviewers])
-        labels_str = ",".join(labels)
-        pr_title = f"[{release_number}] {issue_data['title']}"
-        pr_body = issue_data['body']
-        print(labels_str)
-        status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
-        # status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "chaheein123/bazel", "--title", pr_title, "--body", pr_body, "--head", "iancha1992:tomtesting", "--base", "fake-release-6.3.0"])
-        # print("status_create_pr", status_create_pr)
-        # print("status_create_pr", status_create_pr)
-        if status_create_pr.returncode != 0:
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
-        else:
-            print("PR was successfully created")
-            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick in https://github.com/bazelbuild/bazel/pull/"])
-
+    # def create_pr():
+    #     head_branch = f"iancha1992:{target_branch_name}"
+    #     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
+    #     labels_str = ",".join(labels)
+    #     pr_title = f"[{release_number}] {issue_data['title']}"
+    #     pr_body = issue_data['body']
+    #     print(labels_str)
+    #     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name, "--label", labels_str, "--reviewer", reviewers_str])
+    #     if status_create_pr.returncode != 0:
+    #         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
+    #     else:
+    #         print("PR was successfully created")
 
     if is_first_time == True:
-        # The repo should be cloned only once to save time. Otherwise, it is a waste of time and space.
         clone_and_sync_repo()
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
-    create_pr()
 
-    
