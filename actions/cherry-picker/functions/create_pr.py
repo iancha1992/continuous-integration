@@ -42,8 +42,4 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
     else:
         print("PR was successfully created")
-        send_pr_msg(issue_number, head_branch, release_branch)
-
-
-        # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick in https://github.com/bazelbuild/bazel/pull/{}"])
-
+        # send_pr_msg(issue_number, head_branch, release_branch)
