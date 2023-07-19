@@ -39,9 +39,6 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']
 
-
-
-    
     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch,  '--label', labels_str, '--reviewer', reviewers_str])
     print("status_create_pr", status_create_pr)
     if status_create_pr.returncode != 0:
