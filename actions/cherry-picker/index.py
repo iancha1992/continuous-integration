@@ -17,7 +17,8 @@ pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.en
 # actor_name = "Pavank1992"
 actor_name = {
     "iancha1992",
-    "Pavank1992"
+    "Pavank1992",
+    "chaheein123"
 }
 
 action_event = "merged"
