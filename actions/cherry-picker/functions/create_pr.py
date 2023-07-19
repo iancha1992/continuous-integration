@@ -45,3 +45,4 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
     else:
         print("PR was successfully created")
         send_pr_msg(issue_number, head_branch, release_branch)
+        
