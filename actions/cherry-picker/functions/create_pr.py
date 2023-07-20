@@ -31,7 +31,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
 
     # Delete this later
-    reviewers_str = "Pavank1992,sgowroji"
+    # reviewers_str = "Pavank1992,sgowroji"
 
     if "awaiting-review" not in labels:
         labels.append("awaiting-review")
