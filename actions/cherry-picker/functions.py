@@ -29,8 +29,6 @@ def get_commit_id(pr_number, actor_name, action_event):
 
 def get_reviewers(pr_number):
     r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls/{pr_number}/reviews', headers=headers)
-    print("This is the reviewers")
-    pprint(r.json())
     if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver.")
     approvers_list = []
     for review in r.json():
@@ -70,24 +68,14 @@ def extract_release_numbers_data(pr_number):
 
 def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time):
     token = os.environ["GH_TOKEN"]
-    print("Cherrypicking")
-    print("commit id", commit_id)
-    print("prnumber", pr_number)
-    print("reviewers", reviewers)
-    print("release_number", release_number)
-    print("Issuenumber", issue_number)
-
     g = Github(token)
     gh_cli_repo_name = "iancha1992/bazel"
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
     repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = 'release_test'
-    # release_branch_name = "release-" + release_numberj
     release_branch_name = f'fake-release-{release_number}'
     target_branch_name = f"cp{pr_number}-{release_number}"
     user_name = "iancha1992"
-    # target_branch_name = 'release_test'
-
     result_data = {
         "release_branch_name": release_branch_name,
         "target_branch_name": target_branch_name,
@@ -106,15 +94,11 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
     def remove_upstream_and_add_origin():
         subprocess.run(['git', 'remote', 'rm', 'upstream'])
         subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
-        print("git remote -v")
         subprocess.run(['git', 'remote', '-v'])
 
     def checkout_release_number():
-        print("git fetch --all")
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
-        print(f'git checkout {release_branch_name}')
         subprocess.run(['git', 'checkout', release_branch_name])
-        print(f'git checkout -b {target_branch_name}')
         status_checkout = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
@@ -125,7 +109,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         push_status = None
         # Cherry-pick the specified commit
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
-        # status = subprocess.run(['git', 'cherry-pick', commit_id])
         status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
 
         if status.returncode == 0:
@@ -143,7 +126,6 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
         remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
-    print("Resultdata!!!", result_data)
     return result_data
 
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data):
@@ -163,9 +145,6 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
     head_branch = f"iancha1992:{pr_data['target_branch_name']}"
     release_branch = pr_data["release_branch_name"]
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
-
-    # Delete this later
-    # reviewers_str = "Pavank1992,sgowroji"
 
     if "awaiting-review" not in labels:
         labels.append("awaiting-review")
@@ -191,7 +170,6 @@ def get_issue_data(pr_number, commit_id):
     data["title"] = response_issue.json()["title"]
 
     response_commit = requests.get(f"https://api.github.com/repos/iancha1992/bazel/commits/{commit_id}")
-    # data["body"] = response_commit.json()["commit"]["message"]
     original_msg = response_commit.json()["commit"]["message"]
     pr_body = None
     if "\n\n" in original_msg:
@@ -207,4 +185,3 @@ def get_issue_data(pr_number, commit_id):
 
     data["body"] = pr_body
     return data
-
