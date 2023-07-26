@@ -1,13 +1,5 @@
 import os
-from functions.check_closed import check_closed
-from functions.get_commit_id import get_commit_id
-from functions.get_reviewers import get_reviewers
-from functions.extract_release_numbers_data import extract_release_numbers_data
-from functions.cherry_pick import cherry_pick
-from functions.create_pr import create_pr
-from functions.get_labels import get_labels
-from functions.get_issue_data import get_issue_data
-# from functions.gh_auth_login import gh_auth_login
+from functions import check_closed, get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_issue_data, 
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
@@ -23,8 +15,6 @@ actor_name = {
 }
 
 action_event = "merged"
-
-# gh_auth_login()
 
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
