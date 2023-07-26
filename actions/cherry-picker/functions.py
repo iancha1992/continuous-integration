@@ -132,10 +132,10 @@ def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, i
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         else:
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted. But there was merge conflicts."])
+            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted but there were merge conflicts. Please resolve manually."])
             result_data["is_successful"] = False
         if push_status.returncode != 0:
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted. But failed to push. Please check if the branch, {target_branch_name}, was already created"])
+            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists"])
             result_data["is_successful"] = False
 
     if is_first_time == True:
