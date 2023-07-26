@@ -66,7 +66,7 @@ def extract_release_numbers_data(pr_number):
     milestoned_issues = get_milestoned_issues(milestones_data, pr_number)
     return milestoned_issues
 
-def cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time):
+def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time):
     token = os.environ["GH_TOKEN"]
     g = Github(token)
     gh_cli_repo_name = "iancha1992/bazel"

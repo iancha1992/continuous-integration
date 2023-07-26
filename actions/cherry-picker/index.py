@@ -3,18 +3,14 @@ from functions import check_closed, get_commit_id, get_reviewers, extract_releas
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
-# actor_name = "copybara-service[bot]";
-# action_event = "closed";
-# actor_name = "iancha1992"
-# actor_name = "Pavank1992"
+# action_event = "closed"
+action_event = "merged"
 actor_name = {
     "iancha1992",
     "Pavank1992",
     "chaheein123",
     "copybara-service[bot]"
 }
-
-action_event = "merged"
 
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
@@ -39,6 +35,6 @@ is_first_time = True
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
-    pr_data = cherry_pick(commit_id, pr_number, reviewers, release_number, issue_number, is_first_time)
+    pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time)
     create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data)
     is_first_time = False
