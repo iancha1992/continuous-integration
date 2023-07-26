@@ -60,6 +60,7 @@ def extract_release_numbers_data(pr_number):
                 if issue["body"] == f'Forked from #{pr_number}' and issue["state"] == "open":
                     results[milestone["title"]] = issue["number"]
                     break
+        print("This is the results", results)
         return results
 
     milestones_data = get_all_milestones_data()
