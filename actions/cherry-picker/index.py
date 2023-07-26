@@ -12,6 +12,13 @@ actor_name = {
     "copybara-service[bot]"
 }
 
+github_data = {
+    "gh_cli_repo_name": "iancha1992/bazel",
+    "master_branch": "release_test",
+    "release_branch_name_initials": "fake-release-",
+    "user_name": "iancha1992",
+}
+
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
 
@@ -35,6 +42,6 @@ is_first_time = True
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
-    pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time)
-    create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data)
+    pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time, github_data)
+    create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, github_data["user_name"])
     is_first_time = False

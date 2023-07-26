@@ -66,16 +66,16 @@ def extract_release_numbers_data(pr_number):
     milestoned_issues = get_milestoned_issues(milestones_data, pr_number)
     return milestoned_issues
 
-def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time):
+def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time, github_data):
     token = os.environ["GH_TOKEN"]
     g = Github(token)
-    gh_cli_repo_name = "iancha1992/bazel"
+    gh_cli_repo_name = github_data["gh_cli_repo_name"]
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
     repo_name = gh_cli_repo_name.split("/")[1]
-    master_branch = 'release_test'
-    release_branch_name = f'fake-release-{release_number}'
+    master_branch = github_data["master_branch"]
+    release_branch_name = f"{github_data['release_branch_name_initials']}{release_number}"
     target_branch_name = f"cp{pr_number}-{release_number}"
-    user_name = "iancha1992"
+    user_name = github_data["user_name"]
     result_data = {
         "release_branch_name": release_branch_name,
         "target_branch_name": target_branch_name,
@@ -128,7 +128,7 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
     run_cherrypick()
     return result_data
 
-def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data):
+def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, user_name):
     def send_pr_msg(issue_number, head_branch, release_branch):
         params = {
             "head": head_branch,
@@ -142,7 +142,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_da
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
 
-    head_branch = f"iancha1992:{pr_data['target_branch_name']}"
+    head_branch = f"{user_name}:{pr_data['target_branch_name']}"
     release_branch = pr_data["release_branch_name"]
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
 
