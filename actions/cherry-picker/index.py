@@ -8,6 +8,7 @@ milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 is_prod = os.environ["INPUT_IS_PROD"]
 
 print("is_prod", is_prod)
+print("type!", type(is_prod))
 
 # action_event = "closed"
 action_event = "merged"
