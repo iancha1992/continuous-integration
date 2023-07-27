@@ -20,7 +20,7 @@ if is_prod == "true":
         "user_name": "bazel-io",
     }
 
-elif is_prod == "false":
+else:
     action_event = "merged"
     actor_name = {
         "iancha1992",
