@@ -5,6 +5,9 @@ triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
+is_prod = os.environ["INPUT_IS_PROD"]
+
+print("is_prod", is_prod)
 
 # action_event = "closed"
 action_event = "merged"

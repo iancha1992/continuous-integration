@@ -13,6 +13,9 @@ inputs:
   milestoned-issue-number:
     required: true
     default: ${{ github.milestoned-issue-number }}
+  is-prod:
+    required: true
+    default: ${{ github.is-prod }}
 runs:
   using: 'composite'
   steps:
@@ -30,6 +33,7 @@ runs:
               echo "INPUT_PR_NUMBER=${{ inputs.pr-number }}" >> $GITHUB_ENV
               echo "INPUT_MILESTONE_TITLE=${{ inputs.milestone-title }}" >> $GITHUB_ENV
               echo "INPUT_MILESTONED_ISSUE_NUMBER=${{ inputs.milestoned-issue-number }}" >> $GITHUB_ENV
+              echo "INPUT_IS_PROD=${{ inputs.is-prod }}" >> $GITHUB_ENV
       shell: bash
     - name: Run python index.py
       run: |
