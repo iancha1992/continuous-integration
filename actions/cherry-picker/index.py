@@ -3,6 +3,9 @@ from functions import check_closed, get_commit_id, get_reviewers, extract_releas
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
+milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
+milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
+
 # action_event = "closed"
 action_event = "merged"
 actor_name = {
@@ -29,7 +32,13 @@ commit_id = get_commit_id(pr_number, actor_name, action_event)
 reviewers = get_reviewers(pr_number)
 
 # Retrieve release_numbers
-release_numbers_data = extract_release_numbers_data(pr_number)
+release_numbers_data = None
+# milestone_title
+if triggered_on == "closed":
+    release_numbers_data = extract_release_numbers_data(pr_number)
+else:
+    # "6.3.0 release blockers"
+    release_numbers_data = {milestone_title.split(" release blockers")[0]: milestoned_issue_number}
 
 # Retrieve labels
 labels = get_labels(pr_number)

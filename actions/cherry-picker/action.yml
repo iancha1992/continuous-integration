@@ -7,6 +7,12 @@ inputs:
   pr-number:
     required: true
     default: ${{ github.pr-number }}
+  milestone-title:
+    required: true
+    default: ${{ github.milestone-title }}
+  milestoned-issue-number:
+    required: true
+    default: ${{ github.milestoned-issue-number }}
 runs:
   using: 'composite'
   steps:
@@ -22,6 +28,8 @@ runs:
       run: |
               echo "INPUT_TRIGGERED_ON=${{ inputs.triggered-on }}" >> $GITHUB_ENV
               echo "INPUT_PR_NUMBER=${{ inputs.pr-number }}" >> $GITHUB_ENV
+              echo "INPUT_MILESTONE_TITLE=${{ inputs.milestone-title }}" >> $GITHUB_ENV
+              echo "INPUT_MILESTONED_ISSUE_NUMBER=${{ inputs.milestoned-issue-number }}" >> $GITHUB_ENV
       shell: bash
     - name: Run python index.py
       run: |
