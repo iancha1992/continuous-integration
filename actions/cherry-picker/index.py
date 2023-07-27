@@ -10,16 +10,13 @@ is_prod = os.environ["INPUT_IS_PROD"]
 if is_prod == "true":
     action_event = "closed"
     actor_name = {
-        "iancha1992",
-        "Pavank1992",
-        "chaheein123",
         "copybara-service[bot]"
     }
     github_data = {
-        "gh_cli_repo_name": "iancha1992/bazel",
-        "master_branch": "release_test",
-        "release_branch_name_initials": "fake-release-",
-        "user_name": "iancha1992",
+        "gh_cli_repo_name": "bazelbuild/bazel",
+        "master_branch": "master",
+        "release_branch_name_initials": "release-",
+        "user_name": "bazel-io",
     }
 
 elif is_prod == "false":
@@ -28,7 +25,6 @@ elif is_prod == "false":
         "iancha1992",
         "Pavank1992",
         "chaheein123",
-        "copybara-service[bot]"
     }
     github_data = {
         "gh_cli_repo_name": "iancha1992/bazel",
