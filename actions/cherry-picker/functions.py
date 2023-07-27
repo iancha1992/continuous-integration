@@ -107,11 +107,12 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
 
     def run_cherrypick():
-        push_status = None
         # Cherry-pick the specified commit
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
-        status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
-
+        if github_data["is_prod"] == True:
+            status = subprocess.run(['git', 'cherry-pick', commit_id])
+        else:
+            status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])

@@ -13,6 +13,7 @@ if is_prod == "true":
         "copybara-service[bot]"
     }
     github_data = {
+        "is_prod": True,
         "gh_cli_repo_name": "bazelbuild/bazel",
         "master_branch": "master",
         "release_branch_name_initials": "release-",
@@ -27,6 +28,7 @@ elif is_prod == "false":
         "chaheein123",
     }
     github_data = {
+        "is_prod": False,
         "gh_cli_repo_name": "iancha1992/bazel",
         "master_branch": "release_test",
         "release_branch_name_initials": "fake-release-",
