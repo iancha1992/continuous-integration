@@ -7,24 +7,35 @@ milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 is_prod = os.environ["INPUT_IS_PROD"]
 
-print("is_prod", is_prod)
-print("type!", type(is_prod))
+if is_prod == "true":
+    action_event = "closed"
+    actor_name = {
+        "iancha1992",
+        "Pavank1992",
+        "chaheein123",
+        "copybara-service[bot]"
+    }
+    github_data = {
+        "gh_cli_repo_name": "iancha1992/bazel",
+        "master_branch": "release_test",
+        "release_branch_name_initials": "fake-release-",
+        "user_name": "iancha1992",
+    }
 
-# action_event = "closed"
-action_event = "merged"
-actor_name = {
-    "iancha1992",
-    "Pavank1992",
-    "chaheein123",
-    "copybara-service[bot]"
-}
-
-github_data = {
-    "gh_cli_repo_name": "iancha1992/bazel",
-    "master_branch": "release_test",
-    "release_branch_name_initials": "fake-release-",
-    "user_name": "iancha1992",
-}
+elif is_prod == "false":
+    action_event = "merged"
+    actor_name = {
+        "iancha1992",
+        "Pavank1992",
+        "chaheein123",
+        "copybara-service[bot]"
+    }
+    github_data = {
+        "gh_cli_repo_name": "iancha1992/bazel",
+        "master_branch": "release_test",
+        "release_branch_name_initials": "fake-release-",
+        "user_name": "iancha1992",
+    }
 
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
@@ -36,12 +47,10 @@ commit_id = get_commit_id(pr_number, actor_name, action_event)
 reviewers = get_reviewers(pr_number)
 
 # Retrieve release_numbers
-release_numbers_data = None
-# milestone_title
+# release_numbers_data = None
 if triggered_on == "closed":
     release_numbers_data = extract_release_numbers_data(pr_number)
 else:
-    # "6.3.0 release blockers"
     release_numbers_data = {milestone_title.split(" release blockers")[0]: milestoned_issue_number}
 
 # Retrieve labels
