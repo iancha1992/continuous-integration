@@ -112,6 +112,7 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
         if github_data["is_prod"] == True:
             status = subprocess.run(['git', 'cherry-pick', commit_id])
         else:
+            print("cherrypicking -mmmmm")
             status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
