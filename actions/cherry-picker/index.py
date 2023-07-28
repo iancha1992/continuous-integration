@@ -47,7 +47,6 @@ commit_id = get_commit_id(pr_number, actor_name, action_event)
 reviewers = get_reviewers(pr_number)
 
 # Retrieve release_numbers
-# release_numbers_data = None
 if triggered_on == "closed":
     release_numbers_data = extract_release_numbers_data(pr_number)
 else:
