@@ -107,8 +107,11 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
             print(f"There is NO branch called {release_branch_name}...")
             print(f"Creating the {release_branch_name} from upstream, {upstream_url}")
             subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url], capture_output = True)
+            print("These are the new branches")
+            subprocess.run(['git', 'remote', '-v'])
             subprocess.run(['git', 'fetch', 'upstream'], capture_output = True)
             subprocess.run(['git', 'branch', release_branch_name, f'upstream/{release_branch_name}'], capture_output = True)
+            print("After git branch new!")
             release_push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name])
             if release_push_status.returncode != 0:
                 print("Did the push failed?")
