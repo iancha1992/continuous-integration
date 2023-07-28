@@ -118,7 +118,7 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
                 result_data["is_successful"] = False
                 return
             subprocess.run(['git', 'remote', 'rm', 'upstream'])
-            subprocess.run(['git', 'checkout', release_branch_name], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+            subprocess.run(['git', 'checkout', release_branch_name], capture_output = True)
 
         status_checkout_target = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
