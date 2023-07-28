@@ -72,6 +72,7 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
     g = Github(token)
     gh_cli_repo_name = github_data["gh_cli_repo_name"]
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
+    upstream_url = "git@github.com:bazelbuild/bazel.git"
     repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = github_data["master_branch"]
     release_branch_name = f"{github_data['release_branch_name_initials']}{release_number}"
@@ -104,8 +105,8 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
         # Create the new release branch from the upstream if not exists already.
         if status_checkout_release.returncode != 0:
             print(f"There is NO branch called {release_branch_name}...")
-            print(f"Creating the {release_branch_name} from upstream ({release_branch_name})")
-            subprocess.run(['git', 'remote', 'add', 'upstream', repo_url], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+            print(f"Creating the {release_branch_name} from upstream, ({upstream_url})")
+            subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
             subprocess.run(['git', 'fetch', 'upstream'], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
             subprocess.run(['git', 'branch', release_branch_name, f'upstream/{release_branch_name}'], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
             release_push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
