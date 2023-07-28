@@ -101,16 +101,19 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
         status_checkout_release = subprocess.run(['git', 'checkout', release_branch_name])
         
-        # Need to fix here.
+        # Create the new release branch from the upstream if not exists already.
         if status_checkout_release.returncode != 0:
             print(f"There is NO branch called {release_branch_name}...")
             print(f"Creating the {release_branch_name} from upstream ({release_branch_name})")
-            subprocess.run(['git', 'remote', 'add', 'upstream', repo_url])
-            subprocess.run(['git', 'fetch', 'upstream'])
-            subprocess.run(['git', 'branch', release_branch_name, f'upstream/{release_branch_name}'])
-            subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name])
-            subprocess.run(['git', 'remote', 'rm', 'upstream', ])
-            subprocess.run(['git', 'checkout', release_branch_name])
+            subprocess.run(['git', 'remote', 'add', 'upstream', repo_url], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+            subprocess.run(['git', 'fetch', 'upstream'], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+            subprocess.run(['git', 'branch', release_branch_name, f'upstream/{release_branch_name}'], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+            release_push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
+            if release_push_status.returncode != 0:
+                result_data["is_successful"] = False
+                return
+            subprocess.run(['git', 'remote', 'rm', 'upstream'])
+            subprocess.run(['git', 'checkout', release_branch_name], stdout = subprocess.DEVNULL, stderr = subprocess.DEVNULL)
 
         status_checkout_target = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
@@ -125,21 +128,23 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
             status = subprocess.run(['git', 'cherry-pick', commit_id])
         else:
             status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
+
         if status.returncode == 0:
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
+            if push_status.returncode != 0:
+                subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists"])
+                result_data["is_successful"] = False
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted but there were merge conflicts. Please resolve manually."])
             result_data["is_successful"] = False
-        if push_status.returncode != 0:
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists"])
-            result_data["is_successful"] = False
-
+        
     if is_first_time == True:
         clone_and_sync_repo()
         remove_upstream_and_add_origin()
     checkout_release_number()
-    run_cherrypick()
+    if result_data["is_successful"] == True:
+        run_cherrypick()
     return result_data
 
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, user_name):
