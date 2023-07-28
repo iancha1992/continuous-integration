@@ -99,11 +99,23 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
 
     def checkout_release_number():
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
-        subprocess.run(['git', 'checkout', release_branch_name])
-        status_checkout = subprocess.run(['git', 'checkout', '-b', target_branch_name])
+        status_checkout_release = subprocess.run(['git', 'checkout', release_branch_name])
+        
+        # Need to fix here.
+        if status_checkout_release.returncode != 0:
+            print(f"There is NO branch called {release_branch_name}...")
+            print(f"Creating the {release_branch_name} from upstream ({release_branch_name})")
+            subprocess.run(['git', 'remote', 'add', 'upstream', repo_url])
+            subprocess.run(['git', 'fetch', 'upstream'])
+            subprocess.run(['git', 'branch', release_branch_name, f'upstream/{release_branch_name}'])
+            subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name])
+            subprocess.run(['git', 'remote', 'rm', 'upstream', ])
+            subprocess.run(['git', 'checkout', release_branch_name])
+
+        status_checkout_target = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
-        if status_checkout.returncode != 0:
+        if status_checkout_target.returncode != 0:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
 
     def run_cherrypick():
