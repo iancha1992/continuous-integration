@@ -72,8 +72,6 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
     g = Github(token)
     gh_cli_repo_name = github_data["gh_cli_repo_name"]
     repo_url = f'git@github.com:{gh_cli_repo_name}.git'
-    # upstream_url = "git@github.com:bazelbuild/bazel.git"
-    # upstream_url = "git://github.com/bazelbuild/bazel"
     upstream_url = "https://github.com/bazelbuild/bazel.git"
     repo_name = gh_cli_repo_name.split("/")[1]
     master_branch = github_data["master_branch"]
