@@ -106,7 +106,7 @@ def cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_tim
         if status_checkout_release.returncode != 0:
             print(f"There is NO branch called {release_branch_name}...")
             print(f"Creating the {release_branch_name} from upstream, {upstream_url}")
-            subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url], capture_output = True)
+            subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
             print("These are the new remote repos")
             subprocess.run(['git', 'remote', '-v'])
             subprocess.run(['git', 'fetch', 'upstream'])
