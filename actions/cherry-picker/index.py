@@ -65,6 +65,6 @@ for k in release_numbers_data.keys():
     issue_number = release_numbers_data[k]
     pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time, github_data)
     if pr_data["is_successful"] == True:
-        # create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, github_data["user_name"])
-        pass
+        create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, github_data["user_name"])
+        # pass
     is_first_time = False
