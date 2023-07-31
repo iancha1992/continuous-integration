@@ -8,10 +8,10 @@ inputs:
     required: true
     default: ${{ github.pr-number }}
   milestone-title:
-    required: true
+    required: false
     default: ${{ github.milestone-title }}
   milestoned-issue-number:
-    required: true
+    required: false
     default: ${{ github.milestoned-issue-number }}
   is-prod:
     required: true
