@@ -57,12 +57,15 @@ labels = get_labels(pr_number)
 issue_data = get_issue_data(pr_number, commit_id)
 
 is_first_time = True
-
 for k in release_numbers_data.keys():
     release_number = k
+    release_branch_name = f"{input_data['release_branch_name_initials']}{release_number}"
+    target_branch_name = f"cp{pr_number}-{release_number}"
     issue_number = release_numbers_data[k]
-    pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time, input_data)
-    if pr_data["is_successful"] == True:
-        # create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, input_data["user_name"])
-        pass
+    try:
+        cherrypick_status = cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
+    except:
+        cherrypick_status = 1
+    if cherrypick_status == 0:
+        create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, input_data["user_name"])
     is_first_time = False
