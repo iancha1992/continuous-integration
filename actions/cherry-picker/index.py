@@ -35,8 +35,6 @@ else:
         "user_name": "iancha1992",
     }
 
-print("This is the github_data", github_data)
-
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
 
