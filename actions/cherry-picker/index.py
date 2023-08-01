@@ -8,38 +8,38 @@ milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 is_prod = os.environ["INPUT_IS_PROD"]
 
 if is_prod == "true":
-    action_event = "closed"
-    actor_name = {
-        "copybara-service[bot]"
-    }
-    github_data = {
+    input_data = {
         "is_prod": True,
         "gh_cli_repo_name": "bazelbuild/bazel",
         "master_branch": "master",
         "release_branch_name_initials": "release-",
         "user_name": "bazel-io",
+        "action_event": "closed",
+        "actor_name": {
+            "copybara-service[bot]"
+        }
     }
 
 else:
-    action_event = "merged"
-    actor_name = {
-        "iancha1992",
-        "Pavank1992",
-        "chaheein123",
-    }
-    github_data = {
+    input_data = {
         "is_prod": False,
         "gh_cli_repo_name": "iancha1992/bazel",
         "master_branch": "release_test",
         "release_branch_name_initials": "fake-release-",
         "user_name": "iancha1992",
+        "action_event": "merged",
+        "actor_name": {
+            "iancha1992",
+            "Pavank1992",
+            "chaheein123",
+        }
     }
 
 # Check if the PR is closed.
 if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
 
 # Retrieve commit_id. If doesn't exist or multiple commit id's, then raise error.
-commit_id = get_commit_id(pr_number, actor_name, action_event)
+commit_id = get_commit_id(pr_number, input_data["actor_name"], input_data["action_event"])
 
 # Retrieve approvers(reviewers) of the PR
 reviewers = get_reviewers(pr_number)
@@ -61,8 +61,8 @@ is_first_time = True
 for k in release_numbers_data.keys():
     release_number = k
     issue_number = release_numbers_data[k]
-    pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time, github_data)
+    pr_data = cherry_pick(commit_id, pr_number, release_number, issue_number, is_first_time, input_data)
     if pr_data["is_successful"] == True:
-        # create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, github_data["user_name"])
+        # create_pr(reviewers, release_number, issue_number, labels, issue_data, pr_data, input_data["user_name"])
         pass
     is_first_time = False
