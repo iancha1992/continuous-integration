@@ -18,6 +18,8 @@ def get_commit_id(pr_number, actor_name, action_event):
     r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues/{pr_number}/events', headers=headers, params=params)
     commit_id = None
     for event in r.json():
+        print("This is the event")
+        pprint(event)
         if (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id == None) and (event["event"] == action_event):
             commit_id = event["commit_id"]
         elif (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id != None) and (event["event"] == action_event):
