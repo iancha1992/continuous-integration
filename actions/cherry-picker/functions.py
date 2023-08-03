@@ -82,6 +82,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
     master_branch = input_data["master_branch"]
     user_name = input_data["user_name"]
     print("This is the end of the variables")
+    print(gh_cli_repo_name, repo_url, upstream_url, master_branch, user_name)
 
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
