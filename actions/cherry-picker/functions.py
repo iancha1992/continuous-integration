@@ -154,6 +154,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
             "base": release_branch,
             "state": "open"
         }
+        print(f"This is the issue number, {issue_number}")
         r = requests.get(f'https://api.github.com/repos/bazelbuild/bazel/pulls', headers=headers, params=params).json()
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
