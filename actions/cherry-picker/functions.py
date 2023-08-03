@@ -10,7 +10,7 @@ def check_closed(pr_number, api_repo_name):
     print("This is the prnumber", pr_number)
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}', headers=headers)
     print("DATA!")
-    pprint(r.json())
+    # pprint(r.json())
     if r.json()["state"] == "closed": return True
     return False
 
@@ -22,7 +22,7 @@ def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
     commit_id = None
     for event in r.json():
         print("This is the event")
-        pprint(event)
+        # pprint(event)
         if (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id == None) and (event["event"] == action_event):
             commit_id = event["commit_id"]
         elif (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id != None) and (event["event"] == action_event):
@@ -74,6 +74,7 @@ def extract_release_numbers_data(pr_number, api_repo_name):
 
 def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data):
     print("Cherrypicking now!")
+    print(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
     token = os.environ["GH_TOKEN"]
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
     repo_url = f"git@github.com:{input_data['']}.git"
