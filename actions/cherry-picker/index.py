@@ -36,25 +36,25 @@ else:
     }
 
 # Check if the PR is closed.
-if check_closed(pr_number) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
+if check_closed(pr_number, input_data["gh_cli_repo_name"]) == False: raise ValueError(f'The PR #{pr_number} is not closed yet.')
 
 # Retrieve commit_id. If doesn't exist or multiple commit id's, then raise error.
-commit_id = get_commit_id(pr_number, input_data["actor_name"], input_data["action_event"])
+commit_id = get_commit_id(pr_number, input_data["actor_name"], input_data["action_event"], input_data["gh_cli_repo_name"])
 
 # Retrieve approvers(reviewers) of the PR
-reviewers = get_reviewers(pr_number)
+reviewers = get_reviewers(pr_number, input_data["gh_cli_repo_name"])
 
 # Retrieve release_numbers
 if triggered_on == "closed":
-    release_numbers_data = extract_release_numbers_data(pr_number)
+    release_numbers_data = extract_release_numbers_data(pr_number, input_data["gh_cli_repo_name"])
 else:
     release_numbers_data = {milestone_title.split(" release blockers")[0]: milestoned_issue_number}
 
 # Retrieve labels
-labels = get_labels(pr_number)
+labels = get_labels(pr_number, input_data["gh_cli_repo_name"])
 
 # Retrieve issue/PR's title and body
-issue_data = get_issue_data(pr_number, commit_id)
+issue_data = get_issue_data(pr_number, commit_id, input_data["gh_cli_repo_name"])
 
 is_first_time = True
 for k in release_numbers_data.keys():

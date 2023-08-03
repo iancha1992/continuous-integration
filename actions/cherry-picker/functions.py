@@ -6,19 +6,19 @@ headers = {
     'X-GitHub-Api-Version': '2022-11-28'
 }
 
-def check_closed(pr_number):
+def check_closed(pr_number, gh_cli_repo_name):
     print("This is the prnumber", pr_number)
-    r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls/{pr_number}', headers=headers)
+    r = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/pulls/{pr_number}', headers=headers)
     print("DATA!")
     pprint(r.json())
     if r.json()["state"] == "closed": return True
     return False
 
-def get_commit_id(pr_number, actor_name, action_event):
+def get_commit_id(pr_number, actor_name, action_event, gh_cli_repo_name):
     params = {
         "per_page": 100
     }
-    r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues/{pr_number}/events', headers=headers, params=params)
+    r = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
     commit_id = None
     for event in r.json():
         print("This is the event")
@@ -32,8 +32,8 @@ def get_commit_id(pr_number, actor_name, action_event):
 
     return commit_id
 
-def get_reviewers(pr_number):
-    r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls/{pr_number}/reviews', headers=headers)
+def get_reviewers(pr_number, gh_cli_repo_name):
+    r = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/pulls/{pr_number}/reviews', headers=headers)
     if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver.")
     approvers_list = []
     for review in r.json():
@@ -47,10 +47,10 @@ def get_reviewers(pr_number):
         raise ValueError(f"PR#{pr_number} has no approver.")    
     return approvers_list
 
-def extract_release_numbers_data(pr_number):
+def extract_release_numbers_data(pr_number, gh_cli_repo_name):
 
     def get_all_milestones_data():
-        r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/milestones', headers=headers)
+        r = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/milestones', headers=headers)
         milestones_data = list(map(lambda n: {"title": n["title"].split("release blockers")[0].replace(" ", ""), "number": n["number"]}, r.json()))
         return milestones_data
 
@@ -60,7 +60,7 @@ def extract_release_numbers_data(pr_number):
             params = {
                 "milestone": milestone["number"]
             }
-            r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues', headers=headers, params=params)
+            r = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/issues', headers=headers, params=params)
             for issue in r.json():
                 if issue["body"] == f'Forked from #{pr_number}' and issue["state"] == "open":
                     results[milestone["title"]] = issue["number"]
@@ -175,23 +175,23 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
         print("PR was successfully created")
         send_pr_msg(issue_number, head_branch, release_branch_name)
 
-def get_labels(pr_number):
-    r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues/{pr_number}/labels', headers=headers)
+def get_labels(pr_number, gh_cli_repo_name):
+    r = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/issues/{pr_number}/labels', headers=headers)
     return(list(map(lambda x: x["name"], r.json())))
 
-def get_issue_data(pr_number, commit_id):
+def get_issue_data(pr_number, commit_id, gh_cli_repo_name):
     data = {}
-    response_issue = requests.get(f'https://api.github.com/repos/iancha1992/bazel/issues/{pr_number}', headers=headers)
+    response_issue = requests.get(f'https://api.github.com/repos/{gh_cli_repo_name}/issues/{pr_number}', headers=headers)
     data["title"] = response_issue.json()["title"]
 
-    response_commit = requests.get(f"https://api.github.com/repos/iancha1992/bazel/commits/{commit_id}")
+    response_commit = requests.get(f"https://api.github.com/repos/{gh_cli_repo_name}/commits/{commit_id}")
     original_msg = response_commit.json()["commit"]["message"]
     pr_body = None
     if "\n\n" in original_msg:
         pr_body = original_msg[original_msg.index("\n\n") + 2:]
     else:
         pr_body = original_msg
-    commit_str_body = f"Commit https://github.com/iancha1992/bazel/commit/{commit_id}"
+    commit_str_body = f"Commit https://github.com/{gh_cli_repo_name}/commit/{commit_id}"
     if "PiperOrigin-RevId" in pr_body:
         piper_index = pr_body.index("PiperOrigin-RevId")
         pr_body = pr_body[:piper_index] + f"{commit_str_body}\n\n" + pr_body[piper_index:]
