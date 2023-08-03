@@ -73,6 +73,7 @@ def extract_release_numbers_data(pr_number, api_repo_name):
     return milestoned_issues
 
 def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data):
+    print("Cherrypicking now!")
     token = os.environ["GH_TOKEN"]
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
     repo_url = f"git@github.com:{input_data['']}.git"
