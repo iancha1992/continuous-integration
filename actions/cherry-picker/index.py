@@ -17,7 +17,8 @@ if is_prod == "true":
         "action_event": "closed",
         "actor_name": {
             "copybara-service[bot]"
-        }
+        },
+        "email": "bazel-io-bot@google.com"
     }
 
 else:
@@ -32,7 +33,8 @@ else:
             "iancha1992",
             "Pavank1992",
             "chaheein123",
-        }
+        },
+        "email": "heec@google.com"
     }
 
 # Check if the PR is closed.
