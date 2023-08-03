@@ -21,7 +21,7 @@ def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
     commit_id = None
     for event in r.json():
-        print("This is the event")
+        # print("This is the event")
         # pprint(event)
         if (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id == None) and (event["event"] == action_event):
             commit_id = event["commit_id"]
@@ -156,7 +156,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
         r = requests.get(f'https://api.github.com/repos/bazelbuild/bazel/pulls', headers=headers, params=params).json()
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}"])
+            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}"])
         else:
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
 
