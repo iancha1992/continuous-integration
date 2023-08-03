@@ -77,7 +77,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
     print(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
     token = os.environ["GH_TOKEN"]
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
-    repo_url = f"git@github.com:{input_data['']}.git"
+    repo_url = f"git@github.com:{gh_cli_repo_name}.git"
     upstream_url = "https://github.com/bazelbuild/bazel.git"
     master_branch = input_data["master_branch"]
     user_name = input_data["user_name"]
