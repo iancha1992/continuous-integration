@@ -89,7 +89,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])  # Syncing
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
         subprocess.run(['git', 'clone', f"https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git"])
-        subprocess.run(['git', 'config', '--global', 'user.name', 'bazel-io'])
+        subprocess.run(['git', 'config', '--global', 'user.name', user_name])
         subprocess.run(['git', 'config', '--global', 'user.email', input_data["email"]])
         os.chdir("bazel")
 
