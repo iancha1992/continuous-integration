@@ -148,6 +148,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
 
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name):
     def send_pr_msg(issue_number, head_branch, release_branch):
+        print("Sending the pr msg...")
         params = {
             "head": head_branch,
             "base": release_branch,
