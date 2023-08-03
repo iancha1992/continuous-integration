@@ -156,8 +156,10 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
         r = requests.get(f'https://api.github.com/repos/bazelbuild/bazel/pulls', headers=headers, params=params).json()
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
+            print(f"Cherry-picked in {cherry_picked_pr_number}")
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}"])
         else:
+            print("Failed to send PR msg")
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
 
     head_branch = f"{user_name}:{target_branch_name}"
