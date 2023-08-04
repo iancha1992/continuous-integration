@@ -10,8 +10,13 @@ def check_closed(pr_number, api_repo_name):
     print("This is the prnumber", pr_number)
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}', headers=headers)
     print("DATA!")
-    # pprint(r.json())
-    if r.json()["state"] == "closed": return True
+    pprint(r.json())
+    print("This is the status code", r.status_code)
+    # try:
+    #     if r.json()["state"] == "closed": return True
+    # except:
+    #     response_issue = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}', headers=headers)
+    #     if response_issue.json()["state"] == "closed": return True
     return False
 
 def get_commit_id(pr_number, actor_name, action_event, api_repo_name):

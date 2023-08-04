@@ -1,25 +1,19 @@
+import requests
 
 
 
-# release_number = "6.3.0"
+# 19173
 
-release_number = "6.3.1"
+headers = {
+    'X-GitHub-Api-Version': '2022-11-28'
+}
+# url = 'https://api.github.com/repos/bazelbuild/bazel/issues/19173/comments'
+url = 'https://api.github.com/repos/iancha1992/bazel/issues/239/comments'
+myobj = {
+    'body': 'testing',
+}
 
-# release_number = "6.3.0"
+r = requests.post(url, headers=headers, json=myobj)
+# x = requests.post(url, json = myobj)
 
-last_digit = release_number.split(".")[2]
-
-print(last_digit)
-
-
-if int(last_digit) == 0:
-    pass
-
-else:
-    previous_release_number =  + str(int(last_digit) + 1)
-    # previous_release_number = release_number.split(".")[2]
-    # previous_release_number = str(int(release_number[-1]) + 1)
-    # print(previous_release_number)
-
-
-
+print(r.text)
