@@ -152,7 +152,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
     run_cherrypick()
     return 0
 
-def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name):
+def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name):
     def send_pr_msg(issue_number, head_branch, release_branch):
         print("Sending the pr msg...")
         params = {
@@ -165,7 +165,8 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
             print(f"Cherry-picked in {cherry_picked_pr_number}")
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}"])
+            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}"])
+            issue_comment(issue_number, f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}", api_repo_name)
         else:
             print("Failed to send PR msg")
             subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
