@@ -169,7 +169,9 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
             issue_comment(issue_number, f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}", api_repo_name)
         else:
             print("Failed to send PR msg")
-            subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
+            issue_comment(issue_number, "Failed to send PR msg", api_repo_name)
+            raise ValueError("Failed to send PR msg")
+            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
 
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
@@ -221,5 +223,3 @@ def issue_comment(issue_number, body_content, api_repo_name):
     subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
     subprocess.run(['git', 'remote', 'rm', 'upstream'])
     subprocess.run(['git', 'repo', 'set-default', api_repo_name])
-
-
