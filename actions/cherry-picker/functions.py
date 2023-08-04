@@ -14,7 +14,7 @@ def check_closed(pr_number, api_repo_name):
     print("This is the status code", r.status_code)
     if r.status_code == 404:
         print("4044444444")
-    if r.status_code == 404:
+    if r.status_code == "404":
         print("STRING!!!!!!!!")
     # try:
     #     if r.json()["state"] == "closed": return True
