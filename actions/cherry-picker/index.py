@@ -44,7 +44,8 @@ if check_closed(pr_number, input_data["api_repo_name"]) == False: raise ValueErr
 commit_id = get_commit_id(pr_number, input_data["actor_name"], input_data["action_event"], input_data["api_repo_name"])
 
 # Retrieve approvers(reviewers) of the PR
-reviewers = get_reviewers(pr_number, input_data["api_repo_name"])
+# reviewers = get_reviewers(pr_number, input_data["api_repo_name"])
+reviewers = [{"login": "iancha1992", "id": 0}]
 
 # Retrieve release_numbers
 if triggered_on == "closed":
