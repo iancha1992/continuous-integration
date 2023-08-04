@@ -214,7 +214,7 @@ def get_issue_data(pr_number, commit_id, api_repo_name):
     return data
 
 def issue_comment(issue_number, body_content, api_repo_name):
-    print("Issuing Comment!")
+    print("Issuing Comment!", issue_number, body_content, api_repo_name)
     subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
     subprocess.run(['git', 'repo', 'set-default', "bazelbuild/bazel"])
     subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
