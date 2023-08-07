@@ -222,4 +222,4 @@ def issue_comment(issue_number, body_content, api_repo_name):
     subprocess.run(['gh', 'repo', 'set-default', "bazelbuild/bazel"])
     subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
     subprocess.run(['git', 'remote', 'rm', 'upstream'])
-    subprocess.run(['git', 'repo', 'set-default', api_repo_name])
+    subprocess.run(['gh', 'repo', 'set-default', api_repo_name])
