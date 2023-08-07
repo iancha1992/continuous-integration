@@ -94,11 +94,13 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         subprocess.run(['git', 'config', '--global', 'user.name', user_name])
         subprocess.run(['git', 'config', '--global', 'user.email', input_data["email"]])
         os.chdir("bazel")
-
-    def remove_upstream_and_add_origin():
-        # subprocess.run(['git', 'remote', 'rm', 'upstream'])
         subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
         subprocess.run(['git', 'remote', '-v'])
+
+    # def remove_upstream_and_add_origin():
+    #     # subprocess.run(['git', 'remote', 'rm', 'upstream'])
+    #     subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
+    #     subprocess.run(['git', 'remote', '-v'])
 
     def checkout_release_number():
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
@@ -147,7 +149,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         
     if is_first_time == True:
         clone_and_sync_repo()
-        remove_upstream_and_add_origin()
+        # remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
     return 0
