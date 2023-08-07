@@ -122,7 +122,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
 
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
         if status_checkout_target.returncode != 0:
-            issue_comment(issue_number, f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}", input_data["api_repo_name"])
+            issue_comment(issue_number, f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc:@bazelbuild/triage", input_data["api_repo_name"])
             # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
             raise ValueError(f"There may already be a branch called, {target_branch_name}")
 
@@ -138,11 +138,11 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
             if push_status.returncode != 0:
                 # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists"])
-                issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists", input_data["api_repo_name"])
+                issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists\ncc:@bazelbuild/triage", input_data["api_repo_name"])
                 raise ValueError(f"Could not create and push the branch, {release_branch_name}")
         else:
             # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted but there were merge conflicts. Please resolve manually."])
-            issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.", input_data["api_repo_name"])
+            issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc:@bazelbuild/triage", input_data["api_repo_name"])
             raise ValueError("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.")
         
     if is_first_time == True:
@@ -169,7 +169,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
             issue_comment(issue_number, f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}", api_repo_name)
         else:
             print("Failed to send PR msg")
-            issue_comment(issue_number, "Failed to send PR msg", api_repo_name)
+            issue_comment(issue_number, "Failed to send PR msg \ncc:@bazelbuild/triage", api_repo_name)
             raise ValueError("Failed to send PR msg")
             # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
 
