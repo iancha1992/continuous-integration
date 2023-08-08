@@ -23,8 +23,6 @@ def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
     commit_id = None
     for event in r.json():
-        # print("This is the event")
-        # pprint(event)
         if (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id == None) and (event["event"] == action_event):
             commit_id = event["commit_id"]
         elif (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id != None) and (event["event"] == action_event):
@@ -80,11 +78,8 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
     token = os.environ["GH_TOKEN"]
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
     repo_url = f"git@github.com:{gh_cli_repo_name}.git"
-    # upstream_url = "https://github.com/bazelbuild/bazel.git"
     master_branch = input_data["master_branch"]
     user_name = input_data["user_name"]
-    print("This is the end of the variables")
-    print(gh_cli_repo_name, repo_url, upstream_url, master_branch, user_name)
 
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
@@ -96,11 +91,6 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         os.chdir("bazel")
         subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
         subprocess.run(['git', 'remote', '-v'])
-
-    # def remove_upstream_and_add_origin():
-    #     # subprocess.run(['git', 'remote', 'rm', 'upstream'])
-    #     subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
-    #     subprocess.run(['git', 'remote', '-v'])
 
     def checkout_release_number():
         subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
@@ -125,7 +115,6 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
         if status_checkout_target.returncode != 0:
             issue_comment(issue_number, f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc:@bazelbuild/triage", input_data["api_repo_name"])
-            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}"])
             raise ValueError(f"There may already be a branch called, {target_branch_name}")
 
     def run_cherrypick():
@@ -139,17 +128,14 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
             if push_status.returncode != 0:
-                # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists"])
                 issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists\ncc:@bazelbuild/triage", input_data["api_repo_name"])
                 raise ValueError(f"Could not create and push the branch, {release_branch_name}")
         else:
-            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Cherry-pick was attempted but there were merge conflicts. Please resolve manually."])
             issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc:@bazelbuild/triage", input_data["api_repo_name"])
             raise ValueError("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.")
         
     if is_first_time == True:
         clone_and_sync_repo()
-        # remove_upstream_and_add_origin()
     checkout_release_number()
     run_cherrypick()
     return 0
@@ -167,13 +153,11 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
             print(f"Cherry-picked in {cherry_picked_pr_number}")
-            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}"])
             issue_comment(issue_number, f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}", api_repo_name)
         else:
             print("Failed to send PR msg")
             issue_comment(issue_number, "Failed to send PR msg \ncc:@bazelbuild/triage", api_repo_name)
             raise ValueError("Failed to send PR msg")
-            # subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "Failed to send PR msg"])
 
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
