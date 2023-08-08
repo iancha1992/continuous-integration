@@ -88,7 +88,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
 
     def clone_and_sync_repo():
         print("Cloning and syncing the repo...")
-        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])  # Syncing
+        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])
         subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
         subprocess.run(['git', 'clone', f"https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git"])
         subprocess.run(['git', 'config', '--global', 'user.name', user_name])
@@ -177,9 +177,6 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
 
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join([str(r["login"]) for r in reviewers])
-
-    if "awaiting-review" not in labels:
-        labels.append("awaiting-review")
     labels_str = ",".join(labels)
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']
@@ -194,7 +191,10 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
 
 def get_labels(pr_number, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/labels', headers=headers)
-    return(list(map(lambda x: x["name"], r.json())))
+    labels_list = list(map(lambda x: x["name"], r.json()))
+    labels_list = filter(lambda label: "area" in label or "team" in label, labels_list)
+    if "awaiting-review" not in labels_list: labels_list.append("awaiting-review")
+    return labels_list
 
 def get_issue_data(pr_number, commit_id, api_repo_name):
     data = {}
