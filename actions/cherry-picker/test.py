@@ -7,12 +7,15 @@ import requests, subprocess
 
 # headers = {
 #     'X-GitHub-Api-Version': '2022-11-28',
-
 # }
 # # url = 'https://api.github.com/repos/bazelbuild/bazel/issues/19173/comments'
 # url = 'https://api.github.com/repos/bazelbuild/bazel/collaborators'
 
+# url = "https://api.github.com/users/googlewalt/hovercard"
+
 # r = requests.get(url, headers=headers)
+
+# print(r.json())
 # # x = requests.post(url, json = myobj)
 
 # print(r.text)
@@ -21,20 +24,52 @@ import requests, subprocess
 
 
 # result = subprocess.run(['gh', 'api', '-H', 'Accept: application/vnd.github+json', '-H', 'X-GitHub-Api-Version: 2022-11-28', 'https://api.github.com/repos/bazelbuild/bazel/collaborators/brentleyjones'])  # Syncing
+# result = subprocess.run(['gh', 'api', '-H', 'Accept: application/vnd.github+json', '-H', 'X-GitHub-Api-Version: 2022-11-28', '/users/googlewalt/hovercard'])  # Syncing
 
-print("~~~~~" * 100)
 
-result = subprocess.run(['gh', 'api', '-XGET', '-H', 'Accept: application/vnd.github+json', '-H', 'X-GitHub-Api-Version: 2022-11-28', '-F', 'per_page=100', 'repos/bazelbuild/bazel/collaborators'])
+# print("~~~~~" * 100)
+
+# result = subprocess.run(['gh', 'api', '-XGET', '-H', 'Accept: application/vnd.github+json', '-H', 'X-GitHub-Api-Version: 2022-11-28', '-F', 'per_page=100', 'repos/bazelbuild/bazel/collaborators'])
 # print(result.returncode)
 
 # print("~~~~~" * 100)
 
-print(result.check_returncode)
-
-# team_labels = ["team-CLI", "P3", "team-OSS", "team-Core", "P1", "team-Bazel", "team-Android", "area-java"]
+# print(result.check_returncode)
 
 
-# labels_list = list(filter(lambda label: "area" in label or "team" in label, team_labels))
+# mydict = {
+#     "a": 1,
+#     "b": 2
+# }
 
 
+# yo = mydict.copy()
+
+# mydict["a"] = 10000
+
+
+
+
+
+# print(yo["a"])
+
+# headers = {
+#     'X-GitHub-Api-Version': '2022-11-28',
+# }
+# token_headers = {
+#     'X-GitHub-Api-Version': '2022-11-28',
+# }
+
+
+
+
+
+# response_check = requests.get(f"https://api.github.com/users/iancha1992/hovercard", headers=token_headers).json()
+# for context in response_check["contexts"]:
+#     message_keywords = context["message"].split()
+
+#     print(message_keywords)
+
+
+# print(response_check)
 

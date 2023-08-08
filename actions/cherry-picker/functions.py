@@ -6,6 +6,8 @@ headers = {
     'X-GitHub-Api-Version': '2022-11-28'
 }
 
+token = os.environ["GH_TOKEN"]
+
 upstream_url = "https://github.com/bazelbuild/bazel.git"
 
 def check_closed(pr_number, api_repo_name):
@@ -32,7 +34,7 @@ def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
 
     return commit_id
 
-def get_reviewers(pr_number, api_repo_name):
+def get_reviewers(pr_number, api_repo_name, is_prod):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}/reviews', headers=headers)
     if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver.")
     approvers_list = []
@@ -44,7 +46,22 @@ def get_reviewers(pr_number, api_repo_name):
             }
             approvers_list.append(data)
     if len(approvers_list) == 0:
-        raise ValueError(f"PR#{pr_number} has no approver.")    
+        raise ValueError(f"PR#{pr_number} has no approver.")
+    
+    # Now, check if the users in the list are googlers
+    googler_approvers_list = []
+    token_headers = headers.copy()
+    token_headers["Authorization"] = f"Bearer {token}"
+    if is_prod == True:
+        for user_data in approvers_list:
+            login_name = user_data["login"]
+            response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
+            for context in response_check["contexts"]:
+                message_keywords = context["message"].split()
+                if "@bazelbuild" in message_keywords and "@googlers" in message_keywords: googler_approvers_list.append(user_data)
+        if len(googler_approvers_list) == 0:
+            raise ValueError(f"PR#{pr_number} has no GOOGLE approver.")
+        return googler_approvers_list
     return approvers_list
 
 def extract_release_numbers_data(pr_number, api_repo_name):
@@ -75,7 +92,7 @@ def extract_release_numbers_data(pr_number, api_repo_name):
 def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data):
     print("Cherrypicking now!")
     print(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
-    token = os.environ["GH_TOKEN"]
+    # token = os.environ["GH_TOKEN"]
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
     repo_url = f"git@github.com:{gh_cli_repo_name}.git"
     master_branch = input_data["master_branch"]
