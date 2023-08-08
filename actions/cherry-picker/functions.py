@@ -49,10 +49,10 @@ def get_reviewers(pr_number, api_repo_name, is_prod):
         raise ValueError(f"PR#{pr_number} has no approver.")
     
     # Now, check if the users in the list are googlers
-    googler_approvers_list = []
-    token_headers = headers.copy()
-    token_headers["Authorization"] = f"Bearer {token}"
     if is_prod == True:
+        googler_approvers_list = []
+        token_headers = headers.copy()
+        token_headers["Authorization"] = f"Bearer {token}"
         for user_data in approvers_list:
             login_name = user_data["login"]
             response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
