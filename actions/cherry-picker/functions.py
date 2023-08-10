@@ -57,6 +57,7 @@ def get_reviewers(pr_number, api_repo_name, is_prod):
             login_name = user_data["login"]
             response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
             for context in response_check["contexts"]:
+                print("context!!!", context)
                 message_keywords = context["message"].split()
                 print("message_keywords", message_keywords)
                 if "@bazelbuild" in message_keywords and "@googlers" in message_keywords: googler_approvers_list.append(user_data)
