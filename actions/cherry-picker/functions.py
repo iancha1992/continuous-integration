@@ -58,6 +58,7 @@ def get_reviewers(pr_number, api_repo_name, is_prod):
             response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
             for context in response_check["contexts"]:
                 message_keywords = context["message"].split()
+                print("message_keywords", message_keywords)
                 if "@bazelbuild" in message_keywords and "@googlers" in message_keywords: googler_approvers_list.append(user_data)
         if len(googler_approvers_list) == 0:
             raise ValueError(f"PR#{pr_number} has no GOOGLE approver.")
