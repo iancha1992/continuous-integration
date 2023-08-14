@@ -1,21 +1,33 @@
 import requests, subprocess
+from pprint import pprint
+
+headers = {
+    'X-GitHub-Api-Version': '2022-11-28',
+}
 
 
 
+# git shortlog -s -n -e
 
-# # 19173
 
-# headers = {
-#     'X-GitHub-Api-Version': '2022-11-28',
-# }
 # # url = 'https://api.github.com/repos/bazelbuild/bazel/issues/19173/comments'
 # url = 'https://api.github.com/repos/bazelbuild/bazel/collaborators'
 
-# url = "https://api.github.com/users/googlewalt/hovercard"
+# url = "https://api.github.com/users/iancha1992/social_accounts"
 
-# r = requests.get(url, headers=headers)
+# url = "https://api.github.com/users/iancha1992/social_accounts"
 
-# print(r.json())
+url = "https://api.github.com/users/haxorz/events/public"
+
+r = requests.get(url, headers=headers)
+
+print("*" * 150)
+pprint(r.json(), depth=100000)
+
+
+
+
+
 # # x = requests.post(url, json = myobj)
 
 # print(r.text)
