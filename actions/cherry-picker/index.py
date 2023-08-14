@@ -70,5 +70,5 @@ for k in release_numbers_data.keys():
     except:
         cherrypick_status = 1
     if cherrypick_status == 0:
-        create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"])
+        create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     is_first_time = False

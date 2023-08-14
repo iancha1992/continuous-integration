@@ -85,8 +85,16 @@ url = "https://api.github.com/users/haxorz/events/public"
 
 # print(response_check)
 
-hi = []
+# hi = []
 
-bye = ",".join(hi)
+# bye = ",".join(hi)
 
-print(bye)
+# print(bye)
+
+upstream_url = "https://github.com/bazelbuild/bazel.git"
+
+
+
+hi = upstream_url.split("https://github.com/")[1].replace(".git", "")
+
+print(hi)

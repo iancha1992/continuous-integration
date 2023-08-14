@@ -9,6 +9,7 @@ headers = {
 token = os.environ["GH_TOKEN"]
 
 upstream_url = "https://github.com/bazelbuild/bazel.git"
+upstream_repo = upstream_url.split("https://github.com/")[1].replace(".git", "")
 
 def check_closed(pr_number, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}', headers=headers)
@@ -128,7 +129,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
 
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
         if status_checkout_target.returncode != 0:
-            issue_comment(issue_number, f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc: @bazelbuild/triage", input_data["api_repo_name"])
+            issue_comment(issue_number, f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
             raise ValueError(f"There may already be a branch called, {target_branch_name}")
 
     def run_cherrypick():
@@ -142,10 +143,10 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
             if push_status.returncode != 0:
-                issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists\ncc: @bazelbuild/triage", input_data["api_repo_name"])
+                issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
                 raise ValueError(f"Could not create and push the branch, {release_branch_name}")
         else:
-            issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage", input_data["api_repo_name"])
+            issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
             raise ValueError("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.")
         
     if is_first_time == True:
@@ -154,7 +155,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
     run_cherrypick()
     return 0
 
-def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name):
+def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     def send_pr_msg(issue_number, head_branch, release_branch):
         print("Sending the pr msg...")
         params = {
@@ -163,14 +164,14 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
             "state": "open"
         }
         print(f"This is the issue number, {issue_number}")
-        r = requests.get(f'https://api.github.com/repos/bazelbuild/bazel/pulls', headers=headers, params=params).json()
+        r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
             print(f"Cherry-picked in {cherry_picked_pr_number}")
-            issue_comment(issue_number, f"Cherry-picked in https://github.com/bazelbuild/bazel/pull/{cherry_picked_pr_number}", api_repo_name)
+            issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", api_repo_name, is_prod)
         else:
             print("Failed to send PR msg")
-            issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name)
+            issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name, is_prod)
             raise ValueError("Failed to send PR msg")
 
     head_branch = f"{user_name}:{target_branch_name}"
@@ -180,7 +181,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']
 
-    status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", "bazelbuild/bazel", "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
+    status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", upstream_repo, "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
     print("status_create_pr", status_create_pr)
     if status_create_pr.returncode != 0:
         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
@@ -217,10 +218,13 @@ def get_issue_data(pr_number, commit_id, api_repo_name):
     data["body"] = pr_body
     return data
 
-def issue_comment(issue_number, body_content, api_repo_name):
+def issue_comment(issue_number, body_content, api_repo_name, is_prod):
     print("Issuing Comment!", issue_number, body_content, api_repo_name)
-    subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
-    subprocess.run(['gh', 'repo', 'set-default', "bazelbuild/bazel"])
-    subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
-    subprocess.run(['git', 'remote', 'rm', 'upstream'])
-    subprocess.run(['gh', 'repo', 'set-default', api_repo_name])
+    if is_prod == True:
+        subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
+        subprocess.run(['gh', 'repo', 'set-default', upstream_repo])
+        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
+        subprocess.run(['git', 'remote', 'rm', 'upstream'])
+        subprocess.run(['gh', 'repo', 'set-default', api_repo_name])
+    else:
+        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
