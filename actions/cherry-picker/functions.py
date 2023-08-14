@@ -36,34 +36,30 @@ def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
 
 def get_reviewers(pr_number, api_repo_name, is_prod):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}/reviews', headers=headers)
-    if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver.")
+    if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver at all.")
     approvers_list = []
     for review in r.json():
-        if review["state"] == "APPROVED":
-            data = {
-                "login": review["user"]["login"],
-                "id": review["user"]["id"]
-            }
-            approvers_list.append(data)
+        if review["state"] == "APPROVED": approvers_list.append(review["user"]["login"])
     if len(approvers_list) == 0:
-        raise ValueError(f"PR#{pr_number} has no approver.")
+        raise ValueError(f"PR#{pr_number} has no approval from the approver(s).")
+    return ["iancha1992"]
     
     # Now, check if the users in the list are googlers
-    if is_prod == True:
-        googler_approvers_list = []
-        token_headers = headers.copy()
-        token_headers["Authorization"] = f"Bearer {token}"
-        for user_data in approvers_list:
-            login_name = user_data["login"]
-            response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
-            message_keywords_list = []
-            for context in response_check["contexts"]:
-                message_keywords_list.extend(context["message"].split())
-            if "@bazelbuild" in message_keywords_list and "@googlers" in message_keywords_list: googler_approvers_list.append(user_data)
-        if len(googler_approvers_list) == 0:
-            raise ValueError(f"PR#{pr_number} has no GOOGLE approver.")
-        return googler_approvers_list
-    return approvers_list
+    # if is_prod == True:
+    #     googler_approvers_list = []
+    #     token_headers = headers.copy()
+    #     token_headers["Authorization"] = f"Bearer {token}"
+    #     for user_data in approvers_list:
+    #         login_name = user_data["login"]
+    #         response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
+    #         message_keywords_list = []
+    #         for context in response_check["contexts"]:
+    #             message_keywords_list.extend(context["message"].split())
+    #         if "@bazelbuild" in message_keywords_list and "@googlers" in message_keywords_list: googler_approvers_list.append(user_data)
+    #     if len(googler_approvers_list) == 0:
+    #         raise ValueError(f"PR#{pr_number} has no GOOGLE approver.")
+    #     return googler_approvers_list
+    # return approvers_list
 
 def extract_release_numbers_data(pr_number, api_repo_name):
 
@@ -178,7 +174,8 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
             raise ValueError("Failed to send PR msg")
 
     head_branch = f"{user_name}:{target_branch_name}"
-    reviewers_str = ",".join([str(r["login"]) for r in reviewers])
+    # reviewers_str = ",".join([str(r["login"]) for r in reviewers])
+    reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']

@@ -19,10 +19,10 @@ headers = {
 
 url = "https://api.github.com/users/haxorz/events/public"
 
-r = requests.get(url, headers=headers)
+# r = requests.get(url, headers=headers)
 
-print("*" * 150)
-pprint(r.json(), depth=100000)
+# print("*" * 150)
+# pprint(r.json(), depth=100000)
 
 
 
@@ -85,3 +85,8 @@ pprint(r.json(), depth=100000)
 
 # print(response_check)
 
+hi = []
+
+bye = ",".join(hi)
+
+print(bye)
