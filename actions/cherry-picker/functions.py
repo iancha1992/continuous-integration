@@ -31,10 +31,7 @@ def get_reviewers(pr_number, api_repo_name, issues_data):
     return approvers_list
 
 def extract_release_numbers_data(pr_number, api_repo_name):
-    def get_all_milestones_data():
-        r = requests.get(f'https://api.github.com/repos/{api_repo_name}/milestones', headers=headers)
-        milestones_data = list(map(lambda n: {"title": n["title"].split("release blockers")[0].replace(" ", ""), "number": n["number"]}, r.json()))
-        return milestones_data
+
     def get_milestoned_issues(milestones, pr_number):
         results= {}
         for milestone in milestones:
@@ -46,11 +43,11 @@ def extract_release_numbers_data(pr_number, api_repo_name):
                 if issue["body"] == f'Forked from #{pr_number}' and issue["state"] == "open":
                     results[milestone["title"]] = issue["number"]
                     break
-        print("This is the results", results)
         return results
 
-    milestones_data = get_all_milestones_data()
-    milestoned_issues = get_milestoned_issues(milestones_data, pr_number)
+    response_milestones = requests.get(f'https://api.github.com/repos/{api_repo_name}/milestones', headers=headers)
+    all_milestones = list(map(lambda n: {"title": n["title"].split("release blockers")[0].replace(" ", ""), "number": n["number"]}, response_milestones.json()))
+    milestoned_issues = get_milestoned_issues(all_milestones, pr_number)
     return milestoned_issues
 
 def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data):
