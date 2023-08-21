@@ -50,12 +50,19 @@ def extract_release_numbers_data(pr_number, api_repo_name):
     milestoned_issues = get_milestoned_issues(all_milestones, pr_number)
     return milestoned_issues
 
+def issue_comment(issue_number, body_content, api_repo_name, is_prod):
+    if is_prod == True:
+        subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
+        subprocess.run(['gh', 'repo', 'set-default', upstream_repo])
+        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
+        subprocess.run(['git', 'remote', 'rm', 'upstream'])
+        subprocess.run(['gh', 'repo', 'set-default', api_repo_name])
+    else:
+        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
+
 def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data):
-    print("Cherrypicking now!")
-    print(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
-    # token = os.environ["GH_TOKEN"]
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
-    repo_url = f"git@github.com:{gh_cli_repo_name}.git"
+    gh_cli_repo_url = f"git@github.com:{gh_cli_repo_name}.git"
     master_branch = input_data["master_branch"]
     user_name = input_data["user_name"]
 
@@ -67,11 +74,11 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         subprocess.run(['git', 'config', '--global', 'user.name', user_name])
         subprocess.run(['git', 'config', '--global', 'user.email', input_data["email"]])
         os.chdir("bazel")
-        subprocess.run(['git', 'remote', 'add', 'origin', repo_url])
+        subprocess.run(['git', 'remote', 'add', 'origin', gh_cli_repo_url])
         subprocess.run(['git', 'remote', '-v'])
 
     def checkout_release_number():
-        subprocess.run(['git', 'fetch', '--all'])  # Fetch all branches
+        subprocess.run(['git', 'fetch', '--all'])
         status_checkout_release = subprocess.run(['git', 'checkout', release_branch_name])
         
         # Create the new release branch from the upstream if not exists already.
@@ -120,36 +127,29 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
 
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     def send_pr_msg(issue_number, head_branch, release_branch):
-        print("Sending the pr msg...")
         params = {
             "head": head_branch,
             "base": release_branch,
             "state": "open"
         }
-        print(f"This is the issue number, {issue_number}")
         r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
         if len(r) == 1:
             cherry_picked_pr_number = r[0]["number"]
-            print(f"Cherry-picked in {cherry_picked_pr_number}")
             issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", api_repo_name, is_prod)
         else:
-            print("Failed to send PR msg")
             issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name, is_prod)
             raise ValueError("Failed to send PR msg")
 
     head_branch = f"{user_name}:{target_branch_name}"
-    # reviewers_str = ",".join([str(r["login"]) for r in reviewers])
     reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']
 
     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", upstream_repo, "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
-    print("status_create_pr", status_create_pr)
     if status_create_pr.returncode != 0:
         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
     else:
-        print("PR was successfully created")
         send_pr_msg(issue_number, head_branch, release_branch_name)
 
 def get_labels(pr_number, api_repo_name):
@@ -175,13 +175,3 @@ def get_pr_title_body(commit_id, api_repo_name, issue_data):
     data["body"] = pr_body
     return data
 
-def issue_comment(issue_number, body_content, api_repo_name, is_prod):
-    print("Issuing Comment!", issue_number, body_content, api_repo_name)
-    if is_prod == True:
-        subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
-        subprocess.run(['gh', 'repo', 'set-default', upstream_repo])
-        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
-        subprocess.run(['git', 'remote', 'rm', 'upstream'])
-        subprocess.run(['gh', 'repo', 'set-default', api_repo_name])
-    else:
-        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
