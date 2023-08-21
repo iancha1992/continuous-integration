@@ -1,5 +1,4 @@
 import os, subprocess, requests
-# from github import Github
 from pprint import pprint
 
 headers = {
@@ -9,7 +8,7 @@ headers = {
 token = os.environ["GH_TOKEN"]
 
 upstream_url = "https://github.com/bazelbuild/bazel.git"
-upstream_repo = upstream_url.split("https://github.com/")[1].replace(".git", "")
+upstream_repo = upstream_url.replace("https://github.com/", "").replace(".git", "")
 
 def check_closed(pr_number, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}', headers=headers)
