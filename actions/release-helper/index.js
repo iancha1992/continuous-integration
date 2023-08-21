@@ -25,6 +25,7 @@ async function run() {
         repo,
         username: payload.comment.user.login,
       });
+      console.log("greatsuccess??")
     } catch (err) {
       await octokit.rest.reactions.createForIssueComment({
         owner,
@@ -32,6 +33,7 @@ async function run() {
         comment_id: payload.comment.id,
         content: '-1',
       });
+      console.log("greatfailure??")
       throw `user ${payload.comment.user.login} has no collaborator access in repo ${owner}/${repo}`;
     }
 
