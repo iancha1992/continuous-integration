@@ -157,8 +157,7 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
 
 def get_labels(pr_number, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/labels', headers=headers)
-    labels_list = list(map(lambda x: x["name"], r.json()))
-    labels_list = list(filter(lambda label: "area" in label or "team" in label, labels_list))
+    labels_list = list(filter(lambda label: "area" in label or "team" in label, list(map(lambda x: x["name"], r.json()))))
     if "awaiting-review" not in labels_list: labels_list.append("awaiting-review")
     return labels_list
 
