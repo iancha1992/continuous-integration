@@ -31,12 +31,10 @@ def get_reviewers(pr_number, api_repo_name, issues_data):
     return approvers_list
 
 def extract_release_numbers_data(pr_number, api_repo_name):
-
     def get_all_milestones_data():
         r = requests.get(f'https://api.github.com/repos/{api_repo_name}/milestones', headers=headers)
         milestones_data = list(map(lambda n: {"title": n["title"].split("release blockers")[0].replace(" ", ""), "number": n["number"]}, r.json()))
         return milestones_data
-
     def get_milestoned_issues(milestones, pr_number):
         results= {}
         for milestone in milestones:
