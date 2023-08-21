@@ -4,62 +4,31 @@ from pprint import pprint
 headers = {
     'X-GitHub-Api-Version': '2022-11-28'
 }
-
 token = os.environ["GH_TOKEN"]
-
 upstream_url = "https://github.com/bazelbuild/bazel.git"
 upstream_repo = upstream_url.replace("https://github.com/", "").replace(".git", "")
 
-def check_closed(pr_number, api_repo_name):
-    r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}', headers=headers)
-    if r.status_code == 404:
-        response_issue = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}', headers=headers)
-        if response_issue.json()["state"] == "closed": return True
-    elif r.json()["state"] == "closed": return True
-    return False
-
 def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
-    params = {
-        "per_page": 100
-    }
-    r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
+    params = {"per_page": 100}
+    response = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
     commit_id = None
-    for event in r.json():
+    for event in response.json():
         if (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id == None) and (event["event"] == action_event):
             commit_id = event["commit_id"]
         elif (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id != None) and (event["event"] == action_event):
-            raise ValueError(f'PR#{pr_number} has multiple commits by {actor_name}')
-    
+            raise ValueError(f'PR#{pr_number} has multiple commits made by {actor_name}')
     if commit_id == None: raise ValueError(f'PR#{pr_number} has NO commit made by {actor_name}')
-
     return commit_id
 
-def get_reviewers(pr_number, api_repo_name, is_prod):
+def get_reviewers(pr_number, api_repo_name, issues_data):
+    if "pull_request" not in issues_data: return []
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}/reviews', headers=headers)
     if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver at all.")
     approvers_list = []
     for review in r.json():
         if review["state"] == "APPROVED": approvers_list.append(review["user"]["login"])
-    if len(approvers_list) == 0:
-        raise ValueError(f"PR#{pr_number} has no approval from the approver(s).")
-    return ["iancha1992"]
-    
-    # Now, check if the users in the list are googlers
-    # if is_prod == True:
-    #     googler_approvers_list = []
-    #     token_headers = headers.copy()
-    #     token_headers["Authorization"] = f"Bearer {token}"
-    #     for user_data in approvers_list:
-    #         login_name = user_data["login"]
-    #         response_check = requests.get(f"https://api.github.com/users/{login_name}/hovercard", headers=token_headers).json()
-    #         message_keywords_list = []
-    #         for context in response_check["contexts"]:
-    #             message_keywords_list.extend(context["message"].split())
-    #         if "@bazelbuild" in message_keywords_list and "@googlers" in message_keywords_list: googler_approvers_list.append(user_data)
-    #     if len(googler_approvers_list) == 0:
-    #         raise ValueError(f"PR#{pr_number} has no GOOGLE approver.")
-    #     return googler_approvers_list
-    # return approvers_list
+    if len(approvers_list) == 0: raise ValueError(f"PR#{pr_number} has no approval from the approver(s).")
+    return approvers_list
 
 def extract_release_numbers_data(pr_number, api_repo_name):
 
@@ -195,19 +164,14 @@ def get_labels(pr_number, api_repo_name):
     if "awaiting-review" not in labels_list: labels_list.append("awaiting-review")
     return labels_list
 
-def get_issue_data(pr_number, commit_id, api_repo_name):
+def get_pr_title_body(commit_id, api_repo_name, issue_data):
     data = {}
-    response_issue = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}', headers=headers)
-    data["title"] = response_issue.json()["title"]
-
+    data["title"] = issue_data["title"]
     response_commit = requests.get(f"https://api.github.com/repos/{api_repo_name}/commits/{commit_id}")
     original_msg = response_commit.json()["commit"]["message"]
-    pr_body = None
-    if "\n\n" in original_msg:
-        pr_body = original_msg[original_msg.index("\n\n") + 2:]
-    else:
-        pr_body = original_msg
+    pr_body = original_msg[original_msg.index("\n\n") + 2:] if "\n\n" in original_msg else original_msg
     commit_str_body = f"Commit https://github.com/{api_repo_name}/commit/{commit_id}"
+
     if "PiperOrigin-RevId" in pr_body:
         piper_index = pr_body.index("PiperOrigin-RevId")
         pr_body = pr_body[:piper_index] + f"{commit_str_body}\n\n" + pr_body[piper_index:]
