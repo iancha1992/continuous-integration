@@ -113,7 +113,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
             print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
             if push_status.returncode != 0:
-                issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
+                issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
                 raise Exception(f"Could not create and push the branch, {release_branch_name}")
         else:
             issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
