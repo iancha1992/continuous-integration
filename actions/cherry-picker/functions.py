@@ -43,7 +43,7 @@ def get_reviewers(pr_number, api_repo_name, is_prod):
         if review["state"] == "APPROVED": approvers_list.append(review["user"]["login"])
     if len(approvers_list) == 0:
         raise ValueError(f"PR#{pr_number} has no approval from the approver(s).")
-    return ["iancha1992"]
+    return approvers_list
     
     # Now, check if the users in the list are googlers
     # if is_prod == True:
