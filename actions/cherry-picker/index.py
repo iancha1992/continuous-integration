@@ -71,5 +71,6 @@ for k in release_numbers_data.keys():
         cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
         create_pr(reviewers, release_number, issue_number, labels, pr_title_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
+        print(e)
         issue_comment(issue_number, e, input["api_repo_name"], input["is_prod"])
     is_first_time = False
