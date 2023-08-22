@@ -138,19 +138,17 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
             issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", api_repo_name, is_prod)
         else:
             issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name, is_prod)
-            raise ValueError("Failed to send PR msg")
 
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)
     pr_title = f"[{release_number}] {issue_data['title']}"
     pr_body = issue_data['body']
-
     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", upstream_repo, "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
-    if status_create_pr.returncode != 0:
-        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
-    else:
+    if status_create_pr.returncode == 0:
         send_pr_msg(issue_number, head_branch, release_branch_name)
+    else:
+        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
 
 def get_labels(pr_number, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/labels', headers=headers)
