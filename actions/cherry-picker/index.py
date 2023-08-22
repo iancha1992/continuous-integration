@@ -60,6 +60,7 @@ labels = get_labels(pr_number, input_data["api_repo_name"])
 # Retrieve issue/PR's title and body
 pr_title_body = get_pr_title_body(commit_id, input_data["api_repo_name"], issue_data)
 
+# Perform cherry-pick and then create a pr if it's successful.
 is_first_time = True
 for k in release_numbers_data.keys():
     release_number = k
