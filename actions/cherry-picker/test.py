@@ -35,5 +35,5 @@ except Exception as e:
     print("Except!!!!")
     # print(e)
     print("cherry", str(e))
-    print("cherry", str(e))
+    print("cherry", str(e), "aaaa", "Cccc")
     # print("cherry", type(str(e)))
