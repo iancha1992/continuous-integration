@@ -16,18 +16,18 @@ def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
         if (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id == None) and (event["event"] == action_event):
             commit_id = event["commit_id"]
         elif (event["actor"]["login"] in actor_name) and (event["commit_id"] != None) and (commit_id != None) and (event["event"] == action_event):
-            raise ValueError(f'PR#{pr_number} has multiple commits made by {actor_name}')
-    if commit_id == None: raise ValueError(f'PR#{pr_number} has NO commit made by {actor_name}')
+            raise Exception(f'PR#{pr_number} has multiple commits made by {actor_name}')
+    if commit_id == None: raise Exception(f'PR#{pr_number} has NO commit made by {actor_name}')
     return commit_id
 
 def get_reviewers(pr_number, api_repo_name, issues_data):
     if "pull_request" not in issues_data: return []
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/pulls/{pr_number}/reviews', headers=headers)
-    if len(r.json()) == 0: raise ValueError(f"PR#{pr_number} has no approver at all.")
+    if len(r.json()) == 0: raise Exception(f"PR#{pr_number} has no approver at all.")
     approvers_list = []
     for review in r.json():
         if review["state"] == "APPROVED": approvers_list.append(review["user"]["login"])
-    if len(approvers_list) == 0: raise ValueError(f"PR#{pr_number} has no approval from the approver(s).")
+    if len(approvers_list) == 0: raise Exception(f"PR#{pr_number} has no approval from the approver(s).")
     return approvers_list
 
 def extract_release_numbers_data(pr_number, api_repo_name):
@@ -91,7 +91,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
             subprocess.run(['git', 'branch', release_branch_name, f"upstream/{release_branch_name}"])
             release_push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name])
             if release_push_status.returncode != 0:
-                raise ValueError(f"Could not create and push the branch, {release_branch_name}")
+                raise Exception(f"Could not create and push the branch, {release_branch_name}")
             subprocess.run(['git', 'remote', 'rm', 'upstream'])
             subprocess.run(['git', 'checkout', release_branch_name])
 
@@ -100,7 +100,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
         if status_checkout_target.returncode != 0:
             issue_comment(issue_number, f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
-            raise ValueError(f"There may already be a branch called, {target_branch_name}")
+            raise Exception(f"There may already be a branch called, {target_branch_name}")
 
     def run_cherrypick():
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
@@ -114,10 +114,10 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
             push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
             if push_status.returncode != 0:
                 issue_comment(issue_number, f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, exists\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
-                raise ValueError(f"Could not create and push the branch, {release_branch_name}")
+                raise Exception(f"Could not create and push the branch, {release_branch_name}")
         else:
             issue_comment(issue_number, "Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage", input_data["api_repo_name"], input_data["is_prod"])
-            raise ValueError("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.")
+            raise Exception("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.")
         
     if is_first_time == True:
         clone_and_sync_repo()
