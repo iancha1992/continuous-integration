@@ -68,7 +68,7 @@ for k in release_numbers_data.keys():
     target_branch_name = f"cp{pr_number}-{release_number}"
     issue_number = release_numbers_data[k]
     try:
-        cherrypick_status_code = cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
+        cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
         create_pr(reviewers, release_number, issue_number, labels, pr_title_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
         print(e)

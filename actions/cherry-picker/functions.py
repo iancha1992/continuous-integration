@@ -123,7 +123,6 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number
         clone_and_sync_repo()
     checkout_release_number()
     run_cherrypick()
-    return 0
 
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     def send_pr_msg(issue_number, head_branch, release_branch):
