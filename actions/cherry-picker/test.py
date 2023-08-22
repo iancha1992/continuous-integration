@@ -24,16 +24,16 @@ url = "https://api.github.com/users/haxorz/events/public"
 
 def taylor():
     print("Taylor!!!")
-    raise ValueError("hihihi")
+    raise Exception("hihihi")
 
 try:
     print("Hello world")
     taylor()
     print("Bye")
 
-
 except Exception as e:
     print("Except!!!!")
-    print(e)
-
-
+    # print(e)
+    print("cherry", str(e))
+    print("cherry", str(e))
+    # print("cherry", type(str(e)))
