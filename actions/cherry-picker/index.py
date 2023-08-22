@@ -1,5 +1,5 @@
 import os, requests
-from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_title_body
+from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_title_body, issue_comment
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
@@ -71,5 +71,5 @@ for k in release_numbers_data.keys():
         cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data)
         create_pr(reviewers, release_number, issue_number, labels, pr_title_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
-        print(e)
+        issue_comment(issue_number, e, input["api_repo_name"], input["is_prod"])
     is_first_time = False
