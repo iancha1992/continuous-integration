@@ -73,5 +73,6 @@ for k in release_numbers_data.keys():
     except Exception as e:
         print("Cherrypick error!")
         print(str(e))
+        print(issue_number, str(e), input["api_repo_name"], input["is_prod"])
         issue_comment(issue_number, str(e), input["api_repo_name"], input["is_prod"])
     is_first_time = False
