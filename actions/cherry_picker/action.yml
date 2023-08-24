@@ -41,3 +41,9 @@ runs:
               chmod +x ${{ github.action_path }}/cherrypicker_with_pr.py
               python -u ${{ github.action_path }}/cherrypicker_with_pr.py
       shell: bash
+    - if: ${{ inputs.triggered-on == 'ondemand' }}
+      name: Run python cherrypicker_ondemand.py
+      run: |
+              chmod +x ${{ github.action_path }}/cherrypicker_ondemand.py
+              python -u ${{ github.action_path }}/cherrypicker_ondemand.py
+      shell: bash
