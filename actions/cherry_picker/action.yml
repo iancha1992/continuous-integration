@@ -35,8 +35,9 @@ runs:
               echo "INPUT_MILESTONED_ISSUE_NUMBER=${{ inputs.milestoned-issue-number }}" >> $GITHUB_ENV
               echo "INPUT_IS_PROD=${{ inputs.is-prod }}" >> $GITHUB_ENV
       shell: bash
-    - name: Run python index.py
+    - if: ${{ inputs.triggered-on == 'commented' || inputs.triggered-on == 'closed' }}
+      name: Run python cherrypicker_with_pr.py
       run: |
-              chmod +x ${{ github.action_path }}/index.py
-              python -u ${{ github.action_path }}/index.py
+              chmod +x ${{ github.action_path }}/cherrypicker_with_pr.py
+              python -u ${{ github.action_path }}/cherrypicker_with_pr.py
       shell: bash
