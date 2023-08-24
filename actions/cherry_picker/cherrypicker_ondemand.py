@@ -28,6 +28,6 @@ for commit_id in issue_body_dict["commits"]:
     target_branch_name = f"cp{milestoned_issue_number}-{release_number}"
     reviewers = issue_body_dict["reviewers"]
     labels = issue_body_dict["labels"]
-    pr_title_body = "This is just testing!!!!!!!"
+    pr_title_body = "Please ignore this is just testing.. Automation testing"
     cherry_pick(commit_id, release_branch_name, target_branch_name, True, input_data)
     create_pr(reviewers, release_number, milestoned_issue_number, labels, pr_title_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
