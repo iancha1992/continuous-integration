@@ -40,7 +40,7 @@ runs:
 
               echo "INPUT_ISSUE_BODY<<aaaaa" >> $GITHUB_ENV
               echo "${{ inputs.issue-body }}" >> $GITHUB_ENV
-              echo "aaaaa" >> $GITHUB_ENV
+              echo "bbbbb" >> $GITHUB_ENV
       shell: bash
     - if: ${{ inputs.triggered-on == 'commented' || inputs.triggered-on == 'closed' }}
       name: Run python cherrypicker_with_pr.py
