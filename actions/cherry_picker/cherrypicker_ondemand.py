@@ -8,8 +8,7 @@ print("issue_body")
 print("banana")
 print(issue_body)
 
+line_split_list = issue_body.split("\n")
 
-if "\n" in issue_body:
-    print("candy!!!")
-
+print(line_split_list)
 
