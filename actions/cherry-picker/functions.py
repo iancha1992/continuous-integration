@@ -60,7 +60,7 @@ def issue_comment(issue_number, body_content, api_repo_name, is_prod):
     else:
         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
 
-def cherry_pick(commit_id, release_branch_name, target_branch_name, issue_number, is_first_time, input_data):
+def cherry_pick(commit_id, release_branch_name, target_branch_name, is_first_time, input_data):
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
     gh_cli_repo_url = f"git@github.com:{gh_cli_repo_name}.git"
     master_branch = input_data["master_branch"]
@@ -168,4 +168,3 @@ def get_pr_title_body(commit_id, api_repo_name, issue_data):
 
     data["body"] = pr_body
     return data
-

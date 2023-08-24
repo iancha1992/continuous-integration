@@ -5,7 +5,7 @@ inputs:
     required: true
     default: ${{ github.triggered-on }}
   pr-number:
-    required: true
+    required: false
     default: ${{ github.pr-number }}
   milestone-title:
     required: false
