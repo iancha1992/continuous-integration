@@ -1,6 +1,6 @@
 import os
 from vars import input_data
-from functions import cherry_pick
+from functions import cherry_pick, create_pr
 
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
@@ -26,4 +26,8 @@ for commit_id in issue_body_dict["commits"]:
     release_number = milestone_title.split(" release blockers")[0]
     release_branch_name = f"{input_data['release_branch_name_initials']}{release_number}"
     target_branch_name = f"cp{milestoned_issue_number}-{release_number}"
+    reviewers = issue_body_dict["reviewers"]
+    labels = issue_body_dict["labels"]
+    pr_title_body = "This is just testing!!!!!!!"
     cherry_pick(commit_id, release_branch_name, target_branch_name, True, input_data)
+    create_pr(reviewers, release_number, milestoned_issue_number, labels, pr_title_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
