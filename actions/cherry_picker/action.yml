@@ -37,7 +37,7 @@ runs:
               echo "INPUT_MILESTONE_TITLE=${{ inputs.milestone-title }}" >> $GITHUB_ENV
               echo "INPUT_MILESTONED_ISSUE_NUMBER=${{ inputs.milestoned-issue-number }}" >> $GITHUB_ENV
               echo "INPUT_IS_PROD=${{ inputs.is-prod }}" >> $GITHUB_ENV
-              echo "INPUT_ISSUE_BODY=${{ inputs.issue-body }}<<EOF" >> $GITHUB_ENV
+              echo "INPUT_ISSUE_BODY=${{ inputs.issue-body }}" >> $GITHUB_ENV
       shell: bash
     - if: ${{ inputs.triggered-on == 'commented' || inputs.triggered-on == 'closed' }}
       name: Run python cherrypicker_with_pr.py
