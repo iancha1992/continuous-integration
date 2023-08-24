@@ -9,6 +9,7 @@ print("banana")
 print(issue_body)
 
 
-
+if "\n" in issue_body:
+    print("candy!!!")
 
 
