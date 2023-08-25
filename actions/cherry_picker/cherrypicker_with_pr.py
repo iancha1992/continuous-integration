@@ -1,7 +1,7 @@
 import os, requests
 from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_title_body, issue_comment
 from vars import input_data
-
+print("Ianchanewww")
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
