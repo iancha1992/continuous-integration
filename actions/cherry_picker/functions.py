@@ -60,66 +60,80 @@ def issue_comment(issue_number, body_content, api_repo_name, is_prod):
     else:
         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', body_content])
 
-def cherry_pick(commit_id, release_branch_name, target_branch_name, is_first_time, input_data):
+def clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email):
+    print("Cloning and syncing the repo...")
+    subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])
+    subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
+    subprocess.run(['git', 'clone', f"https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git"])
+    subprocess.run(['git', 'config', '--global', 'user.name', user_name])
+    subprocess.run(['git', 'config', '--global', 'user.email', user_email])
+    os.chdir("bazel")
+    subprocess.run(['git', 'remote', 'add', 'origin', gh_cli_repo_url])
+    subprocess.run(['git', 'remote', '-v'])
+
+def checkout_release_number(release_branch_name, target_branch_name):
+    subprocess.run(['git', 'fetch', '--all'])
+    status_checkout_release = subprocess.run(['git', 'checkout', release_branch_name])
+    
+    # Create the new release branch from the upstream if not exists already.
+    if status_checkout_release.returncode != 0:
+        print(f"There is NO branch called {release_branch_name}...")
+        print(f"Creating the {release_branch_name} from upstream, {upstream_url}")
+        subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
+        subprocess.run(['git', 'remote', '-v'])
+        subprocess.run(['git', 'fetch', 'upstream'])
+        subprocess.run(['git', 'branch', release_branch_name, f"upstream/{release_branch_name}"])
+        release_push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name])
+        if release_push_status.returncode != 0:
+            raise Exception(f"Could not create and push the branch, {release_branch_name}")
+        subprocess.run(['git', 'remote', 'rm', 'upstream'])
+        subprocess.run(['git', 'checkout', release_branch_name])
+
+    status_checkout_target = subprocess.run(['git', 'checkout', '-b', target_branch_name])
+
+    # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
+    if status_checkout_target.returncode != 0:
+        raise Exception(f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc: @bazelbuild/triage")
+
+def run_cherrypick(is_prod, commit_id, target_branch_name, requires_cherrypick_push):
+    print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
+    if is_prod == True:
+        cherrypick_status = subprocess.run(['git', 'cherry-pick', commit_id])
+    else:
+        cherrypick_status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
+
+    if cherrypick_status.returncode == 0:
+        print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
+        if requires_cherrypick_push == True:
+            push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
+            if push_status.returncode != 0: raise Exception(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
+    else:
+        raise Exception("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage")
+
+def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data):
     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
     gh_cli_repo_url = f"git@github.com:{gh_cli_repo_name}.git"
     master_branch = input_data["master_branch"]
     user_name = input_data["user_name"]
+    user_email = input_data["email"]
 
-    def clone_and_sync_repo():
-        print("Cloning and syncing the repo...")
-        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", master_branch])
-        subprocess.run(['gh', 'repo', 'sync', gh_cli_repo_name, "-b", release_branch_name])
-        subprocess.run(['git', 'clone', f"https://{user_name}:{token}@github.com/{gh_cli_repo_name}.git"])
-        subprocess.run(['git', 'config', '--global', 'user.name', user_name])
-        subprocess.run(['git', 'config', '--global', 'user.email', input_data["email"]])
-        os.chdir("bazel")
-        subprocess.run(['git', 'remote', 'add', 'origin', gh_cli_repo_url])
-        subprocess.run(['git', 'remote', '-v'])
+    if requires_clone == True:
+        clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email)
+    if requires_checkout == True:
+        checkout_release_number(release_branch_name, target_branch_name)
+    run_cherrypick(input_data["is_prod"], commit_id, target_branch_name, requires_cherrypick_push)
 
-    def checkout_release_number():
-        subprocess.run(['git', 'fetch', '--all'])
-        status_checkout_release = subprocess.run(['git', 'checkout', release_branch_name])
-        
-        # Create the new release branch from the upstream if not exists already.
-        if status_checkout_release.returncode != 0:
-            print(f"There is NO branch called {release_branch_name}...")
-            print(f"Creating the {release_branch_name} from upstream, {upstream_url}")
-            subprocess.run(['git', 'remote', 'add', 'upstream', upstream_url])
-            subprocess.run(['git', 'remote', '-v'])
-            subprocess.run(['git', 'fetch', 'upstream'])
-            subprocess.run(['git', 'branch', release_branch_name, f"upstream/{release_branch_name}"])
-            release_push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', release_branch_name])
-            if release_push_status.returncode != 0:
-                raise Exception(f"Could not create and push the branch, {release_branch_name}")
-            subprocess.run(['git', 'remote', 'rm', 'upstream'])
-            subprocess.run(['git', 'checkout', release_branch_name])
+# def multi_cherry_picks(commit_id, release_branch_name, target_branch_name, is_first_time, input_data):
+#     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
+#     gh_cli_repo_url = f"git@github.com:{gh_cli_repo_name}.git"
+#     master_branch = input_data["master_branch"]
+#     user_name = input_data["user_name"]
+#     user_email = input_data["email"]
+#     if is_first_time == True:
+#         clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email)
+    
 
-        status_checkout_target = subprocess.run(['git', 'checkout', '-b', target_branch_name])
 
-        # Need to let the user know that there is already a created branch with the same name and bazel-io needs to delete the branch
-        if status_checkout_target.returncode != 0:
-            raise Exception(f"Cherry-pick was being attempted. But, it failed due to already existent branch called {target_branch_name}\ncc: @bazelbuild/triage")
-
-    def run_cherrypick():
-        print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
-        if input_data["is_prod"] == True:
-            cherrypick_status = subprocess.run(['git', 'cherry-pick', commit_id])
-        else:
-            cherrypick_status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
-
-        if cherrypick_status.returncode == 0:
-            print(f"Successfully Cherry-picked, pushing it to branch: {target_branch_name}")
-            push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
-            if push_status.returncode != 0:
-                raise Exception(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
-        else:
-            raise Exception("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage")
-        
-    if is_first_time == True:
-        clone_and_sync_repo()
-    checkout_release_number()
-    run_cherrypick()
 
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     def send_pr_msg(issue_number, head_branch, release_branch):
