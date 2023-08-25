@@ -36,6 +36,7 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data)
         pr_body = get_pr_body(commit_id, input_data["api_repo_name"])
+        # Fix here! milestone_title to issue title!
         create_pr(reviewers, release_number, milestoned_issue_number, labels, milestone_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
         issue_comment(milestoned_issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
