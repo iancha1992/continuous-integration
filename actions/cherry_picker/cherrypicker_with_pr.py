@@ -1,5 +1,5 @@
 import os, requests
-from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_title_body, issue_comment
+from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_body, issue_comment
 from vars import input_data
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
@@ -28,7 +28,7 @@ elif triggered_on == "commented":
 labels = get_labels(pr_number, input_data["api_repo_name"])
 
 # Retrieve issue/PR's title and body
-pr_title_body = get_pr_title_body(commit_id, input_data["api_repo_name"], issue_data)
+pr_body = get_pr_body(commit_id, input_data["api_repo_name"])
 
 # Perform cherry-pick and then create a pr if it's successful.
 requires_clone = True
@@ -37,9 +37,10 @@ for k in release_numbers_data.keys():
     release_branch_name = f"{input_data['release_branch_name_initials']}{release_number}"
     target_branch_name = f"cp{pr_number}-{release_number}"
     issue_number = release_numbers_data[k]
+    pr_title = issue_data["title"]
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, True, True, input_data)
-        create_pr(reviewers, release_number, issue_number, labels, pr_title_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
+        create_pr(reviewers, release_number, issue_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
         issue_comment(issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
     requires_clone = False

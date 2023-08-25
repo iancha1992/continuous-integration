@@ -123,7 +123,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
         checkout_release_number(release_branch_name, target_branch_name)
     run_cherrypick(input_data["is_prod"], commit_id, target_branch_name, requires_cherrypick_push)
 
-def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
+def create_pr(reviewers, release_number, issue_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     def send_pr_msg(issue_number, head_branch, release_branch):
         params = {
             "head": head_branch,
@@ -140,9 +140,8 @@ def create_pr(reviewers, release_number, issue_number, labels, issue_data, relea
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)
-    pr_title = f"[{release_number}] {issue_data['title']}"
-    pr_body = issue_data['body']
-    status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", upstream_repo, "--title", pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
+    modified_pr_title = f"[{release_number}] {pr_title}"
+    status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", upstream_repo, "--title", modified_pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
     if status_create_pr.returncode == 0:
         send_pr_msg(issue_number, head_branch, release_branch_name)
     else:
@@ -154,9 +153,7 @@ def get_labels(pr_number, api_repo_name):
     if "awaiting-review" not in labels_list: labels_list.append("awaiting-review")
     return labels_list
 
-def get_pr_title_body(commit_id, api_repo_name, issue_data):
-    data = {}
-    data["title"] = issue_data["title"]
+def get_pr_body(commit_id, api_repo_name):
     response_commit = requests.get(f"https://api.github.com/repos/{api_repo_name}/commits/{commit_id}")
     original_msg = response_commit.json()["commit"]["message"]
     pr_body = original_msg[original_msg.index("\n\n") + 2:] if "\n\n" in original_msg else original_msg
@@ -168,5 +165,4 @@ def get_pr_title_body(commit_id, api_repo_name, issue_data):
     else:
         pr_body += f"\n\n{commit_str_body}"
 
-    data["body"] = pr_body
-    return data
+    return pr_body

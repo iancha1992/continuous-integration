@@ -1,6 +1,6 @@
 import os, re
 from vars import input_data
-from functions import cherry_pick, create_pr, issue_comment
+from functions import cherry_pick, create_pr, issue_comment, get_pr_title_body
 
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
@@ -36,7 +36,9 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
     pr_title_body = "Please ignore this is just testing.. Automation testing"
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data)
-    # create_pr(reviewers, release_number, milestoned_issue_number, labels, haha, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
+        # pr_title = ""
+        pr_title_body = get_pr_title_body(commit_id, input_data["api_repo_name"], issue_data)
+        # create_pr(reviewers, release_number, milestoned_issue_number, labels, haha, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
         issue_comment(milestoned_issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
     requires_clone = False
