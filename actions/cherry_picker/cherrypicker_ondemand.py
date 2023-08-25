@@ -1,4 +1,4 @@
-import os
+import os, re
 from vars import input_data
 from functions import cherry_pick, create_pr, issue_comment
 
@@ -12,11 +12,13 @@ issue_body_dict = {}
 
 for info in issue_body_split:
     if "commit" in info.lower().split(":")[0]:
-        issue_body_dict["commits"] = info[info.index(":") + 1:].replace(" ", "").split(",")
+        issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
+        # info[info.index(":") + 1:].replace(" ", "").split(",")
+        # re.sub(r'https://.*/commit/', "", url)
     elif "reviewer" in info.lower().split(":")[0]:
-        issue_body_dict["reviewers"] = info[info.index(":") + 1:].replace(" ", "").split(",")
+        issue_body_dict["reviewers"] = info[info.index(":") + 1:].replace(" ", "").replace("@", "").split(",")
     elif "team" in info.lower().split(":")[0]:
-        issue_body_dict["labels"] = info[info.index(":") + 1:].replace(" ", "").split(",")
+        issue_body_dict["labels"] = info[info.index(":") + 1:].replace(" ", "").replace("@", "").split(",")
 
 print("issue_body_dict")
 print(issue_body_dict)
