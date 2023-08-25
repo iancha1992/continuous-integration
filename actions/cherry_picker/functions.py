@@ -123,18 +123,6 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
         checkout_release_number(release_branch_name, target_branch_name)
     run_cherrypick(input_data["is_prod"], commit_id, target_branch_name, requires_cherrypick_push)
 
-# def multi_cherry_picks(commit_id, release_branch_name, target_branch_name, is_first_time, input_data):
-#     gh_cli_repo_name = f"{input_data['user_name']}/bazel"
-#     gh_cli_repo_url = f"git@github.com:{gh_cli_repo_name}.git"
-#     master_branch = input_data["master_branch"]
-#     user_name = input_data["user_name"]
-#     user_email = input_data["email"]
-#     if is_first_time == True:
-#         clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email)
-    
-
-
-
 def create_pr(reviewers, release_number, issue_number, labels, issue_data, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     def send_pr_msg(issue_number, head_branch, release_branch):
         params = {
