@@ -5,7 +5,6 @@ from functions import cherry_pick, create_pr, issue_comment
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 issue_body = os.environ["INPUT_ISSUE_BODY"]
-# issue_body = "@bazel-io cherry-pick\r\ncommits: xyz, abc\r\nreviewers: @iancha1992\r\nteam: team-ExternalDeps"
 
 issue_body_split = issue_body.split("\r\n")
 
