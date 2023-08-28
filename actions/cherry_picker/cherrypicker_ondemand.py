@@ -4,12 +4,11 @@ from functions import cherry_pick, create_pr, issue_comment, get_pr_body
 
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
+issue_title = os.environ["INPUT_ISSUE_TITLE"]
 issue_body = os.environ["INPUT_ISSUE_BODY"]
 
 issue_body_split = issue_body.split("\r\n")
-
 issue_body_dict = {}
-
 for info in issue_body_split:
     if "commit" in info.lower().split(":")[0]:
         issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
@@ -36,8 +35,7 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data)
         pr_body = get_pr_body(commit_id, input_data["api_repo_name"])
-        # Fix here! milestone_title to issue title!
-        # create_pr(reviewers, release_number, milestoned_issue_number, labels, milestone_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
+        create_pr(reviewers, release_number, milestoned_issue_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
         issue_comment(milestoned_issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
     requires_clone = False

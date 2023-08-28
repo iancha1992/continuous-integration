@@ -19,6 +19,9 @@ inputs:
   issue-body:
     required: false
     default: ${{ github.issue-body }}
+  issue-title:
+    required: false
+    default: ${{ github.issue-title }}
 runs:
   using: 'composite'
   steps:
@@ -41,6 +44,8 @@ runs:
               echo "INPUT_ISSUE_BODY<<EOF" >> $GITHUB_ENV
               echo "${{ inputs.issue-body }}" >> $GITHUB_ENV
               echo "EOF" >> $GITHUB_ENV
+
+              echo "INPUT_ISSUE_TITLE=${{ inputs.issue-title }}" >> $GITHUB_ENV
       shell: bash
     - if: ${{ inputs.triggered-on == 'commented' || inputs.triggered-on == 'closed' }}
       name: Run python cherrypicker_with_pr.py
