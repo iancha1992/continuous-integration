@@ -10,7 +10,7 @@ milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 issue_data = requests.get(f"https://api.github.com/repos/{input_data['api_repo_name']}/issues/{pr_number}", headers={'X-GitHub-Api-Version': '2022-11-28'}).json()
 
 # Check if the PR is closed.
-if issue_data["state"] != "closed": raise ValueError(f'The PR #{pr_number} is not closed yet.')
+if issue_data["state"] != "closed": raise Exception(f'The PR #{pr_number} is not closed yet.')
 
 # Retrieve commit_id. If the PR/issue has no commit or has multiple commits, then raise an error.
 commit_id = get_commit_id(pr_number, input_data["actor_name"], input_data["action_event"], input_data["api_repo_name"])
