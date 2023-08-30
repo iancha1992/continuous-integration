@@ -48,16 +48,14 @@ runs:
               echo "INPUT_ISSUE_TITLE=${{ inputs.issue-title }}" >> $GITHUB_ENV
       shell: bash
     - if: ${{ inputs.triggered-on == 'commented' || inputs.triggered-on == 'closed' }}
-      name: Run python cherrypicker_with_pr.py
+      name: Run python cherrypick_with_milestones.py
       run: |
-              chmod +x ${{ github.action_path }}/cherrypicker_with_pr.py
-              python -u ${{ github.action_path }}/cherrypicker_with_pr.py
+              chmod +x ${{ github.action_path }}/cherrypick_with_milestones.py
+              python -u ${{ github.action_path }}/cherrypick_with_milestones.py
       shell: bash
     - if: ${{ inputs.triggered-on == 'ondemand' }}
-      name: Run python cherrypicker_ondemand.py
+      name: Run python cherrypick_with_commits.py
       run: |
-              chmod +x ${{ github.action_path }}/cherrypicker_ondemand.py
-              python -u ${{ github.action_path }}/cherrypicker_ondemand.py
+              chmod +x ${{ github.action_path }}/cherrypick_with_commits.py
+              python -u ${{ github.action_path }}/cherrypick_with_commits.py
       shell: bash
-
-# echo "INPUT_ISSUE_BODY=${{ inputs.issue-body }}" >> $GITHUB_ENV
