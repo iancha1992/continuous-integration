@@ -1,6 +1,7 @@
 import os, requests
 from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_body, issue_comment
 from vars import input_data
+from pprint import pprint
 
 triggered_on = os.environ["INPUT_TRIGGERED_ON"]
 pr_number = os.environ["INPUT_PR_NUMBER"] if triggered_on == "closed" else os.environ["INPUT_PR_NUMBER"].split("#")[1]
@@ -8,6 +9,9 @@ milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 
 issue_data = requests.get(f"https://api.github.com/repos/{input_data['api_repo_name']}/issues/{pr_number}", headers={'X-GitHub-Api-Version': '2022-11-28'}).json()
+
+print("This is the issuedata!")
+pprint(issue_data)
 
 # Check if the PR is closed.
 if issue_data["state"] != "closed": raise Exception(f'The PR #{pr_number} is not closed yet.')
