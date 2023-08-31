@@ -10,10 +10,6 @@ milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 
 issue_data = requests.get(f"https://api.github.com/repos/{input_data['api_repo_name']}/issues/{pr_number}", headers={'X-GitHub-Api-Version': '2022-11-28'}).json()
 
-print("This is the issuedata!")
-print(f"https://api.github.com/repos/{input_data['api_repo_name']}/issues/{pr_number}")
-pprint(issue_data)
-
 # Check if the PR is closed.
 if issue_data["state"] != "closed": raise Exception(f'The PR #{pr_number} is not closed yet.')
 
