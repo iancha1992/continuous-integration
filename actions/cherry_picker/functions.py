@@ -160,7 +160,7 @@ def create_pr(notify_pr_msg, reviewers, release_number, issue_number, labels, pr
         elif notify_pr_msg == True and cherry_picked_pr_number == None:
             issue_comment(issue_number, "Could not find the cherry-picked PR number \ncc: @bazelbuild/triage", api_repo_name, is_prod)
     else:
-        subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
+        issue_comment(issue_number, "PR failed to be created.", api_repo_name, is_prod)
 
 def get_labels(pr_number, api_repo_name):
     r = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/labels', headers=headers)
