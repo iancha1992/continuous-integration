@@ -41,7 +41,7 @@ for k in release_numbers_data.keys():
     pr_title = issue_data["title"]
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, True, True, input_data)
-        create_pr(reviewers, release_number, issue_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
+        create_pr(True, reviewers, release_number, issue_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
         issue_comment(issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
     requires_clone = False

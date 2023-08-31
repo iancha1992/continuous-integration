@@ -123,27 +123,42 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
         checkout_release_number(release_branch_name, target_branch_name)
     run_cherrypick(input_data["is_prod"], commit_id, target_branch_name, requires_cherrypick_push)
 
-def create_pr(reviewers, release_number, issue_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
-    def send_pr_msg(issue_number, head_branch, release_branch):
-        params = {
-            "head": head_branch,
-            "base": release_branch,
-            "state": "open"
-        }
-        r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
-        if len(r) == 1:
-            cherry_picked_pr_number = r[0]["number"]
-            issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", api_repo_name, is_prod)
-        else:
-            issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name, is_prod)
+# def send_pr_msg(issue_number, head_branch, release_branch, api_repo_name, msg, is_prod):
+#     params = {
+#         "head": head_branch,
+#         "base": release_branch,
+#         "state": "open"
+#     }
+#     r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
+#     if len(r) == 1:
+#         cherry_picked_pr_number = r[0]["number"]
+#         issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", api_repo_name, is_prod)
+#     else:
+#         issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name, is_prod)
 
+def get_cherry_picked_pr_number(head_branch, release_branch):
+    params = {
+        "head": head_branch,
+        "base": release_branch,
+        "state": "open"
+    }
+    r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
+    if len(r) == 1: return r[0]["number"]
+    return None
+
+def create_pr(notify_pr_msg, reviewers, release_number, issue_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, user_name, api_repo_name, is_prod):
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)
     modified_pr_title = f"[{release_number}] {pr_title}"
     status_create_pr = subprocess.run(['gh', 'pr', 'create', "--repo", upstream_repo, "--title", modified_pr_title, "--body", pr_body, "--head", head_branch, "--base", release_branch_name,  '--label', labels_str, '--reviewer', reviewers_str])
     if status_create_pr.returncode == 0:
-        send_pr_msg(issue_number, head_branch, release_branch_name)
+        cherry_picked_pr_number = get_cherry_picked_pr_number(head_branch, release_branch_name)
+        if notify_pr_msg == True and cherry_picked_pr_number != None:
+            msg = f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}"
+            issue_comment(issue_number, msg, api_repo_name, is_prod)
+        elif notify_pr_msg == True and cherry_picked_pr_number == None:
+            issue_comment(issue_number, "Could not find the cherry-picked PR number \ncc: @bazelbuild/triage", api_repo_name, is_prod)
     else:
         subprocess.run(['gh', 'issue', 'comment', str(issue_number), '--body', "PR failed to be created."])
 
