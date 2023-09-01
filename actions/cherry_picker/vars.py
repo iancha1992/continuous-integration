@@ -1,5 +1,12 @@
 import os
 
+headers = {
+    'X-GitHub-Api-Version': '2022-11-28'
+}
+token = os.environ["GH_TOKEN"]
+upstream_url = "https://github.com/bazelbuild/bazel.git"
+upstream_repo = upstream_url.replace("https://github.com/", "").replace(".git", "")
+
 if "INPUT_IS_PROD" not in os.environ or os.environ["INPUT_IS_PROD"] == "false":
     input_data = {
         "is_prod": False,
