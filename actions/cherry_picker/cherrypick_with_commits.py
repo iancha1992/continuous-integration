@@ -74,7 +74,7 @@ if len(successful_commits):
 else:
     issue_comment_body = "Cherry-pick(s) failed for "
     for idx, commit in enumerate(failed_commits):
-        issue_comment_body += f" {commit['commit_id']}"
+        issue_comment_body += f" {commit['commit_id']} ({commit['msg']})"
         if idx < len(failed_commits) - 1:
             issue_comment_body += ", "
 
