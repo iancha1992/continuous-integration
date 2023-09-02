@@ -11,6 +11,7 @@ issue_body_split = issue_body.split("\r\n")
 issue_body_dict = {}
 for info in issue_body_split:
     if "commit" in info.lower().split(":")[0]:
+        # info = info.replace(" and", "")
         issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
     elif "reviewer" in info.lower().split(":")[0]:
         issue_body_dict["reviewers"] = info[info.index(":") + 1:].replace(" ", "").replace("@", "").split(",")
