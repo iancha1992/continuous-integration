@@ -55,9 +55,9 @@ if len(successful_commits):
     issue_comment_body = f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}. There was (were) {len(successful_commits)} successful commit(s)"
 
     success_commits_str = " ("
-    for idx, success_commit in enumerate(successful_commits):
+    for index, success_commit in enumerate(successful_commits):
         success_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}"
-        if idx < len(success_commit) - 1:
+        if index < len(success_commit) - 1:
             success_commits_str += ", "
     success_commits_str += ")"
 
