@@ -47,7 +47,7 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
 issue_comment_body = ""
 if len(successful_commits):
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
-    for idx, commit in successful_commits:
+    for idx, commit in enumerate(successful_commits):
         pr_body += f"{idx + 1}) " + commit["msg_body"] + "\n\n"
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     issue_comment_body = f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}. There were {len(successful_commits)} successful commits"
