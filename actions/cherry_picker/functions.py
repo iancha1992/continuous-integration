@@ -124,20 +124,6 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
     if requires_checkout == True:
         checkout_release_number(release_branch_name, target_branch_name)
     run_cherrypick(input_data["is_prod"], commit_id, target_branch_name, requires_cherrypick_push)
-    
-
-# def send_pr_msg(issue_number, head_branch, release_branch, api_repo_name, msg, is_prod):
-#     params = {
-#         "head": head_branch,
-#         "base": release_branch,
-#         "state": "open"
-#     }
-#     r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
-#     if len(r) == 1:
-#         cherry_picked_pr_number = r[0]["number"]
-#         issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", api_repo_name, is_prod)
-#     else:
-#         issue_comment(issue_number, "Failed to send PR msg \ncc: @bazelbuild/triage", api_repo_name, is_prod)
 
 def get_cherry_picked_pr_number(head_branch, release_branch):
     params = {
