@@ -1,6 +1,6 @@
 import os, re, subprocess
 from vars import input_data, upstream_repo
-from functions import cherry_pick, create_pr, issue_comment, get_pr_body, get_cherry_picked_pr_number
+from functions import cherry_pick, create_pr, issue_comment, get_pr_body
 
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
