@@ -36,8 +36,8 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data)
         msg_body = get_pr_body(commit_id, input_data["api_repo_name"])
-        successful_commits = {"commit_id": commit_id, "msg": msg_body}
-        successful_commits.append(commit_id)
+        success_msg = {"commit_id": commit_id, "msg": msg_body}
+        successful_commits.append(success_msg)
     except Exception as e:
         failure_msg = {"commit_id": commit_id, "msg": str(e)}
         failed_commits.append(failure_msg)
@@ -72,7 +72,7 @@ if len(successful_commits):
         issue_comment_body += failure_commits_str
 
 else:
-    issue_comment_body = "Cherry-picked failed for "
+    issue_comment_body = "Cherry-pick(s) failed for "
     for idx, commit in enumerate(failed_commits):
         issue_comment_body += f" {commit['commit_id']}"
         if idx < len(failed_commits) - 1:
