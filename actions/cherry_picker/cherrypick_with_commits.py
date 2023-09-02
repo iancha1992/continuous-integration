@@ -28,7 +28,6 @@ labels = issue_body_dict["labels"]
 requires_clone = True
 requires_checkout = True
 requires_cherrypick_push = False
-# pr_body = ""
 successful_commits = []
 failed_commits = []
 
@@ -45,56 +44,37 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
     requires_clone = False
     requires_checkout = False
 
+issue_comment_body = ""
 if len(successful_commits):
-    # Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}
-    # cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
     for idx, commit in successful_commits:
         pr_body += f"{idx + 1}) " + commit["msg_body"] + "\n\n"
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     issue_comment_body = f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}. There were {len(successful_commits)} successful commits"
 
-    success_beg_str = " ("
+    success_commits_str = " ("
     for idx, success_commit in enumerate(successful_commits):
-        success_beg_str += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}"
+        success_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}"
         if idx < len(success_commit) - 1:
-            success_beg_str += ", "
-    success_beg_str += ")"
+            success_commits_str += ", "
+    success_commits_str += ")"
+
+    issue_comment_body += success_commits_str
 
     if len(failed_commits):
-        failure_beg_str = f"It also has {len(failed_commits)} failed commits ("
+        failure_commits_str = f"It also has {len(failed_commits)} failed commits, "
         for fail_commit in failed_commits:
-            failure_beg_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit['commit_id']}"
+            failure_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit['commit_id']} ({fail_commit['msg']})"
             if idx < len(failed_commits) - 1:
-                failure_beg_str += ", "
-        success_beg_str += "), which are not included in the PR."
+                failure_commits_str += ", "
+        failure_commits_str += ", which are not included in the PR."
+        issue_comment_body += failure_commits_str
 
-
-    # https://github.com/iancha1992/bazel/commit/9e6ea18459fde410ae024a6f5465775741134d1a
-    # if len(failed_commits):
-    #     issue_comment_body = f"The cherry-pick had {len(successful_commits)} successful commits () and {len(failed_commits)} failed commits"
-        
-    #     issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
-    # else:
-    #     issue_comment(milestoned_issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", input_data["api_repo_name"], input_data["is_prod"])
-elif len(failed_commits):
-    pass
-
-    # issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+else:
+    issue_comment_body = "Cherry-picked failed for "
+    for idx, commit in enumerate(failed_commits):
+        issue_comment_body += f" {commit['commit_id']}"
+        if idx < len(failed_commits) - 1:
+            issue_comment_body += ", "
+issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
 
