@@ -59,7 +59,7 @@ if len(successful_commits):
     for index, success_commit in enumerate(successful_commits):
         print("This is index!!", index)
         success_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}"
-        if index < len(success_commit) - 1:
+        if index < len(successful_commits) - 1:
             success_commits_str += ", "
     success_commits_str += ")"
 
