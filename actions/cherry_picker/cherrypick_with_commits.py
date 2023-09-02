@@ -40,7 +40,7 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
         success_msg = {"commit_id": commit_id, "msg": msg_body}
         successful_commits.append(success_msg)
     except Exception as e:
-        failure_msg = {"commit_id": commit_id, "msg": str(e)}
+        failure_msg = {"commit_id": commit_id, "msg": str(e).replace("\ncc: @bazelbuild/triage", "")}
         failed_commits.append(failure_msg)
     requires_clone = False
     requires_checkout = False
