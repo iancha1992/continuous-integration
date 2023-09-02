@@ -152,6 +152,7 @@ def get_cherry_picked_pr_number(head_branch, release_branch):
         raise Exception(f"Could not find the cherry-picked PR number \ncc: @bazelbuild/triage")
 
 def create_pr(reviewers, release_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, user_name):
+    print("Creating a PR...")
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)

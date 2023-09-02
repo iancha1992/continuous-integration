@@ -47,6 +47,7 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
 issue_comment_body = ""
 if len(successful_commits):
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
+    print(pr_body)
     for idx, commit in enumerate(successful_commits):
         pr_body += f"{idx + 1}) " + commit["msg_body"] + "\n\n"
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
@@ -76,5 +77,7 @@ else:
         issue_comment_body += f" {commit['commit_id']}"
         if idx < len(failed_commits) - 1:
             issue_comment_body += ", "
+
+print("This is the issue_comment_body", issue_comment_body)
 issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
 
