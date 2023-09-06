@@ -1,4 +1,4 @@
-import os, requests
+import os, requests, sys
 from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_body, issue_comment
 from vars import headers, upstream_repo, input_data
 from pprint import pprint
@@ -9,6 +9,8 @@ milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 
 issue_data = requests.get(f"https://api.github.com/repos/{input_data['api_repo_name']}/issues/{pr_number}", headers=headers).json()
+
+sys.exit("This is exit for testing!!!")
 
 # Check if the PR is closed.
 if issue_data["state"] != "closed": raise Exception(f'The PR #{pr_number} is not closed yet.')
