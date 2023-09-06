@@ -2,13 +2,6 @@ import os, subprocess, requests
 from pprint import pprint
 from vars import headers, token, upstream_repo, upstream_url
 
-# headers = {
-#     'X-GitHub-Api-Version': '2022-11-28'
-# }
-# token = os.environ["GH_TOKEN"]
-# upstream_url = "https://github.com/bazelbuild/bazel.git"
-# upstream_repo = upstream_url.replace("https://github.com/", "").replace(".git", "")
-
 def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
     params = {"per_page": 100}
     response = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
