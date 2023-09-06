@@ -10,13 +10,19 @@ issue_body = os.environ["INPUT_ISSUE_BODY"]
 issue_body_split = issue_body.split("\r\n")
 issue_body_dict = {}
 for info in issue_body_split:
-    if "commit" in info.lower().split(":")[0]:
+    if "commits:" in info.lower().split(":")[0]:
         # info = info.replace(" and", "")
-        issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
-    elif "reviewer" in info.lower().split(":")[0]:
-        issue_body_dict["reviewers"] = info[info.index(":") + 1:].replace(" ", "").replace("@", "").split(",")
-    elif "team" in info.lower().split(":")[0]:
-        issue_body_dict["labels"] = info[info.index(":") + 1:].replace(" ", "").replace("@", "").split(",")
+        # print()
+        commits_url_list = info.replace("commits:", "").replace(" ", "").split(",")
+        issue_body_dict["commits"] = []
+        for commit_url in commits_url_list:
+            c_id = re.sub(r'https://.*/commit/', "", commit_url)
+            issue_body_dict["commits"].append(c_id)
+            # issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
+    elif "reviewers:" in info.lower().split(":")[0]:
+        issue_body_dict["reviewers"] = info[info.index("reviewers:") + 1:].replace(" ", "").replace("@", "").split(",")
+    elif "teams:" in info.lower().split(":")[0]:
+        issue_body_dict["labels"] = info[info.index("teams:") + 1:].replace(" ", "").replace("@", "").split(",")
 
 print("issue_body_dict", issue_body_dict)
 
