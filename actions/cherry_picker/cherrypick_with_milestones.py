@@ -10,8 +10,7 @@ milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 
 issue_data = requests.get(f"https://api.github.com/repos/{input_data['api_repo_name']}/issues/{pr_number}", headers=headers).json()
 
-sys.exit("This is exit for testing!!!")
-
+raise SystemExit("This is the good end!")
 # Check if the PR is closed.
 if issue_data["state"] != "closed": raise Exception(f'The PR #{pr_number} is not closed yet.')
 
