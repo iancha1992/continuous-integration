@@ -46,5 +46,11 @@ for k in release_numbers_data.keys():
         cherry_picked_pr_number = create_pr(reviewers, release_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
         issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
-        issue_comment(issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
+        # if "is_push_error" in e.args[0]
+        issue_comment_msg = None
+        if type(e.args[0]) is dict and "msg" in e.args[0]:
+            issue_comment_msg = e.args[0]["msg"]
+        else:
+            issue_comment_msg = str(e)
+        issue_comment(issue_number, issue_comment_msg, input_data["api_repo_name"], input_data["is_prod"])
     requires_clone = False

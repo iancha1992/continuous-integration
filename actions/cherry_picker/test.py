@@ -1,21 +1,60 @@
-import re
+# import re
 
-# def hi(a):
-#     if a == "bye":
-#         print("hihihi")
-
-
-
-
-# hi("aaaa")
-
-url = "https://github.com/iancha1992/bazel/commit/a2b775467c1b36bd1c935d35770916105cd7102d"
+# # def hi(a):
+# #     if a == "bye":
+# #         print("hihihi")
 
 
 
 
-new_url = re.sub(r'https://.*/commit/', "", url)
+# # hi("aaaa")
 
-# flags=re.IGNORECASE
+# url = "https://github.com/iancha1992/bazel/commit/a2b775467c1b36bd1c935d35770916105cd7102d"
 
-print(new_url)
+
+
+
+# new_url = re.sub(r'https://.*/commit/', "", url)
+
+# # flags=re.IGNORECASE
+
+# print(new_url)
+
+
+
+# class IanException(Exception):
+#     # print("mynameiseminem!")
+#     pass
+
+# raise IanException("hiya!!!!!")
+
+
+
+# yoyo = str({"awefwef": "aaaaa"})
+
+
+# print(yoyo["awefwef"])
+
+yoyo = {"awefwef": "aaaaa"}
+
+
+
+
+
+# print(yoyo)
+print(type(yoyo) is dict)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
