@@ -110,7 +110,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
                 if push_status.returncode != 0: raise Exception(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
         else:
             subprocess.run(['git', 'cherry-pick', '--abort'])
-            raise Exception("Cherry-pick was attempted but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage")
+            raise Exception("Cherry-pick was attempted, but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage")
 
     if requires_clone == True:
         clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email)
