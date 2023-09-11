@@ -149,6 +149,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
         else:
             cherrypick_status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
         
+        print("cherrypick_status.returncode", cherrypick_status.returncode)
         if cherrypick_status.returncode != 0:
             subprocess.run(['git', 'cherry-pick', '--skip'])
             return False
@@ -156,7 +157,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
 
     def push_to_branch(target_branch_name):
         # raise GeneralCpException("Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage")
-        print(f"Successfully cherry-picked, pushing it to branch: {target_branch_name}")
+        print(f"Pushing it to branch: {target_branch_name}")
         push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
         if push_status.returncode != 0:
             raise PushCpException(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
