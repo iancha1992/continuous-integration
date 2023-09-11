@@ -1,6 +1,6 @@
 import os, re
 from vars import input_data, upstream_repo
-from functions import cherry_pick, create_pr, issue_comment, get_pr_body
+from functions import cherry_pick, create_pr, issue_comment, get_pr_body, GeneralCpException, PushCpException
 
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
@@ -45,15 +45,16 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
         msg_body = get_pr_body(commit_id, input_data["api_repo_name"])
         success_msg = {"commit_id": commit_id, "msg": msg_body}
         successful_commits.append(success_msg)
+    except PushCpException as pe:
+        issue_comment(milestoned_issue_number, str(pe), input_data["api_repo_name"], input_data["is_prod"])
+        raise SystemExit(0)
     except Exception as e:
-        
         failure_msg = {"commit_id": commit_id, "msg": str(e).replace("\ncc: @bazelbuild/triage", "")}
         failed_commits.append(failure_msg)
     requires_clone = False
     requires_checkout = False
 
 issue_comment_body = ""
-
 if len(successful_commits):
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
     print(pr_body)

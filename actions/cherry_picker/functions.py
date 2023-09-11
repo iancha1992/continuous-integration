@@ -2,6 +2,12 @@ import os, subprocess, requests
 from pprint import pprint
 from vars import headers, token, upstream_repo, upstream_url
 
+class GeneralCpException(Exception):
+    pass
+
+class PushCpException(Exception):
+    pass
+
 def get_commit_id(pr_number, actor_name, action_event, api_repo_name):
     params = {"per_page": 100}
     response = requests.get(f'https://api.github.com/repos/{api_repo_name}/issues/{pr_number}/events', headers=headers, params=params)
@@ -63,11 +69,11 @@ def issue_comment(issue_number, body_content, api_repo_name, is_prod):
 
 def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data):
     # This class is actually needed to distinguish cherrypick errors at different stage, so that the user knows where the error is coming from when we notify in the milestoned issue
-    class GeneralCpException(Exception):
-        pass
+    # class GeneralCpException(Exception):
+    #     pass
     
-    class PushCpException(Exception):
-        pass    
+    # class PushCpException(Exception):
+    #     pass
     
     # cp_exception_info = {
     #     "is_push_error": None,
