@@ -168,9 +168,6 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
     
     # New changes here
     is_cherrypickable = check_cherrypickable(input_data["is_prod"], commit_id, target_branch_name)
-    
-
-
     if requires_cherrypick_push == True:
         push_to_branch(target_branch_name)
 
