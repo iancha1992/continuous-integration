@@ -145,7 +145,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
                     # raise CherrypickException(cp_exception_info)
                     raise PushCpException(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
         else:
-            subprocess.run(['git', 'cherry-pick', '--abort'])
+            subprocess.run(['git', 'cherry-pick', '--skip'])
             # raise Exception("Cherry-pick was attempted, but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage")
             # cp_exception_info["is_push_error"] = False
             # cp_exception_info["msg"] = "Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage"
