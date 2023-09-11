@@ -62,7 +62,7 @@ class GeneralCpException(Exception):
 
 try:
     raise PushCpException("hi")
-except PushCpException as e:
+except GeneralCpException as e:
     print("byeah!")
 except Exception as e:
     print("hiya!!!!!!")
