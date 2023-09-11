@@ -35,14 +35,24 @@
 
 # print(yoyo["awefwef"])
 
-yoyo = {"awefwef": "aaaaa"}
+# yoyo = {"awefwef": "aaaaa"}
 
 
 
 
 
-# print(yoyo)
-print(type(yoyo) is dict)
+# # print(yoyo)
+# print(type(yoyo) is dict)
+
+
+
+
+
+class PushCpException(Exception):
+    pass
+
+class GeneralCpException(Exception):
+    pass
 
 
 
@@ -50,11 +60,9 @@ print(type(yoyo) is dict)
 
 
 
-
-
-
-
-
-
-
-
+try:
+    raise PushCpException("hi")
+except PushCpException as e:
+    print("byeah!")
+except Exception as e:
+    print("hiya!!!!!!")
