@@ -133,24 +133,25 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
             cherrypick_status = subprocess.run(['git', 'cherry-pick', commit_id])
         else:
             cherrypick_status = subprocess.run(['git', 'cherry-pick', '-m', '1', commit_id])
-
-        if cherrypick_status.returncode == 0:
-            if requires_cherrypick_push == True:
-                print(f"Successfully cherry-picked, pushing it to branch: {target_branch_name}")
-                push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
-                if push_status.returncode != 0:
-                    # raise Exception(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
-                    # cp_exception_info["is_push_error"] = True
-                    # cp_exception_info["msg"] = f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage"
-                    # raise CherrypickException(cp_exception_info)
-                    raise PushCpException(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
-        else:
+        
+        if cherrypick_status.returncode != 0:
             subprocess.run(['git', 'cherry-pick', '--skip'])
-            # raise Exception("Cherry-pick was attempted, but there were merge conflicts. Please resolve manually.\ncc: @bazelbuild/triage")
-            # cp_exception_info["is_push_error"] = False
-            # cp_exception_info["msg"] = "Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage"
-            # raise CherrypickException(cp_exception_info)
             raise GeneralCpException("Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage")
+        if requires_cherrypick_push == True:
+            print(f"Successfully cherry-picked, pushing it to branch: {target_branch_name}")
+            push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
+            if push_status.returncode != 0:
+                raise PushCpException(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
+
+        # if cherrypick_status.returncode == 0:
+        #     if requires_cherrypick_push == True:
+        #         print(f"Successfully cherry-picked, pushing it to branch: {target_branch_name}")
+        #         push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
+        #         if push_status.returncode != 0:
+        #             raise PushCpException(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
+        # else:
+        #     subprocess.run(['git', 'cherry-pick', '--skip'])
+        #     raise GeneralCpException("Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage")
 
     if requires_clone == True:
         clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email)

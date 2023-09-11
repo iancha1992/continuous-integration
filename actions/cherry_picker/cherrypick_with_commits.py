@@ -41,7 +41,7 @@ failed_commits = []
 
 for idx, commit_id in enumerate(issue_body_dict["commits"]):
     print("This is the commits!@", issue_body_dict["commits"], idx)
-    if idx >= len(issue_body_dict["commits"]) - 1: requires_cherrypick_push = True
+    if idx >= len(issue_body_dict["commits"]) - 1 and len(successful_commits) > 0: requires_cherrypick_push = True
     print("Requirescherrypickpush", requires_cherrypick_push)
     try:
         cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data)
