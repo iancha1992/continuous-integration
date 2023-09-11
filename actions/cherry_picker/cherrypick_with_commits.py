@@ -71,7 +71,7 @@ if len(successful_commits):
             issue_comment_body += ", "
 
     if len(failed_commits):
-        failure_commits_str = f". It also has {len(failed_commits)} failed commit(s): "
+        failure_commits_str = f". There was also {len(failed_commits)} failed commit(s): "
         for fail_commit in failed_commits:
             failure_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit['commit_id']} ({fail_commit['msg']})"
             if idx < len(failed_commits) - 1:
