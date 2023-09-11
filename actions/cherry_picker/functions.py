@@ -168,9 +168,13 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
     
     # New changes here
     is_cherrypickable = check_cherrypickable(input_data["is_prod"], commit_id, target_branch_name)
+    
+
+
     if requires_cherrypick_push == True:
         push_to_branch(target_branch_name)
-    elif is_cherrypickable == False:
+
+    if is_cherrypickable == False:
         raise GeneralCpException("Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage")
         
 def get_cherry_picked_pr_number(head_branch, release_branch):
