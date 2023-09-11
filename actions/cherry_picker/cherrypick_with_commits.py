@@ -20,9 +20,10 @@ for info in issue_body_split:
             issue_body_dict["commits"].append(c_id)
             # issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
     elif "reviewers:" in info:
-        issue_body_dict["reviewers"] = info[info.index("reviewers:") + 1:].replace(" ", "").replace("@", "").split(",")
+        # issue_body_dict["reviewers"] = info[info.index("reviewers:") + 1:].replace(" ", "").replace("@", "").split(",")
+        issue_body_dict["reviewers"] = info.replace("reviewers:", "").replace(" ", "").replace("@", "").split(",")
     elif "teams:" in info:
-        issue_body_dict["labels"] = info[info.index("teams:") + 1:].replace(" ", "").replace("@", "").split(",")
+        issue_body_dict["labels"] = info.replace("teams:", "").replace(" ", "").replace("@", "").split(",")
 
 print("issue_body_dict", issue_body_dict)
 
