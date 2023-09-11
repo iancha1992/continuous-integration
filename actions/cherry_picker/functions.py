@@ -142,7 +142,7 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
     #         push_status = subprocess.run(['git', 'push', '--set-upstream', 'origin', target_branch_name])
     #         if push_status.returncode != 0:
     #             raise PushCpException(f"Cherry-pick was attempted, but failed to push. Please check if the branch, {target_branch_name}, already exists\ncc: @bazelbuild/triage")
-    def is_cherrypickable(is_prod, commit_id, target_branch_name):
+    def check_cherrypickable(is_prod, commit_id, target_branch_name):
         print(f"Cherry-picking the commit id {commit_id} in CP branch: {target_branch_name}")
         if is_prod == True:
             cherrypick_status = subprocess.run(['git', 'cherry-pick', commit_id])
@@ -165,11 +165,14 @@ def cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clo
         clone_and_sync_repo(gh_cli_repo_name, master_branch, release_branch_name, user_name, gh_cli_repo_url, user_email)
     if requires_checkout == True:
         checkout_release_number(release_branch_name, target_branch_name)
-    if is_cherrypickable(input_data["is_prod"], commit_id, target_branch_name) == True and requires_cherrypick_push == True:
+    
+    # New changes here
+    is_cherrypickable = check_cherrypickable(input_data["is_prod"], commit_id, target_branch_name)
+    if requires_cherrypick_push == True:
         push_to_branch(target_branch_name)
-    else:
+    elif is_cherrypickable == False:
         raise GeneralCpException("Cherry-pick was attempted, but there may be merge conflict(s). Please resolve manually.\ncc: @bazelbuild/triage")
-
+        
 def get_cherry_picked_pr_number(head_branch, release_branch):
     params = {
         "head": head_branch,
