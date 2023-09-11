@@ -172,6 +172,14 @@ def get_cherry_picked_pr_number(head_branch, release_branch):
 
 def create_pr(reviewers, release_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, user_name):
     print("Creating a PR...")
+    print("reviewers", reviewers)
+    print("release_number", release_number)
+    print("labels", labels)
+    print("prtitle", pr_title)
+    print("prbody", pr_body)
+    print("release_branch_name", release_branch_name)
+    print("target_branch_name", target_branch_name)
+    print("user_name", user_name)
     head_branch = f"{user_name}:{target_branch_name}"
     reviewers_str = ",".join(reviewers)
     labels_str = ",".join(labels)
