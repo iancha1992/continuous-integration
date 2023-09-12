@@ -79,7 +79,7 @@ if len(successful_commits):
             failure_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit['commit_id']} ({fail_commit['msg']})"
             if idx < len(failed_commits) - 1:
                 failure_commits_str += ", "
-        failure_commits_str += "The failed commit(s) are NOT included in the PR."
+        failure_commits_str += " The failed commit(s) are NOT included in the PR."
         issue_comment_body += failure_commits_str
 else:
     issue_comment_body = "Cherry-pick(s) failed for "
