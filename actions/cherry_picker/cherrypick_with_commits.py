@@ -2,6 +2,7 @@ import os, re
 from vars import input_data, upstream_repo
 from functions import cherry_pick, create_pr, issue_comment, get_pr_body, GeneralCpException, PushCpException, push_to_branch
 
+print("NEW TESTING")
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 issue_title = os.environ['INPUT_ISSUE_TITLE']
