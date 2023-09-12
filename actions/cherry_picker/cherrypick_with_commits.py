@@ -63,8 +63,8 @@ if len(successful_commits):
     for idx, commit in enumerate(successful_commits):
         pr_body += str((idx + 1)) + ") " + commit["msg"] + "\n\n"
     print("This is the reviewers, ", reviewers)
-    cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
-    # cherry_picked_pr_number = "19395"
+    # cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
+    cherry_picked_pr_number = "19395"
     issue_comment_body = f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}, which includes the following commit(s): "
 
     for index, success_commit in enumerate(successful_commits):
