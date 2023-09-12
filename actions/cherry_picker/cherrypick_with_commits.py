@@ -12,16 +12,12 @@ issue_body_split = issue_body.split("\r\n")
 issue_body_dict = {}
 for info in issue_body_split:
     if "commits:" in info:
-        # info = info.replace(" and", "")
-        # print()
         commits_url_list = info.replace("commits:", "").replace(" ", "").split(",")
         issue_body_dict["commits"] = []
         for commit_url in commits_url_list:
             c_id = re.sub(r'https://.*/commit/', "", commit_url)
             issue_body_dict["commits"].append(c_id)
-            # issue_body_dict["commits"] = re.sub(r'https://.*/commit/', "", info[info.index(":") + 1:].replace(" ", "")).split(",")
     elif "reviewers:" in info:
-        # issue_body_dict["reviewers"] = info[info.index("reviewers:") + 1:].replace(" ", "").replace("@", "").split(",")
         issue_body_dict["reviewers"] = info.replace("reviewers:", "").replace(" ", "").replace("@", "").split(",")
     elif "teams:" in info:
         issue_body_dict["labels"] = info.replace("teams:", "").replace(" ", "").replace("@", "").split(",")
@@ -85,7 +81,6 @@ if len(successful_commits):
                 failure_commits_str += ", "
         failure_commits_str += "The failed commit(s) are NOT included in the PR."
         issue_comment_body += failure_commits_str
-
 else:
     issue_comment_body = "Cherry-pick(s) failed for "
     for idx, commit in enumerate(failed_commits):
