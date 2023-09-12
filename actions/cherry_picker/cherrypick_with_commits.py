@@ -1,6 +1,6 @@
 import os, re
 from vars import input_data, upstream_repo
-from functions import cherry_pick, create_pr, issue_comment, get_pr_body, GeneralCpException, PushCpException
+from functions import cherry_pick, create_pr, issue_comment, get_pr_body, GeneralCpException, PushCpException, push_to_branch
 
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
@@ -35,16 +35,12 @@ reviewers = issue_body_dict["reviewers"]
 labels = issue_body_dict["labels"]
 requires_clone = True
 requires_checkout = True
-requires_cherrypick_push = False
 successful_commits = []
 failed_commits = []
 
 for idx, commit_id in enumerate(issue_body_dict["commits"]):
-    print("This is the commits!@", issue_body_dict["commits"], idx)
-    if idx >= len(issue_body_dict["commits"]) - 1 and len(successful_commits) > 0: requires_cherrypick_push = True
-    print("Requirescherrypickpush", requires_cherrypick_push)
     try:
-        cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, requires_cherrypick_push, input_data)
+        cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, requires_checkout, input_data)
         msg_body = get_pr_body(commit_id, input_data["api_repo_name"])
         success_msg = {"commit_id": commit_id, "msg": msg_body}
         successful_commits.append(success_msg)
@@ -56,6 +52,12 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
         failed_commits.append(failure_msg)
     requires_clone = False
     requires_checkout = False
+
+try:
+    push_to_branch(target_branch_name)
+except Exception as e:
+    issue_comment(milestoned_issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
+    raise SystemExit(0)
 
 issue_comment_body = ""
 if len(successful_commits):
@@ -95,4 +97,3 @@ print("*" * 100)
 print("successful_commits", successful_commits)
 print("failed_commits", failed_commits)
 issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
-

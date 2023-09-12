@@ -1,5 +1,5 @@
 import os, requests, sys
-from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_body, issue_comment
+from functions import get_commit_id, get_reviewers, extract_release_numbers_data, cherry_pick, create_pr, get_labels, get_pr_body, issue_comment, push_to_branch
 from vars import headers, upstream_repo, input_data
 from pprint import pprint
 
@@ -42,7 +42,8 @@ for k in release_numbers_data.keys():
     issue_number = release_numbers_data[k]
     pr_title = issue_data["title"]
     try:
-        cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, True, True, input_data)
+        cherry_pick(commit_id, release_branch_name, target_branch_name, requires_clone, True, input_data)
+        push_to_branch(target_branch_name)
         cherry_picked_pr_number = create_pr(reviewers, release_number, labels, pr_title, pr_body, release_branch_name, target_branch_name, input_data["user_name"], input_data["api_repo_name"], input_data["is_prod"])
         issue_comment(issue_number, f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}", input_data["api_repo_name"], input_data["is_prod"])
     except Exception as e:
