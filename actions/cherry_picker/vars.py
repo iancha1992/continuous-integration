@@ -36,3 +36,4 @@ elif os.environ["INPUT_IS_PROD"] == "true":
         },
         "email": "bazel-io-bot@google.com"
     }
+
