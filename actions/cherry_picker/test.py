@@ -8,16 +8,6 @@ def get_middle_text(all_str, left_str, right_str):
         right_index = all_str.index(right_str)
     # print(all_str[left_index:right_index])
     return all_str[left_index:right_index]
-    
-
-    
-
-
-# print(get_middle_text("### Please put the commit ID's (at least first 6 digits of the commit ID's). If multiple, then please separate by commas. Example: 9e90a6, f1da12\n\n\nabcde, fghij\n\n### Which category does this issue belong to?\n\n\nteam-OSS, team-Bazel\n\n### Please provide the reviewers of the PR once it's created after cherry-picking. Example: @iancha1992, @keertk\n\n\n@chaheein123 ", "If multiple, then please separate by commas. Example: 9e90a6, f1da12\n\n\n", "\n\n### Which category does"))
-# print(get_middle_text("### Please put the commit ID's (at least first 6 digits of the commit ID's). If multiple, then please separate by commas. Example: 9e90a6, f1da12\n\n\nabcde, fghij\n\n### Which category does this issue belong to?\n\n\nteam-OSS, team-Bazel\n\n### Please provide the reviewers of the PR once it's created after cherry-picking. Example: @iancha1992, @keertk\n\n\n@chaheein123 ", "If multiple, then please separate by commas. Example: 9e90a6, f1da12\n\n\n", None))
-
-
-
 
 cherrypick_with_commits_infos = {
     "commits": {
@@ -29,7 +19,7 @@ cherrypick_with_commits_infos = {
         "right": "\n\n### Please provide the reviewers"
     },
     "reviewers": {
-        "left": "Please provide the reviewers of the PR once it is created after cherry-picking. Example:",
+        "left": "Please provide the reviewers of the PR once it is created after cherry-picking. Example: @iancha1992, @keertk\n\n\n",
         "right": None
     }
 }
@@ -44,9 +34,9 @@ issue_body = "### Please put the commit IDs (at least first 6 digits of the comm
 
 # hello = re.sub(r'https://.*/commit/', "", get_middle_text(issue_body, commits_text["left"], commits_text["right"])).replace(" ", "").split(",")
 
-hello = get_middle_text(issue_body, commits_text["left"], commits_text["right"]).replace(" ", "").split(",")
+hello = get_middle_text(issue_body, reviewers_text["left"], reviewers_text["right"]).replace(" ", "").split(",")
 print(hello)
-result = map(lambda x: x)
+# result = map(lambda x: x)
 
 # aye = re.sub(r'https://.*/commit/', "", hello)
 
