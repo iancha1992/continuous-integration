@@ -25,7 +25,7 @@ issue_body_dict["labels"] = get_middle_text(issue_body, team_labels_text["left"]
 issue_body_dict["reviewers"] = get_middle_text(issue_body, reviewers_text["left"], reviewers_text["right"]).replace(" ", "").replace("@", "").split(",")
 
 
-
+print("issue_body_dictissue_body_dictissue_body_dict", issue_body_dict)
 
 # for info in issue_body_split:
 #     if "commits:" in info:
