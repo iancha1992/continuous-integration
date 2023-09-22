@@ -1,6 +1,6 @@
 import os, re
-from vars import input_data, upstream_repo
-from functions import cherry_pick, create_pr, issue_comment, get_pr_body, PushCpException, push_to_branch
+from vars import input_data, upstream_repo, cherrypick_with_commits_infos
+from functions import cherry_pick, create_pr, issue_comment, get_pr_body, PushCpException, push_to_branch, get_middle_text
 
 print("NEW TESTING")
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
@@ -8,19 +8,39 @@ milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 issue_title = os.environ['INPUT_ISSUE_TITLE']
 issue_body = os.environ["INPUT_ISSUE_BODY"]
 
-issue_body_split = issue_body.split("\r\n")
+# issue_body_split = issue_body.split("\r\n")
 issue_body_dict = {}
-for info in issue_body_split:
-    if "commits:" in info:
-        commits_url_list = info.replace("commits:", "").replace(" ", "").split(",")
-        issue_body_dict["commits"] = []
-        for commit_url in commits_url_list:
-            c_id = re.sub(r'https://.*/commit/', "", commit_url)
-            issue_body_dict["commits"].append(c_id)
-    elif "reviewers:" in info:
-        issue_body_dict["reviewers"] = info.replace("reviewers:", "").replace(" ", "").replace("@", "").split(",")
-    elif "teams:" in info:
-        issue_body_dict["labels"] = info.replace("teams:", "").replace(" ", "").replace("@", "").split(",")
+
+commits_text = cherrypick_with_commits_infos["commits"]
+team_labels_text = cherrypick_with_commits_infos["team_labels"]
+reviewers_text = cherrypick_with_commits_infos["reviewers"]
+issue_body_dict["commits"] = get_middle_text(issue_body, commits_text["left"], commits_text["right"]).replace(" ", "").split(",")
+# for commit_index, commit_str in enumerate(issue_body_dict["commits"]):
+#     issue_body_dict["commits"][commit_index] = re.sub(r'https://.*/commit/', "", issue_body_dict["commits"][commit_index])
+
+for commit_index in len(issue_body_dict["commits"]):
+    issue_body_dict["commits"][commit_index] = re.sub(r'https://.*/commit/', "", issue_body_dict["commits"][commit_index])
+
+issue_body_dict["labels"] = get_middle_text(issue_body, team_labels_text["left"], team_labels_text["right"]).replace(" ", "").replace("@", "").split(",")
+issue_body_dict["reviewers"] = get_middle_text(issue_body, reviewers_text["left"], reviewers_text["right"]).replace(" ", "").replace("@", "").split(",")
+
+
+
+
+# for info in issue_body_split:
+#     if "commits:" in info:
+#         commits_url_list = info.replace("commits:", "").replace(" ", "").split(",")
+#         issue_body_dict["commits"] = []
+#         for commit_url in commits_url_list:
+#             c_id = re.sub(r'https://.*/commit/', "", commit_url)
+#             issue_body_dict["commits"].append(c_id)
+#     elif "reviewers:" in info:
+#         issue_body_dict["reviewers"] = info.replace("reviewers:", "").replace(" ", "").replace("@", "").split(",")
+#     elif "teams:" in info:
+#         issue_body_dict["labels"] = info.replace("teams:", "").replace(" ", "").replace("@", "").split(",")
+
+
+
 
 print("issue_body_dict", issue_body_dict)
 

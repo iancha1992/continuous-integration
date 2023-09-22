@@ -7,6 +7,21 @@ token = os.environ["GH_TOKEN"]
 upstream_url = "https://github.com/bazelbuild/bazel.git"
 upstream_repo = upstream_url.replace("https://github.com/", "").replace(".git", "")
 
+cherrypick_with_commits_infos = {
+    "commits": {
+        "left": "If multiple, then please separate by commas. Example: 9e90a6, f1da12\n\n\n",
+        "right": "\n\n### Which category",
+    },
+    "team_labels": {
+        "left": "Which category does this issue belong to?\n\n\n",
+        "right": "\n\n### Please provide the reviewers"
+    },
+    "reviewers": {
+        "left": "Please provide the reviewers of the PR once it is created after cherry-picking. Example:",
+        "right": None
+    }
+}
+
 if "INPUT_IS_PROD" not in os.environ or os.environ["INPUT_IS_PROD"] == "false":
     input_data = {
         "is_prod": False,

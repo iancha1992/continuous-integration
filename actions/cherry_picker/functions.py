@@ -157,3 +157,11 @@ def get_pr_body(commit_id, api_repo_name):
     else:
         pr_body += f"\n\n{commit_str_body}"
     return pr_body
+
+def get_middle_text(all_str, left_str, right_str):
+    left_index = all_str.index(left_str) + len(left_str)
+    if right_str == None:
+        right_index = len(all_str)
+    else:
+        right_index = all_str.index(right_str)
+    return all_str[left_index:right_index]
