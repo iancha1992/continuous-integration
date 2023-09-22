@@ -17,7 +17,7 @@ cherrypick_with_commits_infos = {
         "right": "\n\n### Please provide the reviewers"
     },
     "reviewers": {
-        "left": "Please provide the reviewers of the PR once it is created after cherry-picking. Example:",
+        "left": "Please provide the reviewers of the PR once it is created after cherry-picking. Example: @iancha1992, @keertk\n\n\n",
         "right": None
     }
 }

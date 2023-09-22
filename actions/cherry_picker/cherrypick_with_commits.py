@@ -81,7 +81,7 @@ if len(successful_commits):
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
     print(pr_body)
     for idx, commit in enumerate(successful_commits):
-        pr_body += str((idx + 1)) + ") " + commit["msg"] + "\n\n"
+        pr_body += str((idx + 1)) + ")" + commit["msg"] + "\n\n"
     print("This is the reviewers, ", reviewers)
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     # cherry_picked_pr_number = "19395"
