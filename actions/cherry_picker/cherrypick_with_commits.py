@@ -18,7 +18,7 @@ issue_body_dict["commits"] = get_middle_text(issue_body, commits_text["left"], c
 # for commit_index, commit_str in enumerate(issue_body_dict["commits"]):
 #     issue_body_dict["commits"][commit_index] = re.sub(r'https://.*/commit/', "", issue_body_dict["commits"][commit_index])
 
-for commit_index in len(issue_body_dict["commits"]):
+for commit_index in range(len(issue_body_dict["commits"])):
     issue_body_dict["commits"][commit_index] = re.sub(r'https://.*/commit/', "", issue_body_dict["commits"][commit_index])
 
 issue_body_dict["labels"] = get_middle_text(issue_body, team_labels_text["left"], team_labels_text["right"]).replace(" ", "").replace("@", "").split(",")
