@@ -9,15 +9,15 @@ upstream_repo = upstream_url.replace("https://github.com/", "").replace(".git", 
 
 cherrypick_with_commits_infos = {
     "commits": {
-        "left": "If multiple, then please separate by commas. Example: 9e90a6, f1da12\n\n\n",
-        "right": "\n\n### Which category",
+        "left": "### Commit IDs\n\n\n",
+        "right": "\n\n### Category",
     },
     "team_labels": {
-        "left": "Which category does this issue belong to?\n\n\n",
-        "right": "\n\n### Please provide the reviewers"
+        "left": "Category\n\n\n",
+        "right": "\n\n### Reviewers"
     },
     "reviewers": {
-        "left": "Please provide the reviewers of the PR once it is created after cherry-picking. Example: @iancha1992, @keertk\n\n\n",
+        "left": "Reviewers\n\n\n",
         "right": None
     }
 }
