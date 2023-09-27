@@ -1,5 +1,4 @@
 import os, subprocess, requests
-from pprint import pprint
 from vars import headers, token, upstream_repo, upstream_url
 
 class PushCpException(Exception):
