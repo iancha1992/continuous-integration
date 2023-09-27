@@ -72,5 +72,5 @@ elif len(failed_commits):
     issue_comment_body = "Failed commmits (likely due to merge conflicts): "
     for fail_commit in failed_commits:
         issue_comment_body += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit}, "
-    issue_comment_body = issue_comment_body[::-1].replace(" ,", ".", 1)[::-1]
+    issue_comment_body = issue_comment_body[::-1].replace(" ,", ".", 1)[::-1] + "\nPlease resolve manually.\ncc: @bazelbuild/triage"
 issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
