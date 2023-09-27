@@ -54,23 +54,23 @@ if len(successful_commits):
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
     for idx, commit in enumerate(successful_commits):
         pr_body += str((idx + 1)) + ")" + commit["msg"] + "\n\n"
-    cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
-    # cherry_picked_pr_number = "19395"
+    # cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
+    cherry_picked_pr_number = "19395"
     issue_comment_body = f"The following commits were cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}: "
     for success_commit in successful_commits:
         issue_comment_body += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}, "
-    issue_comment_body = issue_comment_body[::-1].replace(", ", ".", 1)[::-1]
+    issue_comment_body = issue_comment_body[::-1].replace(" ,", ".", 1)[::-1]
 
     if len(failed_commits):
         failure_commits_str = f"\nFailed commits (likely due to merge conflicts): "
         for fail_commit in failed_commits:
             failure_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit}, "
-        failure_commits_str = failure_commits_str[::-1].replace(", ", "", 1)[::-1]
-        failure_commits_str += "\nThe failed commits are NOT included in the PR. Please resolve manually.\ncc: @bazelbuild/triage"
+        failure_commits_str = failure_commits_str[::-1].replace(" ,", "", 1)[::-1]
+        failure_commits_str += "\n\nThe failed commits are NOT included in the PR. Please resolve manually.\ncc: @bazelbuild/triage"
         issue_comment_body += failure_commits_str
 elif len(failed_commits):
     issue_comment_body = "Failed commmits (likely due to merge conflicts): "
     for fail_commit in failed_commits:
         issue_comment_body += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit}, "
-    issue_comment_body = issue_comment_body[::-1].replace(", ", ".", 1)[::-1]
+    issue_comment_body = issue_comment_body[::-1].replace(" ,", ".", 1)[::-1]
 issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
