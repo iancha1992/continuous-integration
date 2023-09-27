@@ -2,7 +2,6 @@ import os, re
 from vars import input_data, upstream_repo, cherrypick_with_commits_infos
 from functions import cherry_pick, create_pr, issue_comment, get_pr_body, PushCpException, push_to_branch, get_middle_text
 
-print("NEW TESTING")
 milestone_title = os.environ["INPUT_MILESTONE_TITLE"]
 milestoned_issue_number = os.environ["INPUT_MILESTONED_ISSUE_NUMBER"]
 issue_title = os.environ['INPUT_ISSUE_TITLE']
@@ -40,8 +39,7 @@ for idx, commit_id in enumerate(issue_body_dict["commits"]):
         issue_comment(milestoned_issue_number, str(pe), input_data["api_repo_name"], input_data["is_prod"])
         raise SystemExit(0)
     except Exception as e:
-        failure_msg = {"commit_id": commit_id, "msg": str(e).replace("\ncc: @bazelbuild/triage", "")}
-        failed_commits.append(failure_msg)
+        failed_commits.append(commit_id)
     requires_clone = False
     requires_checkout = False
 
@@ -54,37 +52,25 @@ except Exception as e:
 issue_comment_body = ""
 if len(successful_commits):
     pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
-    print(pr_body)
     for idx, commit in enumerate(successful_commits):
         pr_body += str((idx + 1)) + ")" + commit["msg"] + "\n\n"
-    print("This is the reviewers, ", reviewers)
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     # cherry_picked_pr_number = "19395"
-    issue_comment_body = f"Cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}, which includes the following commit(s): "
-
-    for index, success_commit in enumerate(successful_commits):
-        print("This is index!!", index)
-        issue_comment_body += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}"
-        if index < len(successful_commits) - 1:
-            issue_comment_body += ", "
+    issue_comment_body = f"The following commits were cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}: "
+    for success_commit in successful_commits:
+        issue_comment_body += f"https://github.com/{input_data['api_repo_name']}/commit/{success_commit['commit_id']}, "
+    issue_comment_body = issue_comment_body[::-1].replace(", ", ".", 1)[::-1]
 
     if len(failed_commits):
-        failure_commits_str = f". There was(were) also {len(failed_commits)} failed commit(s): "
+        failure_commits_str = f"\nFailed commits (likely due to merge conflicts): "
         for fail_commit in failed_commits:
-            failure_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit['commit_id']} ({fail_commit['msg']})"
-            if idx < len(failed_commits) - 1:
-                failure_commits_str += ", "
-        failure_commits_str += " The failed commit(s) are NOT included in the PR."
+            failure_commits_str += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit}, "
+        failure_commits_str = failure_commits_str[::-1].replace(", ", "", 1)[::-1]
+        failure_commits_str += "\nThe failed commits are NOT included in the PR. Please resolve manually.\ncc: @bazelbuild/triage"
         issue_comment_body += failure_commits_str
-else:
-    issue_comment_body = "Cherry-pick(s) failed for "
-    for idx, commit in enumerate(failed_commits):
-        issue_comment_body += f" {commit['commit_id']} ({commit['msg']})"
-        if idx < len(failed_commits) - 1:
-            issue_comment_body += ", "
-
-print("This is the issue_comment_body", issue_comment_body)
-print("*" * 100)
-print("successful_commits", successful_commits)
-print("failed_commits", failed_commits)
+elif len(failed_commits):
+    issue_comment_body = "Failed commmits (likely due to merge conflicts): "
+    for fail_commit in failed_commits:
+        issue_comment_body += f"https://github.com/{input_data['api_repo_name']}/commit/{fail_commit}, "
+    issue_comment_body = issue_comment_body[::-1].replace(", ", ".", 1)[::-1]
 issue_comment(milestoned_issue_number, issue_comment_body, input_data["api_repo_name"], input_data["is_prod"])
