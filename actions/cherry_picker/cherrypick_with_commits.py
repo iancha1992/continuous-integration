@@ -58,6 +58,7 @@ if len(successful_commits):
             pr_body += str((idx + 1)) + ")" + commit["msg"] + "\n\n"
     elif len(successful_commits) == 1:
         pr_body = f"{successful_commits[0]['msg']}"
+    if "awaiting-review" not in labels: labels.append("awaiting-review")
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     # cherry_picked_pr_number = "19395"
     issue_comment_body = f"The following commits were cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}: "
