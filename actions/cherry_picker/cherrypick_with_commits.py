@@ -49,7 +49,6 @@ except Exception as e:
     issue_comment(milestoned_issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
     raise SystemExit(0)
 
-
 issue_comment_body = ""
 if len(successful_commits):
     if len(successful_commits) >= 2:
