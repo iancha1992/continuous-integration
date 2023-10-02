@@ -49,11 +49,15 @@ except Exception as e:
     issue_comment(milestoned_issue_number, str(e), input_data["api_repo_name"], input_data["is_prod"])
     raise SystemExit(0)
 
+
 issue_comment_body = ""
 if len(successful_commits):
-    pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
-    for idx, commit in enumerate(successful_commits):
-        pr_body += str((idx + 1)) + ")" + commit["msg"] + "\n\n"
+    if len(successful_commits) >= 2:
+        pr_body = f"This PR contains {len(successful_commits)} commit(s).\n\n"
+        for idx, commit in enumerate(successful_commits):
+            pr_body += str((idx + 1)) + ")" + commit["msg"] + "\n\n"
+    elif len(successful_commits) == 1:
+        pr_body = f"{successful_commits[0]['msg']}"
     cherry_picked_pr_number = create_pr(reviewers, release_number, labels, issue_title, pr_body, release_branch_name, target_branch_name, input_data['user_name'])
     # cherry_picked_pr_number = "19395"
     issue_comment_body = f"The following commits were cherry-picked in https://github.com/{upstream_repo}/pull/{cherry_picked_pr_number}: "
