@@ -124,7 +124,7 @@ def get_cherry_picked_pr_number(head_branch, release_branch):
         "base": release_branch,
         "state": "open"
     }
-    r = requests.get(f'https://api.github.com/repos/{upstream_repo}/pulls', headers=headers, params=params).json()
+    r = requests.get(f'https://api.github.com/repos/iancha1992/bazel/pulls', headers=headers, params=params).json()
     if len(r) == 1: return r[0]["number"]
     else: raise Exception(f"Could not find the cherry-picked PR number \ncc: @bazelbuild/triage")
 
