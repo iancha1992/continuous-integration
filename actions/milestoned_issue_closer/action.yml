@@ -1,0 +1,26 @@
+name: "Close the milestoned issue when cherry-picked PR is merged"
+description: "Close the milestoned issue"
+inputs:
+  pr-number:
+    required: true
+    default: ${{ github.pr-number }}
+runs:
+  using: "composite"
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+    - name: Install Dependencies
+      run: |
+        pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
+    - name: Pass Inputs to Shell
+      run: |
+        echo "INPUT_PR_NUMBER=${{ inputs.pr-number }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Run python close_issue.py
+      run: |
+        chmod +x ${{ github.action_path }}/close_issue.py
+        python -u ${{ github.action_path }}/close_issue.py
+      shell: bash
