@@ -1,1 +1,14 @@
+name: "Testingtesting"
+description: "thisisjtesting"
+inputs:
+  issue-title:
+    required: true
+    default: ${{ github.issue-title }}
 
+runs:
+  using: "composite"
+  steps:
+    - name: Install Dependencies
+      run: |
+        pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
